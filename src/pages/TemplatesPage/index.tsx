@@ -13,6 +13,7 @@ const Templates: React.FC = () => {
   const customer = readUser()?.customer;
   const [templates, setTemplates] = useState<TemplateDataResponse[]>([]);
 
+
   useEffect(() => {
     // Obtener las plantillas del cliente y actualizar el estado
     getCustomerTemplates(customer?._id).then((res) => setTemplates(res));

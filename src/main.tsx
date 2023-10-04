@@ -2,6 +2,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -42,16 +44,18 @@ const root = ReactDOM.createRoot(rootElement!);
 root.render(
   <React.StrictMode>
     {/* <ThemeProvider theme={theme}> */}
-      <SnackbarProvider maxSnack={3} anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}>
+    <SnackbarProvider maxSnack={3} anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}>
 
-          <Provider store={store}>
-            <App />
-          </Provider>
+      <Provider store={store}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <App />
+        </LocalizationProvider>
+      </Provider>
 
-      </SnackbarProvider>
+    </SnackbarProvider>
     {/* </ThemeProvider> */}
   </React.StrictMode>,
 )
