@@ -7,7 +7,7 @@ import LoginPage from '@app/pages/LoginPage'
 import Manager from '@app/pages/Manager'
 
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 const Logout = React.lazy(() => import('@app/components/auth/Logout'))
 
 const ROLES = {
@@ -18,8 +18,10 @@ const ROLES = {
 const LogoutFallback = withLoading(Logout)
 
 const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
+const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView'))
 
-const Template = withLoading(TemplatesPage)
+const Templates = withLoading(TemplatesPage)
+const TemplatesDataView = withLoading(TemplatesDataViewPage)
 
 function AppRouter() {
   // const navigate = useNavigate();
@@ -27,6 +29,9 @@ function AppRouter() {
   const userRole = user ? user.user?.roles : [{ name: 'USER_ROLE' }]
   const _roles = userRole?.map((rol) => rol.name)
 
+
+  const hasUserRole = userRole?.some(role => role.name === 'USER_ROLE');
+  console.log("🚀 ~ file: AppRouter.tsx:32 ~ AppRouter ~ hasUserRole:", hasUserRole)
   // // Función para determinar la ruta de redirección en función del rol
   // const getRedirectPath = () => {
   //   if (_roles?.includes(ROLES.User)) {
@@ -52,18 +57,23 @@ function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
-          {/* <Outlet />
-        </Route> */}
-        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-          <Route path="templates" >
-            <Route index element={<Template />} />
+          {hasUserRole ? (
+            <Route index element={<Navigate to="/templates" replace />} />
+          ) : (
+            // Puedes agregar una redirección por defecto si el usuario no tiene el rol "USER_ROLE"
+            <Route index element={<Navigate to="/manager" replace />} />
+          )}
+          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route path="/templates" >
+              <Route index element={<Templates />} />
+              <Route path="charts" element={<TemplatesDataView />} />
+            </Route>
           </Route>
-        </Route>
-        <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-          <Route path="manager" >
-            <Route index element={<Manager />} />
+          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route path="manager" >
+              <Route index element={<Manager />} />
+            </Route>
           </Route>
-        </Route>
         </Route>
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutFallback />} />
