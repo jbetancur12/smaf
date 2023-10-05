@@ -4,21 +4,19 @@ import {
   DarkModeOutlined,
   LightModeOutlined,
   Menu as MenuIcon,
-  Search,
-  SettingsOutlined,
+  SettingsOutlined
 } from "@mui/icons-material";
 import {
   AppBar,
   Box,
   Button,
   IconButton,
-  InputBase,
   Menu,
   MenuItem,
   PaletteColor,
   Toolbar,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -69,7 +67,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
           <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <MenuIcon />
           </IconButton>
-          <FlexBetween
+          {/* <FlexBetween
           // @ts-ignore
             backgroundColor={theme.palette.background.alt}
             borderRadius="9px"
@@ -80,7 +78,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
             <IconButton>
               <Search />
             </IconButton>
-          </FlexBetween>
+          </FlexBetween> */}
         </FlexBetween>
 
         {/* RIGHT SIDE */}
@@ -113,7 +111,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
               <Box
                 component="img"
                 alt="profile"
-                src="images/avatar.png"
+                src="/images/avatar.png"
                 height="32px"
                 width="32px"
                 borderRadius="50%"

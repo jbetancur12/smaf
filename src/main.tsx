@@ -12,6 +12,7 @@ import App from './App';
 import './index.css';
 import { store } from './store/store';
 
+
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement!);
 

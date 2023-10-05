@@ -1,40 +1,36 @@
-import { getTemplate, getTemplateMeasurements } from '@app/api/template.api'
+import { getTemplateMeasurements } from '@app/api/template.api'
 import { Sensor, VariableData } from '@app/api/variable.api'
 import { Box } from "@mui/material"
-import { useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { useState } from "react"
+import ApexCharts from './components/ApexCharts'
 import DatePickerRange from './components/DatePickerRange'
 import RangeButtons from './components/RangeButtons'
 import SelectComponent from './components/SelectComponent'
+import Sensors from './components/Sensors'
 
 interface ISeries {
   timestamp: string
   measurements: {}
 }
 
+interface DataViewProps{
+  ai: Sensor[];
+  templateId: string | null;
+  variables: VariableData[]
+  mqtt: any
+}
+
 const dt: Date = new Date()
 dt.setHours(dt.getHours() - 6)
 
-const DataView = () => {
-  let [searchParams] = useSearchParams()
+const DataView: React.FC<DataViewProps> = ({ai, templateId, variables,mqtt}) => {
 
   const [startDate, setStartDate] = useState<Date>(dt)
   const [endDate, setEndDate] = useState<Date>(new Date())
-
-  const [variables, setVariables] = useState<VariableData[]>([])
-  const [ai, setAi] = useState<Sensor[]>([])
-  const [graphData, setGraphData] = useState({
-    salesGraph: [],
-    salesByPeriod: []
-  });
-  const [unit, setUnit] = useState('hour');
   const [data, setData] = useState<ISeries[]>([])
-  console.log("🚀 ~ file: DataView.tsx:33 ~ DataView ~ data:", data)
   const [custom, setCustom] = useState<Boolean>(false)
   const [variablesQuery, setVariablesQuery] = useState<string | string[]>([])
 
-  const templateId = searchParams.get('template')
-  const customerId = searchParams.get('customer')
 
   const datesQuery = (start: Date, end: Date) => {
     setStartDate(start)
@@ -62,28 +58,22 @@ const DataView = () => {
     fetchData(startDate, endDate, templateId, queryString)
   }
 
-  useEffect(() => {
-    getTemplate(templateId).then((data) => {
-      setVariables(data.variables)
-      const analogInputs = data.variables.filter(
-        (obj) => obj.typePin === 'analogInput'
-      )
-      setAi(analogInputs as Sensor[])
-    })
 
-    return () => { }
-  }, [])
 
 
   return (
     <Box m="1.5rem 2.5rem">
       <Box className="tw-flex tw-items-center tw-gap-3 tw-mb-4" >
         <RangeButtons custom={setCustom} datesQuery={datesQuery} disable={variablesQuery.length <= 0}/>
-       {custom && <DatePickerRange setGraphData={setGraphData} setUnit={setUnit}  datesQuery={datesQuery} custom={custom}/>}
+       {custom && <DatePickerRange datesQuery={datesQuery} custom={custom}/>}
       </Box>
       <Box className="tw-w-full">
         <SelectComponent options={ai} onSubmit={handleFormSubmit} setVariablesQuery={setVariablesQuery}/>
       </Box>
+      <Box>
+      {data.length > 0  && <ApexCharts data={data}/>}
+      </Box>
+      <Sensors variables={variables} data={mqtt}/>
     </Box>
   )
 }

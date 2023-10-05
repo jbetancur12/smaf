@@ -88,11 +88,9 @@ function getDateISOString(date: Date | null, endOfDay: boolean = false): string 
 }
 
 const DatePickerRange: React.FC<{
-  setGraphData: (data: any) => void;
-  setUnit: (unit: string) => void;
   datesQuery: (start: Date, end: Date) => void
   custom: Boolean
-}> = ({ setGraphData, setUnit,  datesQuery, custom }) => {
+}> = ({  datesQuery, custom }) => {
   const [startDate, setStartDate] = useState<Date>(manipulateDate(new Date(), 7, "D", "rest"));
   const [endDate, setEndDate] = useState<Date>(new Date());
   const diffDays = getDaysBetweenDates(endDate, startDate);

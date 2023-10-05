@@ -55,7 +55,7 @@ const Templates: React.FC = () => {
                     <Typography variant="body2" color="text.secondary">
                       {template.description}
                     </Typography>
-                    {/* Aquí puedes agregar más contenido de la tarjeta si es necesario */}
+
                   </CardContent>
                 </Card>
               </Link>

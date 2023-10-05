@@ -18,7 +18,7 @@ const ROLES = {
 const LogoutFallback = withLoading(Logout)
 
 const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
-const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView'))
+const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView2'))
 
 const Templates = withLoading(TemplatesPage)
 const TemplatesDataView = withLoading(TemplatesDataViewPage)
