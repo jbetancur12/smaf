@@ -29,6 +29,7 @@ const navItems = () => [
     text: "Plantillas",
     icon: <HomeOutlined />,
     path: "templates",
+    visibleToRoles: ["USER_ROLE"]
   },
 
   // ...otros elementos del menú
@@ -44,6 +45,13 @@ interface SidebarProps {
   user: {
     name: string;
     occupation: string;
+    roles?: [
+      {
+        name: string
+        _id?: string
+        createdAt?: Date
+      }
+    ]
   };
   drawerWidth: number;
   isSidebarOpen: boolean;
@@ -67,6 +75,8 @@ const Sidebar:React.FC<SidebarProps> = ({
   useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);
+
+  const userRoles = user.roles && Array.isArray(user.roles) ? user.roles.map(role => role.name) : [];
 
   return (
     <Box component="nav">
@@ -114,7 +124,10 @@ const Sidebar:React.FC<SidebarProps> = ({
               </FlexBetween>
             </Box>
             <List>
-              {navItems().map(({ text, icon, path }) => {
+              {navItems()
+              //@ts-ignore
+               .filter((item) => item.visibleToRoles.some((role) => userRoles.includes(role)))
+              .map(({ text, icon, path }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
