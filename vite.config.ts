@@ -16,8 +16,10 @@ export default defineConfig({
         plugins: [
             NodeGlobalsPolyfillPlugin({
                 buffer: true
-            })
+            }),
+
         ]
     }
-}
+},
+resolve: { alias: { mqtt: 'mqtt/dist/mqtt.min.js', }, }
 })

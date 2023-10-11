@@ -59,8 +59,6 @@ const DataView: React.FC<DataViewProps> = ({ai, templateId, variables,mqtt}) => 
   }
 
 
-
-
   return (
     <Box m="1.5rem 2.5rem">
       <Box className="tw-flex tw-items-center tw-gap-3 tw-mb-4" >

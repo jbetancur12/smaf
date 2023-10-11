@@ -1,5 +1,4 @@
 import { httpApi } from '@app/api/http.api'
-import { AppDate } from '@app/constants/Dates'
 import { TemplateTableRow } from './table.api'
 import { VariableData } from './variable.api'
 
@@ -52,8 +51,8 @@ export const getCustomerTemplates = (
     .then(({ data }) => data)
 
 export const getTemplateMeasurements = (
-  startDate: AppDate,
-  endDate: AppDate,
+  startDate: Date,
+  endDate: Date,
   templateId: string | null,
   queryString: string
 ): Promise<any> =>

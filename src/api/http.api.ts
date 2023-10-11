@@ -61,10 +61,17 @@ httpApi.interceptors.response.use(undefined, async (error: AxiosError) => {
       window.location.href = '/auth/login'
     }
   }
-  throw new ApiError<ApiErrorData>(
-    error.response?.data.message || error.message,
-    error.response?.data
-  )
+  if (error.response?.data && typeof error.response.data === 'object') {
+    // Si es de tipo ApiErrorData, lanza un ApiError con los datos adecuados
+    throw new ApiError<ApiErrorData>(
+      // @ts-ignore
+      error.response.data.message || error.message,
+      error.response.data as ApiErrorData
+    );
+  } else {
+    // Si no es de tipo ApiErrorData, lanza un ApiError con un mensaje genérico o undefined para los datos
+    throw new ApiError<ApiErrorData>(error.message, undefined);
+  }
 })
 
 export interface ApiErrorData {

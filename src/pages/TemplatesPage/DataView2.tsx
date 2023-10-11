@@ -1,6 +1,6 @@
 import { getTemplate } from '@app/api/template.api';
 import { Sensor, VariableData } from '@app/api/variable.api';
-import mqttHook from '@app/hooks/mqttHook';
+
 import { Sensors } from '@mui/icons-material';
 import SsidChartIcon from '@mui/icons-material/SsidChart';
 import Tab from '@mui/material/Tab';
@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import DataView from './DataView';
 import Actuators from './components/Actuators';
+import mqttHook from './mqttHook';
 
 function formatDateTime(date: Date) {
   const year = date.getFullYear()
@@ -33,6 +34,7 @@ export default function IconLabelTabs() {
   const [ai, setAi] = useState<Sensor[]>([])
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [mqttDataObj, setMqttDataObj] = useState<any>({})
+  const [mqttData, setMqttData] = useState<any>({});
   // console.log("🚀 ~ file: DataView2.tsx:35 ~ IconLabelTabs ~ mqttDataObj:", mqttDataObj)
   const [mqttInputObj, setMqttInputObj] = useState<any>({ 0: '0,0' })
   //console.log("🚀 ~ file: DataView2.tsx:38 ~ IconLabelTabs ~ mqttInputObj:", mqttInputObj)
@@ -48,13 +50,12 @@ export default function IconLabelTabs() {
     mqttUnSub
   } = mqttHook()
 
+
   const templateId = searchParams.get('template')
   const customerId = searchParams.get('customer')
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-
 
   useEffect(() => {
     getTemplate(templateId).then((data) => {
@@ -72,7 +73,7 @@ export default function IconLabelTabs() {
     const protocol = 'wss'
     const host = 'mqtt.smaf.com.co'
     const port = 8081
-    const clientId = 'emqx_react_' + Math.random().toString(16).substring(2, 8)
+    const clientId = 'smaf_' + Math.random().toString(16).substring(2, 8)
     const username = 'smaf'
     const password = 'smaf310'
 
@@ -95,46 +96,81 @@ export default function IconLabelTabs() {
   }, [])
 
 useEffect(() => {
-  if (connectStatus === 'Connected' && !isSubscribed) {
-    const subscription = {
-      topic: ['sensor', 'output'],
-      qos: 0 as QoS
-    }
-    const context = {
+     const context = {
       topic: 'input',
       qos: 0 as QoS,
       payload: `${customerId}/${templateId}/0/0/update`
     }
 
-    mqttSub(subscription)
     mqttPublish(context)
-    setIsSubscribed(true)
-  }
-}, [connectStatus, isSubscribed])
+
+
+}, [])
+
+
 
 useEffect(() => {
-  console.log("🚀 ~ file: DataView2.tsx:118 ~ useEffect ~ data:", payload)
-  if (payload.topic === 'sensor') {
-    const data = payload.message.toString().split('/')
+  const ws = new WebSocket('ws://localhost:5050'); // Reemplaza con la dirección de tu servidor Express
+
+  ws.onopen = () => {
+    console.log('Conectado al servidor WebSocket');
+  };
+
+  ws.onmessage = (event) => {
+  const wssPayload = JSON.parse(event.data)
+   if (wssPayload.topic === 'sensor') {
+    const data = wssPayload.message.split('/')
     if (data[1] === templateId) {
       setMqttDataObj((prevData: any) => ({
         ...prevData,
         [data[3]]: { value: data[4], date: formatDateTime(new Date()) }
+
       }))
     }
   }
 
-  if (payload.topic === 'output') {
-    const data = payload.message.toString().split('/')
-    console.log("🚀 ~ file: DataView2.tsx:128 ~ useEffect ~ data:", data)
+  if (wssPayload.topic === 'output') {
+    const data = wssPayload.message.split('/')
     if (data[1] === templateId) {
+      // console.log("🚀 ~ file: DataView2.tsx:134 ~ useEffect ~ data:", data)
       setMqttInputObj((prevData: any) => ({
         ...prevData,
         [data[3]]: data[4]
       }))
     }
-  }
-}, [payload.topic, payload.message, templateId])
+  } // Actualizar el estado de React con los datos MQTT
+  };
+
+  return () => {
+    ws.close(); // Cerrar la conexión al desmontar el componente
+  };
+}, []);
+
+
+
+// useEffect(() => {
+
+//   if (payload.topic === 'sensor') {
+//     const data = payload.message.toString().split('/')
+//     if (data[1] === templateId) {
+//       setMqttDataObj((prevData: any) => ({
+//         ...prevData,
+//         [data[3]]: { value: data[4], date: formatDateTime(new Date()) }
+
+//       }))
+//     }
+//   }
+
+//   if (payload.topic === 'output') {
+//     const data = payload.message.toString().split('/')
+//     if (data[1] === templateId) {
+//       setMqttInputObj((prevData: any) => ({
+//         ...prevData,
+//         [data[3]]: data[4]
+//       }))
+//     }
+//   }
+// }, [payload.topic, payload.message, templateId])
 
 const outputs = variables.filter((obj) => obj.typePin === 'digitalOutput')
 
@@ -144,14 +180,13 @@ const handleOutput = (vp?: number, msg?: string) => {
     qos: 0 as QoS,
     payload: `${customerId}/${templateId}/${Date.now()}/${vp}/${msg}`
   }
-  console.log("🚀 ~ file: DataView2.tsx:147 ~ handleOutput ~ context:", context)
-
 
   mqttPublish(context)
 }
 
   return (
     <>
+
     <Tabs value={value} onChange={handleChange} aria-label="icon label tabs example">
       <Tab icon={<SsidChartIcon />} />
       <Tab icon={<Sensors />} />

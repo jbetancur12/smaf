@@ -16,6 +16,7 @@ const ROLES = {
 }
 
 const LogoutFallback = withLoading(Logout)
+const LayoutFallback = withLoading(Layout)
 
 const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
 const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView2'))
@@ -31,32 +32,11 @@ function AppRouter() {
 
 
   const hasUserRole = userRole?.some(role => role.name === 'USER_ROLE');
-  console.log("🚀 ~ file: AppRouter.tsx:32 ~ AppRouter ~ hasUserRole:", hasUserRole)
-  // // Función para determinar la ruta de redirección en función del rol
-  // const getRedirectPath = () => {
-  //   if (_roles?.includes(ROLES.User)) {
-  //     return "/templates";
-  //   } else if (_roles?.includes(ROLES.Admin)) {
-  //     return "/manager";
-  //   } else {
-  //     // Manejar otros roles o escenarios aquí
-  //     return "/";
-  //   }
-  // };
-
-
-  // const redirectPath = getRedirectPath();
-
-
-  // Redirigir automáticamente según el rol del usuario
-  // React.useEffect(() => {
-  //   navigate(redirectPath, { replace: true });
-  // }, [navigate, redirectPath]);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Layout />}>
+        <Route path='/' element={<LayoutFallback />}>
           {hasUserRole ? (
             <Route index element={<Navigate to="/templates" replace />} />
           ) : (

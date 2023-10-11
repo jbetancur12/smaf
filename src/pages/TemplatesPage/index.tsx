@@ -17,7 +17,7 @@ const Templates: React.FC = () => {
   useEffect(() => {
     // Obtener las plantillas del cliente y actualizar el estado
     getCustomerTemplates(customer?._id).then((res) => setTemplates(res));
-  }, [customer]);
+  }, []);
 
   // Función para dividir las tarjetas en grupos de 6
   const chunkArray = (arr: any, chunkSize: number) => {

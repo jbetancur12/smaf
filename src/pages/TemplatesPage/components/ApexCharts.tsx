@@ -8,6 +8,8 @@ interface SeriesData {
 
 const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
   // Extrae las categorías de tiempo y los valores de cada métrica
+
+
   const categories = data.map((entry) => new Date(entry.timestamp).toLocaleString());
 
   const metricNames = Object.keys(data[0].measurements);
@@ -31,73 +33,7 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
   }));
 
 
-  // function findMaxMinPoints(seriesData: SeriesData[]) {
-  //   const maxMinPoints: any[] = [];
-
-  //   seriesData.forEach((series) => {
-  //     const { data, name } = series;
-
-  //     let maxPoint = { x: 0, y: -Infinity };
-  //     let minPoint = { x: 0, y: Infinity };
-
-  //     data.forEach((point, index) => {
-  //       if (point > maxPoint.y) {
-  //         maxPoint = { x: index, y: point };
-  //       }
-  //       if (point < minPoint.y) {
-  //         minPoint = { x: index, y: point };
-  //       }
-  //     });
-
-  //     // Agregar anotaciones de punto máximo y mínimo
-  //     maxMinPoints.push({
-  //       x: maxPoint.x,
-  //       y: maxPoint.y,
-  //       marker: {
-  //         size: 3,
-  //         fillColor: "#fff",
-  //         strokeColor: "#2698FF",
-  //         radius: 2
-  //       },
-  //       label: {
-  //         borderColor: "#FF4560",
-  //         offsetY: 0,
-  //         style: {
-  //           color: "#fff",
-  //           background: "#FF4560"
-  //         },
-  //         text: maxPoint.y.toFixed(1)
-  //       }
-  //     });
-
-  //     maxMinPoints.push({
-  //       x: minPoint.x,
-  //       y: minPoint.y,
-  //       marker: {
-  //         size: 3,
-  //         fillColor: "#fff",
-  //         strokeColor: "#2698FF",
-  //         radius: 2
-  //       },
-  //       label: {
-  //         borderColor: "#FF4560",
-  //         offsetY: 0,
-  //         style: {
-  //           color: "#fff",
-  //           background: "#FF4560"
-  //         },
-  //         text: minPoint.y.toFixed(1)
-  //       }
-  //     });
-  //   });
-
-  //   return maxMinPoints;
-  // }
-
-  // const maxMinAnnotations = findMaxMinPoints(seriesData);
-
-
-  const yAxesConfig = series.map((series) => ({
+  const yAxesConfig = series.map((series, index) => ({
     // opposite: true,
     seriesName: series.name,
     axisTicks: {
@@ -105,11 +41,11 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
     },
     axisBorder: {
       show: true,
-      color: getRandomColor(), // Genera un color aleatorio para el eje
+      color: getRandomColor(index), // Genera un color aleatorio para el eje
     },
     labels: {
       style: {
-        colors: getRandomColor(), // Genera un color aleatorio para las etiquetas
+        colors: getRandomColor(index), // Genera un color aleatorio para las etiquetas
       },
       formatter: function (value: number) {
 
@@ -122,7 +58,7 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
     title: {
       text: series.name,
       style: {
-        color: getRandomColor(), // Genera un color aleatorio para el título
+        color: getRandomColor(index), // Genera un color aleatorio para el título
       },
 
     },
@@ -144,11 +80,14 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
       show: true,
       curve: 'smooth',
       lineCap: 'butt',
-      colors: undefined,
+      colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'],
       width: 2,
       dashArray: 0,
-    }
+    },
+
   };
+
+  console.log("object")
 
   return (
     <div>
@@ -157,15 +96,22 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
   );
 };
 
-function getRandomColor(): string {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-
-  return color;
+function getRandomColor(index:number): string {
+  // Implementa tu lógica para asignar un color específico a cada eje
+  // Por ejemplo, puedes mantener una lista de colores y asignar uno basado en el índice.
+  const colors = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
+  return colors[index % colors.length];
 }
+
+// function getRandomColor(): string {
+//   const letters = '0123456789ABCDEF';
+//   let color = '#';
+//   for (let i = 0; i < 6; i++) {
+//     color += letters[Math.floor(Math.random() * 16)];
+//   }
+
+//   return color;
+// }
 
 function isValidNumber(value: any): boolean {
   return typeof value === 'number' && !isNaN(value) && isFinite(value);

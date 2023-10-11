@@ -26,9 +26,9 @@ import FlexBetween from "./FlexBetween";
 
 const navItems = () => [
   {
-    text: "Panel de Control",
+    text: "Plantillas",
     icon: <HomeOutlined />,
-    path: "dashboard",
+    path: "templates",
   },
 
   // ...otros elementos del menú

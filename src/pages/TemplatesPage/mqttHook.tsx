@@ -102,7 +102,9 @@ const mqttHook = () => {
     }
   }
 
-  // console.log(payload,( new Date()).toLocaleString())
+  if(payload.message.includes("579/0/6")){
+    console.log(payload,( new Date()).toLocaleString())
+  }
 
   return {
     client,

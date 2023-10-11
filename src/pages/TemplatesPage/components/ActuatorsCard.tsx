@@ -121,7 +121,7 @@
 // export default ActuatorsCard;
 
 
-import { Box, Button, Card, CardContent, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface ActuatorsCardProps {
@@ -240,7 +240,7 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
               color='secondary'
               sx={{ backgroundColor: stateColor, color: "white" }}
             >
-              {selectedOption}
+              {selectedOption ? selectedOption : <CircularProgress size={20} />}
             </Button>
             <Menu
               id="menu"
