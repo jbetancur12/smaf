@@ -4,7 +4,6 @@ import RequireAuth from '@app/components/auth/RequireAuth'
 import { withLoading } from '@app/hocs/withLoading'
 import { useAppSelector } from '@app/hooks/reduxHooks'
 import LoginPage from '@app/pages/LoginPage'
-import Manager from '@app/pages/Manager'
 
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
@@ -20,15 +19,18 @@ const LayoutFallback = withLoading(Layout)
 
 const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
 const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView2'))
+const CustomersPage = React.lazy(() => import('@app/pages/CustomersPage/CustomersPage'))
+const CustomerPage = React.lazy(() => import('@app/pages/CustomersPage/CustomerPage/CustomerPage'))
 
 const Templates = withLoading(TemplatesPage)
 const TemplatesDataView = withLoading(TemplatesDataViewPage)
+const Customers = withLoading(CustomersPage)
+const Customer = withLoading(CustomerPage)
 
 function AppRouter() {
   // const navigate = useNavigate();
   const user = useAppSelector((state) => state.user)
   const userRole = user ? user.user?.roles : [{ name: 'USER_ROLE' }]
-  const _roles = userRole?.map((rol) => rol.name)
 
 
   const hasUserRole = userRole?.some(role => role.name === 'USER_ROLE');
@@ -41,7 +43,7 @@ function AppRouter() {
             <Route index element={<Navigate to="/templates" replace />} />
           ) : (
             // Puedes agregar una redirección por defecto si el usuario no tiene el rol "USER_ROLE"
-            <Route index element={<Navigate to="/manager" replace />} />
+            <Route index element={<Navigate to="/customers" replace />} />
           )}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/templates" >
@@ -50,9 +52,13 @@ function AppRouter() {
             </Route>
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-            <Route path="manager" >
-              <Route index element={<Manager />} />
+          <Route path="customers">
+            <Route index element={<Customers />} />
+            <Route path=":id">
+              <Route index element={<Customer />} />
+              {/* <Route path="template/:idTemplate" element={<Template />} /> */}
             </Route>
+          </Route>
           </Route>
         </Route>
         <Route path="/auth/login" element={<LoginPage />} />

@@ -1,7 +1,8 @@
 import {
   ChevronLeft,
   ChevronRightOutlined,
-  HomeOutlined,
+  DeviceThermostatOutlined,
+  FactoryOutlined,
   SettingsOutlined
 } from "@mui/icons-material";
 import {
@@ -27,9 +28,15 @@ import FlexBetween from "./FlexBetween";
 const navItems = () => [
   {
     text: "Plantillas",
-    icon: <HomeOutlined />,
+    icon: <DeviceThermostatOutlined />,
     path: "templates",
     visibleToRoles: ["USER_ROLE"]
+  },
+  {
+    text: "Clientes",
+    icon: <FactoryOutlined />,
+    path: "customers",
+    visibleToRoles: ["ADMIN_ROLE"]
   },
 
   // ...otros elementos del menú

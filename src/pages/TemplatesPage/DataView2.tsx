@@ -26,7 +26,7 @@ function formatDateTime(date: Date) {
 
 export default function IconLabelTabs() {
 
-  const { socket, isConnected, sendMessage, receivedMessage } = useWebSocket('wss://api.smaf.com.co');
+  const { socket, isConnected, sendMessage } = useWebSocket('wss://api.smaf.com.co');
 
   let [searchParams] = useSearchParams()
 
@@ -41,7 +41,7 @@ export default function IconLabelTabs() {
 
   const templateId = searchParams.get('template')
   const customerId = searchParams.get('customer')
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
