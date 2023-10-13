@@ -1,7 +1,8 @@
+import { TemplateDataResponse } from '@app/api/template.api';
 import Form from '@app/components/Form';
 import { useAppDispatch } from '@app/hooks/reduxHooks';
 import { useNotification } from '@app/services/notificationService';
-import { doSignUp } from '@app/store/slices/authSlice';
+import { doCreateTemplate } from '@app/store/slices/templateSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -22,70 +23,72 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { SignUpFormData, User } from '../CustomerPage';
 
 
 
-interface UsersTableProps {
-  users: User[];
+
+interface TemplatesTableProps {
+  templates: TemplateDataResponse[];
 
 }
 
 const formFields = [
   {
-    name: 'firstName',
+    name: 'name',
     label: 'Nombre',
     type: 'text',
     required: true,
     value: '',
   },
   {
-    name: 'lastName',
-    label: 'Apellido',
+    name: 'description',
+    label: 'Decripción',
     type: 'text',
     required: true,
     value: '',
   },
   {
-    name: 'email',
-    label: 'Email',
-    type: 'email',
+    name: 'type',
+    label: 'Tipo',
+    type: 'text',
     required: true,
-    value: '',
+    value: 'graph',
   },
 ];
 
-const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
+const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
 
-  const { id: customer } = useParams()
   const [openDialog, setOpenDialog] = useState(false);
-  const [customerUsers, setCustomerUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [customerTemplates, setCustomerTemplates] = useState<TemplateDataResponse[]>([]);
+  const [id, setId] = useState<string>("");
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [templateToDelete, setTemplateToDelete] = useState<TemplateDataResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [editItem, setEditItem] = useState<Record<string, string> | null>(null)
 
   const dispatch = useAppDispatch()
-  const { success, error, info } = useNotification()
-
-  useEffect(() => {
-    setCustomerUsers(users)
-  }, [])
+  const { id: customer } = useParams()
 
 
-  const onCreateUser = (values: SignUpFormData) => {
-    dispatch(doSignUp(values))
+  const {success, error, info} = useNotification()
+
+  useEffect(()=>{
+    setCustomerTemplates(templates)
+  },[])
+
+
+  const onCreateTemplate = (values: any) => {
+    setLoading(true)
+    dispatch(doCreateTemplate({...values, customer}))
       .unwrap()
       .then((res) => {
         if (res !== undefined) {
           // @ts-ignore
-          setCustomerUsers((current) => [...current, res.user])
-          //setUserInDialog({ id: "", firstName: '', lastName: '', email: '', password: "initialPassword123456" })
-          setLoading(false)
+          setCustomerTemplates((current) => [...current, res.data])
           setOpenDialog(false);
-          success("Usuario Creado con exito")
+          success("Plantilla Creada con exito")
+          setLoading(false)
         }
-        // setOpen(false)
 
       })
       .catch((err) => {
@@ -93,66 +96,60 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
       })
   }
 
-  const onEditUser = (values: any) => {
+  const onEditTemplate = () => {
     info("Pendiente la edicion")
     setOpenDialog(false);
   }
 
   const onDeleteUser = (id: string) => {
-    setUserToDelete(null); // Restablece el usuario que se va a eliminar
     setIsDeleteConfirmationOpen(false);
     info("Pendiente la eliminacion")
   }
 
-
-  const handleEditClick = (user: any) => {
-    // setUserInDialog(user);
-    setEditItem(user)
-    setOpenDialog(true);
-  };
-
-  const handleDeleteUserClick = (user: User) => {
-    setIsDeleteConfirmationOpen(true);
-  };
-
-
-
-  const myHandleFormSubmit = (values: any) => {
-    // Aquí puedes realizar la lógica con los datos del formulario
-    setLoading(true)
-    onCreateUser({ ...values, password: "initialPassword", customer });
-  };
 
   const handleCancel = () => {
     setOpenDialog(false)
     setEditItem(null)
   }
 
+  const handleEditClick = (template: any) => {
+    // setUserInDialog(user);
+    setEditItem(template)
+    setOpenDialog(true);
+  };
+
+
+  const handleDeleteUserClick = (template: TemplateDataResponse) => {
+    setIsDeleteConfirmationOpen(true);
+  };
+
   return (
     <div>
       <Button variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
-        Nuevo Usuario
+        Nueva Plantilla
       </Button>
-      {customerUsers.length > 0 ? (
+      {customerTemplates.length > 0 ? (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>id</TableCell>
                 <TableCell>Nombre</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Acciones</TableCell>
+                <TableCell>Descripcion</TableCell>
+                <TableCell>Tipo</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customerUsers.map((user, index) => (
+              {customerTemplates.map((template, index) => (
                 <TableRow key={index}>
-                  <TableCell>{user.firstName + ' ' + user.lastName}</TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{template._id}</TableCell>
+                  <TableCell>{template.name}</TableCell>
+                  <TableCell>{template.type}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEditClick(user)} color="primary">
+                  <IconButton onClick={() => handleEditClick(template)} color="primary">
                       <EditIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleDeleteUserClick(user)} color="error">
+                    <IconButton onClick={() => handleDeleteUserClick(template)} color="error">
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -164,13 +161,20 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
       ) : (
         <Typography variant="body1">No hay usuarios registrados para esta empresa.</Typography>
       )}
-
-      <Form fields={formFields} handleSubmit={myHandleFormSubmit} open={openDialog} onClose={() => setOpenDialog(false)} handleCancel={handleCancel} loading={loading} editItem={editItem} handleEdit={onEditUser} />
-
+    <Form
+          open={openDialog}
+          onClose={()=>setOpenDialog(false)}
+          fields={formFields}
+          handleSubmit={onCreateTemplate}
+          handleCancel={handleCancel}
+          handleEdit={onEditTemplate}
+          loading={loading}
+          editItem={editItem}
+          />
       <Dialog open={isDeleteConfirmationOpen} onClose={() => setIsDeleteConfirmationOpen(false)}>
         <DialogTitle>Confirmar Eliminación</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">¿Está seguro de que desea eliminar a {userToDelete?.firstName}?</Typography>
+          <Typography variant="body1">¿Está seguro de que desea eliminar a {templateToDelete?.name}?</Typography>
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={() => setIsDeleteConfirmationOpen(false)}>
@@ -179,7 +183,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => onDeleteUser(userToDelete?.id || '')}
+            onClick={() => onDeleteUser(templateToDelete?._id || '')}
           >
             Confirmar
           </Button>
@@ -189,4 +193,4 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
   );
 };
 
-export default UsersTable;
+export default TemplatesTable;

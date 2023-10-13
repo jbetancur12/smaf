@@ -6,9 +6,10 @@ import { retrieveCustomer } from "@app/store/slices/customerSlice"
 import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
-import { Box, Paper, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Box, Paper, Tab, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import TemplatesTable from "./components/TemplatesTable"
 import UsersTable from "./components/UsersTable"
 
 
@@ -109,7 +110,8 @@ const CustomerPage = () => {
         </TabPanel>
 
         <TabPanel value="3">
-          {templates.length > 0 ? (
+          <TemplatesTable templates={templates}/>
+          {/* {templates.length > 0 ? (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
@@ -134,7 +136,7 @@ const CustomerPage = () => {
             </TableContainer>
           ) : (
             <Typography variant="body1">No hay plantillas registradas para esta empresa.</Typography>
-          )}
+          )} */}
         </TabPanel>
       </TabContext>
 
