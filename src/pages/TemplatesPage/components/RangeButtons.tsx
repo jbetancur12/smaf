@@ -14,7 +14,7 @@ _dt.setHours(_dt.getHours() - 24)
 
 const RangeButtons: React.FC<RangeButtonsProps> = ({ custom, datesQuery, disable, setRange }) => {
 
-  const [alignment, setAlignment] = React.useState<string | null>('1Day');
+  const [alignment, setAlignment] = React.useState<string | null>('6Hours');
   const [_startDate, setStartDate] = useState<Date>(new Date(_dt));
   const [endDate, _setEndDate] = useState<Date>(new Date());
 

@@ -161,11 +161,11 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
       <Box>
         {data.length > 0 && <ApexCharts data={data} />}
         <Box className="tw-flex tw-justify-center tw-gap-5">
-          <IconButton>
-            <ArrowBack onClick={backwardDate}/>
+          <IconButton onClick={backwardDate}>
+            <ArrowBack />
           </IconButton>
-          <IconButton>
-            <ArrowForward onClick={forwardDate}/>
+          <IconButton onClick={forwardDate}>
+            <ArrowForward />
           </IconButton>
         </Box>
       </Box>
