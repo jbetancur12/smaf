@@ -20,7 +20,7 @@ import {
   useTheme
 } from "@mui/material";
 import profileImage from "assets/avatar.png";
-import logo from "assets/logo_smaf.png";
+import logo from "assets/smaf_logo-nobg.png";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
@@ -38,7 +38,6 @@ const navItems = () => [
     path: "customers",
     visibleToRoles: ["ADMIN_ROLE"]
   },
-
   // ...otros elementos del menú
 ];
 
@@ -71,6 +70,7 @@ const Sidebar:React.FC<SidebarProps> = ({
 }) => {
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
+  console.log("🚀 ~ file: SideBar.tsx:80 ~ active:", active)
   const navigate = useNavigate();
   const theme = useTheme()
 
@@ -103,7 +103,7 @@ const Sidebar:React.FC<SidebarProps> = ({
           <Box width="100%">
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.secondary.main}>
-                <Box display="flex" alignContent="center" justifyContent="center" gap="0.5rem">
+                <Box display="flex" alignContent="center" justifyContent="center" gap="0.5rem" >
                   {/* <Typography variant="h4" fontWeight="bold">
                     ECOMVISION
                   </Typography> */}
@@ -112,10 +112,11 @@ const Sidebar:React.FC<SidebarProps> = ({
                     component="img"
                     alt="logo"
                     src={logo}
-                    height="60px"
-                    width="60px"
-                    borderRadius="50%"
-                    sx={{ objectFit: "cover", filter: "invert(100%)" }}
+                    height="70px"
+                    width="70px"
+
+                    // borderRadius="50%"
+                    // sx={{ objectFit: "cover"}}
                   />
                 </Box>
                 {!isNonMobile && (
@@ -130,6 +131,7 @@ const Sidebar:React.FC<SidebarProps> = ({
               //@ts-ignore
                .filter((item) => item.visibleToRoles.some((role) => userRoles.includes(role)))
               .map(({ text, icon, path }) => {
+                console.log("🚀 ~ file: SideBar.tsx:140 ~ path:", path)
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -162,7 +164,7 @@ const Sidebar:React.FC<SidebarProps> = ({
                           color:
                             active === path
                               ? theme.palette.primary["600" as keyof PaletteColor]
-                              : theme.palette.secondary["200" as keyof PaletteColor],
+                              : theme.palette.secondary["100" as keyof PaletteColor],
                         }}
                       >
                         {icon}

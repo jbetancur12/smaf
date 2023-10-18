@@ -8,18 +8,19 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   optimizeDeps: {
     esbuildOptions: {
-        // Node.js global to browser globalThis
-        define: {
-            global: 'globalThis'
-        },
-        // Enable esbuild polyfill plugins
-        plugins: [
-            NodeGlobalsPolyfillPlugin({
-                buffer: true
-            }),
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis'
+      },
+      // Enable esbuild polyfill plugins
+      plugins: [
 
-        ]
+        NodeGlobalsPolyfillPlugin({
+          buffer: true
+        }),
+
+      ]
     }
-},
-resolve: { alias: { mqtt: 'mqtt/dist/mqtt.min.js', }, }
+  },
+  resolve: { alias: { mqtt: 'mqtt/dist/mqtt.min.js', }, }
 })
