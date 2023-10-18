@@ -14,11 +14,11 @@ _dt.setHours(_dt.getHours() - 24)
 const RangeButtons: React.FC<RangeButtonsProps> = ({ custom, datesQuery, disable }) => {
 
   const [alignment, setAlignment] = React.useState<string | null>('1Day');
-  const [startDate, setStartDate] = useState<Date>(new Date(_dt));
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [_startDate, setStartDate] = useState<Date>(new Date(_dt));
+  const [endDate, _setEndDate] = useState<Date>(new Date());
 
   const handleAlignment = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newAlignment: string | null,
   ) => {
 

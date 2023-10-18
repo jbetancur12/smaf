@@ -64,9 +64,8 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [customerTemplates, setCustomerTemplates] = useState<TemplateDataResponse[]>([]);
-  const [id, setId] = useState<string>("");
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
-  const [templateToDelete, setTemplateToDelete] = useState<TemplateDataResponse | null>(null);
+  const [templateToDelete, _setTemplateToDelete] = useState<TemplateDataResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [editItem, setEditItem] = useState<Record<string, string> | null>(null)
 
@@ -103,7 +102,7 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
     setOpenDialog(false);
   }
 
-  const onDeleteUser = (id: string) => {
+  const onDeleteUser = (_id: string) => {
     setIsDeleteConfirmationOpen(false);
     info("Pendiente la eliminacion")
   }
@@ -121,13 +120,10 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
   };
 
 
-  const handleDeleteUserClick = (template: TemplateDataResponse) => {
+  const handleDeleteUserClick = (_template: TemplateDataResponse) => {
     setIsDeleteConfirmationOpen(true);
   };
 
-  const handleRowClick = (template:any) => {
-    console.log(template)
-  }
 
   return (
     <div>

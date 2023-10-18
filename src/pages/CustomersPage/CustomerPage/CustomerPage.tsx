@@ -60,7 +60,7 @@ const CustomerPage = () => {
 
       <TabContext value={activeTab}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={(e, newValue) => setActiveTab(newValue)}>
+          <TabList onChange={(_e, newValue) => setActiveTab(newValue)}>
             <Tab label="Información del Cliente" value="1" />
             <Tab label="Usuarios" value="2" />
             <Tab label="Plantillas" value="3" />

@@ -142,7 +142,6 @@ const Sidebar:React.FC<SidebarProps> = ({
                     </Typography>
                   );
                 }
-                const lcText = kebabCase(text);
 
                 return (
                   <ListItem key={text} disablePadding>

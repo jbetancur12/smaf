@@ -1,7 +1,7 @@
 import { TemplateDataResponse } from "@app/api/template.api"
 import { VariableDataResponse } from "@app/api/variable.api"
 import Header from "@app/components/Header"
-import { useAppDispatch, useAppSelector } from "@app/hooks/reduxHooks"
+import { useAppDispatch } from "@app/hooks/reduxHooks"
 import { useNotification } from "@app/services/notificationService"
 import { retrieveTemplate } from "@app/store/slices/templateSlice"
 import { doCreateVariable, doDeleteVariable, doUpdateVariable } from "@app/store/slices/variableSlice"
@@ -18,7 +18,6 @@ import VariableForm, { VariableFormData } from "./components/VariableForm"
 const TemplatesPage = () => {
   const [template, setTemplate] = useState<Partial<TemplateDataResponse>>({})
   const [variables, setVariables] = useState<VariableDataResponse[]>([])
-  const [open, setOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingVariable, setEditingVariable] = useState<VariableFormData>();
@@ -37,8 +36,7 @@ const TemplatesPage = () => {
 
   const dispatch = useAppDispatch()
   const { success, error, info } = useNotification();
-  const [value, copy] = useCopyToClipboard()
-  const { templates } = useAppSelector((state) => state.template)
+  const [_value, copy] = useCopyToClipboard()
 
   let { id, idTemplate } = useParams()
 
@@ -164,6 +162,7 @@ const TemplatesPage = () => {
   }
 
   const handleCellClick = (value:string|undefined) => {
+    //@ts-ignore
     copy(value);
     info("Id copiado al portapapeles")
   };

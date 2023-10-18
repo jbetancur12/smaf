@@ -12,8 +12,8 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
   // const [selectedOption, setSelectedOption] = useState<string | undefined>('  ')
   const [buttonColor, setButtonColor] = useState<string>('gray')
   const [stateColor, setStateColor] = useState<string>('gray')
-  const [actualState, setActualState] = useState({ state: 0, operation: 0 })
-  const [loading, setLoading] = useState(true)
+  const [_actualState, setActualState] = useState({ state: 0, operation: 0 })
+  const [_loading, setLoading] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 

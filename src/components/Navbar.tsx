@@ -47,12 +47,6 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
 
   const handleClose = () => setAnchorEl(null);
 
-  const handleLogout = () => {
-    localStorage.removeItem("jwt");
-    navigate("/login");
-  };
-
-
   return (
     <AppBar
       sx={{

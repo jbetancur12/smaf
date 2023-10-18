@@ -93,12 +93,12 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
       })
   }
 
-  const onEditUser = (values: any) => {
+  const onEditUser = (_values: any) => {
     info("Pendiente la edicion")
     setOpenDialog(false);
   }
 
-  const onDeleteUser = (id: string) => {
+  const onDeleteUser = (_id: string) => {
     setUserToDelete(null); // Restablece el usuario que se va a eliminar
     setIsDeleteConfirmationOpen(false);
     info("Pendiente la eliminacion")
@@ -111,7 +111,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
     setOpenDialog(true);
   };
 
-  const handleDeleteUserClick = (user: User) => {
+  const handleDeleteUserClick = (_user: User) => {
     setIsDeleteConfirmationOpen(true);
   };
 
