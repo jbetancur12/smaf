@@ -7,16 +7,19 @@ import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const Templates: React.FC = () => {
-  const customer = readUser()?.customer;
+  const [searchParams] = useSearchParams();
+  const customerUser = readUser()?.customer?._id
+  const customerAdmin = searchParams.get("customer")
+  const customer: string | null | undefined = customerUser || customerAdmin
   const [templates, setTemplates] = useState<TemplateDataResponse[]>([]);
 
 
   useEffect(() => {
     // Obtener las plantillas del cliente y actualizar el estado
-    getCustomerTemplates(customer?._id).then((res) => setTemplates(res));
+    if (customer !== null) getCustomerTemplates(customer).then((res) => setTemplates(res));
   }, []);
 
   // Función para dividir las tarjetas en grupos de 6
@@ -45,7 +48,7 @@ const Templates: React.FC = () => {
                 color: 'inherit',
               }} to={{
                 pathname: 'charts',
-                search: `?customer=${customer?._id}&template=${template._id}`
+                search: `?customer=${customer}&template=${template._id}`
               }}>
                 <Card>
                   <CardContent sx={{textAlign: 'center'}} >

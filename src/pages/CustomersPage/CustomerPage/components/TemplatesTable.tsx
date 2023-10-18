@@ -150,6 +150,7 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
                 <TableRow key={index} >
                   <TableCell>{template._id}</TableCell>
                   <TableCell>{template.name}</TableCell>
+                  <TableCell>{template.description}</TableCell>
                   <TableCell>{template.type}</TableCell>
                   <TableCell>
                     <IconButton onClick={() =>  navigate(`template/${template._id}`)}>

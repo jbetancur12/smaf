@@ -47,7 +47,7 @@ function AppRouter() {
             // Puedes agregar una redirección por defecto si el usuario no tiene el rol "USER_ROLE"
             <Route index element={<Navigate to="/customers" replace />} />
           )}
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}>
             <Route path="/templates" >
               <Route index element={<Templates />} />
               <Route path="charts" element={<TemplatesDataView />} />

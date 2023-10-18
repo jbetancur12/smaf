@@ -1,6 +1,6 @@
 import { getTemplateMeasurements } from '@app/api/template.api'
 import { Sensor, VariableData } from '@app/api/variable.api'
-import { Box } from "@mui/material"
+import { Backdrop, Box, CircularProgress } from "@mui/material"
 import { useState } from "react"
 import ApexCharts from './components/ApexCharts'
 import DatePickerRange from './components/DatePickerRange'
@@ -30,6 +30,7 @@ const DataView: React.FC<DataViewProps> = ({ai, templateId, variables,mqtt}) => 
   const [data, setData] = useState<ISeries[]>([])
   const [custom, setCustom] = useState<Boolean>(false)
   const [variablesQuery, setVariablesQuery] = useState<string | string[]>([])
+  const [backdrop, setBackdrop] = useState(false)
 
 
   const datesQuery = (start: Date, end: Date) => {
@@ -46,6 +47,7 @@ const DataView: React.FC<DataViewProps> = ({ai, templateId, variables,mqtt}) => 
     getTemplateMeasurements(startDate, endDate, templateId, queryString).then(
       ({ data }) => {
         setData(data)
+        setBackdrop(false)
       }
     )
   }
@@ -54,6 +56,7 @@ const DataView: React.FC<DataViewProps> = ({ai, templateId, variables,mqtt}) => 
     // setVariablesQuery(selectedOptions)
     // Aquí puedes realizar la llamada a la API y enviar las selecciones
     const queryString = selectedOptions.join(',')
+    setBackdrop(true)
 
     fetchData(startDate, endDate, templateId, queryString)
   }
@@ -72,6 +75,12 @@ const DataView: React.FC<DataViewProps> = ({ai, templateId, variables,mqtt}) => 
       {data.length > 0  && <ApexCharts data={data}/>}
       </Box>
       <Sensors variables={variables} data={mqtt}/>
+      <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={backdrop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
     </Box>
   )
 }

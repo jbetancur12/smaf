@@ -3,7 +3,7 @@ import Header from '@app/components/Header';
 import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
 import { useNotification } from '@app/services/notificationService';
 import { doCreateCustomer, doDeleteCustomer, doUpdateCustomer, retrieveCustomers } from '@app/store/slices/customerSlice';
-import { Visibility } from '@mui/icons-material';
+import { Equalizer, Visibility } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Backdrop, Box, Button, CircularProgress, IconButton, Modal } from '@mui/material';
@@ -176,6 +176,9 @@ const Customers: React.FC = () => {
             color='error'
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton onClick={() => navigate(`/templates?customer=${params.row._id}`)} color="info">
+            <Equalizer />
           </IconButton>
         </>
       ),
