@@ -158,8 +158,8 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
       <Box className="tw-w-full">
         <SelectComponent options={ai} onSubmit={handleFormSubmit} setVariablesQuery={setVariablesQuery} />
       </Box>
-      <Box>
-        {data.length > 0 && <ApexCharts data={data} />}
+      {data.length > 0 &&<Box>
+        <ApexCharts data={data} />
         <Box className="tw-flex tw-justify-center tw-gap-5">
           <IconButton onClick={backwardDate}>
             <ArrowBack />
@@ -168,7 +168,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
             <ArrowForward />
           </IconButton>
         </Box>
-      </Box>
+      </Box>}
       <Sensors variables={variables} data={mqtt} />
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
