@@ -124,10 +124,10 @@ const Customers: React.FC = () => {
   };
 
   const initFetch = useCallback(() => {
-    dispatch(retrieveCustomers()).unwrap().then((res) => {
+    dispatch(retrieveCustomers()).unwrap().then((_res) => {
       setLoading(false)
       setOpenBackDrop(false)
-    }).catch(err => {
+    }).catch(_err => {
       error("Error:")
     })
   }, [dispatch])

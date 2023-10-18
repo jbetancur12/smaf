@@ -103,7 +103,7 @@ const TemplatesPage = () => {
   const confirmDeleteVariable = () => {
     dispatch(doDeleteVariable(variableToDelete._id))
       .unwrap()
-      .then((data) => {
+      .then((_data) => {
         const updatedVariables = variables.filter((item) => item._id !== variableToDelete._id)
         setVariables(updatedVariables)
         success(`Variable ${variableToDelete.name} eliminada con exito`)

@@ -43,44 +43,7 @@ function manipulateDate(oldDate: Date, offset: number, offsetType: string, opera
 // }
 
 
-function getDaysBetweenDates(date1: Date, date2: Date): number {
-  const d1 = new Date(date1);
-  d1.setHours(0, 0, 0, 0);
-  const d2 = new Date(date2);
-  d2.setHours(23, 59, 59, 999);
-  const timeDiff = Math.abs(d2.getTime() - d1.getTime());
-  const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  return diffDays;
-}
 
-function getUnit(days: number): string {
-  let timeUnit: string;
-
-  switch (true) {
-    case days <= 1:
-      timeUnit = "hour";
-      break;
-    case days <= 30:
-      timeUnit = "day";
-      break;
-    case days <= 365:
-      timeUnit = "month";
-      break;
-    default:
-      timeUnit = "year";
-      break;
-  }
-
-  return timeUnit;
-}
-
-function getDateISOString(date: Date | null, endOfDay: boolean = false): string | null {
-  const hours = endOfDay ? 23 : 0;
-  const minutes = endOfDay ? 59 : 0;
-  const seconds = endOfDay ? 59 : 0;
-  const milliseconds = endOfDay ? 999 : 0;
-  return date ? new Date(date.setHours(hours, minutes, seconds, milliseconds)).toISOString() : null;
-}
 
 const DatePickerRange: React.FC<{
   datesQuery: (start: Date, end: Date) => void
@@ -88,7 +51,6 @@ const DatePickerRange: React.FC<{
 }> = ({  datesQuery, custom }) => {
   const [startDate, setStartDate] = useState<Date>(manipulateDate(new Date(), 7, "D", "rest"));
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const diffDays = getDaysBetweenDates(endDate, startDate);
 
   // Assuming you have a `useGetDashboardGraphQuery` hook defined elsewhere
   // const { data, isLoading } = useGetDashboardGraphQuery(params);
