@@ -3,9 +3,10 @@ import Header from '@app/components/Header';
 import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
 import { useNotification } from '@app/services/notificationService';
 import { doCreateCustomer, doDeleteCustomer, doUpdateCustomer, retrieveCustomers } from '@app/store/slices/customerSlice';
+import { Visibility } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Modal } from '@mui/material';
+import { Box, Button, IconButton, Modal } from '@mui/material';
 import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -151,23 +152,22 @@ const Customers: React.FC = () => {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
+          <IconButton onClick={() => navigate(`${params.row._id}`)}>
+            <Visibility />
+          </IconButton>
+          <IconButton
             onClick={() => handleEditCustomer(params.row)}
             className='tw-mr-2 '
             color='warning'
           >
-            Editar
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<DeleteIcon />}
+            <EditIcon />
+          </IconButton>
+          <IconButton
             onClick={() => handleDeleteCustomer(params.row)}
             color='error'
           >
-            Eliminar
-          </Button>
+            <DeleteIcon />
+          </IconButton>
         </>
       ),
     },
@@ -193,7 +193,7 @@ const Customers: React.FC = () => {
         Crear Nueva Compañia
       </Button>
       <Box>
-        <DataGrid rows={customers} columns={columns} getRowId={(row) => row._id} onCellClick={handleEvent} />
+        <DataGrid rows={customers} columns={columns} getRowId={(row) => row._id} />
       </Box>
       <Modal open={isModalOpen} onClose={handleCancel}>
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: '#FFF', padding: '1rem', borderRadius: 12 }}>

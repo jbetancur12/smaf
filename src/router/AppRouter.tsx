@@ -21,11 +21,13 @@ const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
 const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView2'))
 const CustomersPage = React.lazy(() => import('@app/pages/CustomersPage/CustomersPage'))
 const CustomerPage = React.lazy(() => import('@app/pages/CustomersPage/CustomerPage/CustomerPage'))
+const CustomerTemplatesPage = React.lazy(() => import('@app/pages/CustomersPage/CustomerPage/TemplatesPage/TemplatesPage'))
 
 const Templates = withLoading(TemplatesPage)
 const TemplatesDataView = withLoading(TemplatesDataViewPage)
 const Customers = withLoading(CustomersPage)
 const Customer = withLoading(CustomerPage)
+const CustomerTemplates = withLoading(CustomerTemplatesPage)
 
 function AppRouter() {
   // const navigate = useNavigate();
@@ -56,7 +58,7 @@ function AppRouter() {
             <Route index element={<Customers />} />
             <Route path=":id">
               <Route index element={<Customer />} />
-              {/* <Route path="template/:idTemplate" element={<Template />} /> */}
+              <Route path="template/:idTemplate" element={<CustomerTemplates />} />
             </Route>
           </Route>
           </Route>
@@ -138,7 +140,8 @@ export default AppRouter
 // const Logout = React.lazy(() => import('@app/components/auth/Logout'));
 // const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'));
 // const LogoutFallback = withLoading(Logoimport Templates from './../pages/TemplatesPage/index';
-// ut);
+// ut);import TemplatesPage from './../pages/CustomersPage/CustomerPage/TemplatesPage/TemplatesPage';
+
 
 // function AppRouter() {
 //   const user = useAppSelector((state) => state.user.user);

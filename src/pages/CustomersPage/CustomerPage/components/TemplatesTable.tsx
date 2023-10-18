@@ -3,6 +3,7 @@ import Form from '@app/components/Form';
 import { useAppDispatch } from '@app/hooks/reduxHooks';
 import { useNotification } from '@app/services/notificationService';
 import { doCreateTemplate } from '@app/store/slices/templateSlice';
+import { Visibility } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -22,7 +23,7 @@ import {
   Typography
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -57,6 +58,9 @@ const formFields = [
 ];
 
 const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
+  const dispatch = useAppDispatch()
+  const { id: customer } = useParams()
+  const navigate = useNavigate()
 
   const [openDialog, setOpenDialog] = useState(false);
   const [customerTemplates, setCustomerTemplates] = useState<TemplateDataResponse[]>([]);
@@ -66,8 +70,6 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [editItem, setEditItem] = useState<Record<string, string> | null>(null)
 
-  const dispatch = useAppDispatch()
-  const { id: customer } = useParams()
 
 
   const {success, error, info} = useNotification()
@@ -123,6 +125,10 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
     setIsDeleteConfirmationOpen(true);
   };
 
+  const handleRowClick = (template:any) => {
+    console.log(template)
+  }
+
   return (
     <div>
       <Button variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
@@ -141,11 +147,14 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
             </TableHead>
             <TableBody>
               {customerTemplates.map((template, index) => (
-                <TableRow key={index}>
+                <TableRow key={index} >
                   <TableCell>{template._id}</TableCell>
                   <TableCell>{template.name}</TableCell>
                   <TableCell>{template.type}</TableCell>
                   <TableCell>
+                    <IconButton onClick={() =>  navigate(`template/${template._id}`)}>
+                      <Visibility/>
+                    </IconButton>
                   <IconButton onClick={() => handleEditClick(template)} color="primary">
                       <EditIcon />
                     </IconButton>

@@ -33,7 +33,6 @@ const CustomerPage = () => {
   const [customer, setCustomer] = useState<Partial<CustomerDataResponse>>({})
   const [templates, setTemplates] = useState<TemplateDataResponse[]>([])
   const [users, setUsers] = useState<User[]>([])
-  console.log("🚀 ~ file: CustomerPage.tsx:34 ~ CustomerPage ~ users:", users)
   const [activeTab, setActiveTab] = useState('1'); // '1' representa la primera pestaña por defecto
 
 
