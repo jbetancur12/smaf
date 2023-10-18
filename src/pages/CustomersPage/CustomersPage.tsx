@@ -6,8 +6,8 @@ import { doCreateCustomer, doDeleteCustomer, doUpdateCustomer, retrieveCustomers
 import { Visibility } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, IconButton, Modal } from '@mui/material';
-import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
+import { Backdrop, Box, Button, CircularProgress, IconButton, Modal } from '@mui/material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomerForm, { CustomerFormData } from './components/CustomerForm';
@@ -22,6 +22,8 @@ const Customers: React.FC = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<CustomerFormData | null>(null);
+  const [loading, setLoading] = useState(false)
+  const [openBackDrop, setOpenBackDrop] = useState(false)
 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,10 +124,17 @@ const Customers: React.FC = () => {
   };
 
   const initFetch = useCallback(() => {
-    dispatch(retrieveCustomers())
+    dispatch(retrieveCustomers()).unwrap().then((res) => {
+      setLoading(false)
+      setOpenBackDrop(false)
+    }).catch(err => {
+      error("Error:")
+    })
   }, [dispatch])
 
   useEffect(() => {
+    setLoading(true)
+    setOpenBackDrop(true)
     initFetch()
   }, [initFetch])
 
@@ -173,15 +182,6 @@ const Customers: React.FC = () => {
     },
   ];
 
-  const handleEvent: GridEventListener<'cellClick'> = (
-    params,  // GridCellParams<any>
-
-  ) => {
-    navigate(`/customers/${params.value}`)
-
-  }
-
-
   return (
     <Box m="1.5rem 2.5rem" sx={{
       display: 'flex',
@@ -193,7 +193,13 @@ const Customers: React.FC = () => {
         Crear Nueva Compañia
       </Button>
       <Box>
-        <DataGrid rows={customers} columns={columns} getRowId={(row) => row._id} />
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openBackDrop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        {!loading ? (<DataGrid rows={customers} columns={columns} getRowId={(row) => row._id} />) : "..."}
       </Box>
       <Modal open={isModalOpen} onClose={handleCancel}>
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: '#FFF', padding: '1rem', borderRadius: 12 }}>
