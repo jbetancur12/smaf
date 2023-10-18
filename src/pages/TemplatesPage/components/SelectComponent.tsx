@@ -25,7 +25,7 @@ export interface Sensor {
 interface SensorListProps {
   options: Sensor[]
   onSubmit: (selectedOptions: string[]) => void
-  setVariablesQuery: (selectedOptions: string | string[]) => void
+  setVariablesQuery: (selectedOptions: string[]) => void
 }
 
 const ITEM_HEIGHT = 48;
@@ -54,7 +54,7 @@ const SelectComponent: React.FC<SensorListProps> = ({ options, onSubmit, setVari
       target: { value },
     } = event;
     if (value.length <= 5) {
-      setVariablesQuery(value)
+      setVariablesQuery([...value])
       setNumberOfTagsSelects(value.length)
       setPersonName(
         typeof value === 'string' ? value.split(',') : value,

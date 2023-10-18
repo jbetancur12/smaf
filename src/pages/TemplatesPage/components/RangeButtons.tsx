@@ -5,13 +5,14 @@ import { ranges } from "../utils";
 interface RangeButtonsProps {
   custom: (custom: Boolean) => void;
   datesQuery: (start: Date, end: Date) => void;
-  disable: boolean
+  disable: boolean;
+  setRange: (range:string|null) => void
 }
 
 const _dt: Date = new Date()
 _dt.setHours(_dt.getHours() - 24)
 
-const RangeButtons: React.FC<RangeButtonsProps> = ({ custom, datesQuery, disable }) => {
+const RangeButtons: React.FC<RangeButtonsProps> = ({ custom, datesQuery, disable, setRange }) => {
 
   const [alignment, setAlignment] = React.useState<string | null>('1Day');
   const [_startDate, setStartDate] = useState<Date>(new Date(_dt));
@@ -19,16 +20,16 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({ custom, datesQuery, disable
 
   const handleAlignment = (
     _event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | null,
+    range: string | null,
   ) => {
 
-    setAlignment(newAlignment);
+    setAlignment(range);
     custom(false)
-
+    setRange(range)
     const dt: Date = new Date()
 
 
-    switch (newAlignment) {
+    switch (range) {
       case 'lastHour':
         dt.setHours(dt.getHours() - 1)
         break

@@ -87,8 +87,6 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
 
   };
 
-  console.log("object")
-
   return (
     <div>
       <ReactApexChart options={options} series={series} type="line" height={350} />
