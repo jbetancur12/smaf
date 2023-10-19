@@ -1,6 +1,8 @@
 import { CustomerDataResponse } from "@app/api/customer.api"
+import { httpApi } from "@app/api/http.api"
 import { TemplateDataResponse, getCustomerTemplates } from "@app/api/template.api"
 import Header from "@app/components/Header"
+import Subscription from "@app/components/Subscription"
 import { useAppDispatch } from "@app/hooks/reduxHooks"
 import { retrieveCustomer } from "@app/store/slices/customerSlice"
 import TabContext from '@mui/lab/TabContext'
@@ -40,6 +42,9 @@ const CustomerPage = () => {
     dispatch(retrieveCustomer(id))
       .unwrap()
       .then((res) => {
+        httpApi
+          .post<any>('api/check-suscriptions/' + res._id)
+          .then(({ data }) => console.log(data))
         setCustomer(res)
         setUsers(res.users)
       })
@@ -52,8 +57,8 @@ const CustomerPage = () => {
   useEffect(() => {
     fetchCustomer()
     fetchTemplates()
-  }, [])
 
+  }, [])
   return (
     <Box m="1.5rem 2.5rem">
       <Header title={customer.name} />
@@ -99,17 +104,33 @@ const CustomerPage = () => {
                   <TableCell><strong>Fecha de Creación:</strong></TableCell>
                   <TableCell> {customer.createdAt ? new Date(customer.createdAt).toLocaleString() : 'Fecha no disponible'}</TableCell>
                 </TableRow>
+                <TableRow>
+                  <TableCell><strong>Suscripción:</strong></TableCell>
+                  <TableCell> {customer.activeSubscription?.isActive ? "Si" : 'No'}</TableCell>
+                  {customer.activeSubscription?.endDate && (<><TableCell><strong>Fecha de Inicio:</strong></TableCell>
+                    <TableCell>{customer.activeSubscription?.startDate ? new Date(customer.activeSubscription?.startDate).toLocaleDateString() : ""}</TableCell>
+                    <TableCell><strong>Fecha de Fin:</strong></TableCell>
+                    <TableCell>{customer.activeSubscription?.endDate ? new Date(customer.activeSubscription?.endDate).toLocaleDateString() : ""}</TableCell></>)}
+                </TableRow>
+                <TableRow>
+                  <TableCell><strong>Periodo de Prueba:</strong></TableCell>
+                  <TableCell> {customer.trialPeriod?.isOnTrial ? "Si" : 'No'}</TableCell>
+                  {customer.trialPeriod?.trialEndDate && (<>                <TableCell><strong>Fecha de Inicio:</strong></TableCell>
+                    <TableCell>{customer.trialPeriod?.trialStartDate ? new Date(customer.trialPeriod?.trialStartDate).toLocaleDateString() : ""}</TableCell>
+                    <TableCell><strong>Fecha de Fin:</strong></TableCell>
+                    <TableCell>{customer.trialPeriod?.trialEndDate ? new Date(customer.trialPeriod?.trialEndDate).toLocaleDateString() : ""}</TableCell></>)}
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </TabPanel>
 
         <TabPanel value="2">
-          <UsersTable  users={users}/>
+          <UsersTable users={users} />
         </TabPanel>
 
         <TabPanel value="3">
-          <TemplatesTable templates={templates}/>
+          <TemplatesTable templates={templates} />
           {/* {templates.length > 0 ? (
             <TableContainer component={Paper}>
               <Table>
@@ -139,6 +160,7 @@ const CustomerPage = () => {
         </TabPanel>
       </TabContext>
 
+      {customer && Object.keys(customer).length > 0 && <Subscription customerId={customer._id} hasSubscription={customer.activeSubscription?.isActive} hasTrial={customer.trialPeriod?.isOnTrial} />}
 
 
 

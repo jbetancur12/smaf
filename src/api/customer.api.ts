@@ -15,6 +15,16 @@ export interface CustomerData {
 
 export interface CustomerDataResponse extends CustomerData {
   _id: string
+  activeSubscription : {
+    isActive: boolean
+    startDate: Date | null
+    endDate: Date | null
+  }
+  trialPeriod : {
+    isOnTrial: boolean
+    trialStartDate: Date | null
+    trialEndDate: Date | null
+  }
 }
 
 export const getCustomers = (): Promise<any> =>
