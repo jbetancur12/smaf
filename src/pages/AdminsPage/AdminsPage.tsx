@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
 import { readToken } from '@app/services/localStorage.service';
 import { useNotification } from '@app/services/notificationService';
 import { doSignUp } from '@app/store/slices/authSlice';
-import { retrieveUsers } from '@app/store/slices/usersSlice';
+import { doDeleteUser, retrieveUsers } from '@app/store/slices/usersSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
@@ -30,6 +30,7 @@ const AdminsPage = () => {
 
   const { success, error, info } = useNotification();
   const { users  } = useAppSelector((state) => state.users)
+  const user = useAppSelector((state) => state.user.user)
 
 
   const formFields = [
@@ -123,7 +124,22 @@ const AdminsPage = () => {
     { field: 'firstName', headerName: 'Nombre', flex: 1 },
     { field: 'lastName', headerName: 'Nombre', flex: 1 },
     { field: 'email', headerName: 'Email', flex: 1 },
-    { field: 'customer', headerName: 'Compañia', flex: 1 },
+    { field: 'verified', headerName: 'Verificado', flex: 1, renderCell:(params) => (
+      <Box sx={
+        {
+          width: 10,
+          height:10,
+          backgroundColor: params.row.verified ? "green" : "orange",
+          borderRadius: "50%"
+        }
+      }></Box>
+    ) },
+    { field: 'customer',  headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
+      if(params.value){
+        return params.value
+      }
+      return "Admin"
+    } },
     {
       field: 'created', headerName: 'Fecha de Creación', flex: 1, valueFormatter: (params) => {
         const date = new Date(params.value as string);
@@ -140,31 +156,39 @@ const AdminsPage = () => {
       headerName: 'Acciones',
       flex: 1,
       headerAlign: "center",
-      renderCell: (params) => (
+      renderCell: (params) => {
+        return(
         <>
           <IconButton
             onClick={() => handleEditCustomer(params.row)}
             className='tw-mr-2 '
             color='warning'
-          >
+            >
             <EditIcon />
           </IconButton>
           <IconButton
             onClick={() => handleDeleteUserClick(params.row)}
             color='error'
+            disabled={params.row.id === user?.id}
           >
             <DeleteIcon />
           </IconButton>
         </>
-      ),
+      )},
     },
   ];
 
   const myHandleFormSubmit = (values: any) => {
-    console.log("🚀 ~ file: AdminsPage.tsx:147 ~ myHandleFormSubmit ~ values:", values)
+
     // Aquí puedes realizar la lógica con los datos del formulario
     setLoading(true)
-    onCreateUser({ ...values, password: "initialPassword", roles: [selectValue], customer: selectValueCustomer });
+    if (selectValueCustomer.length >0) {
+      onCreateUser({ ...values, password: "initialPassword", roles: [selectValue], customer: selectValueCustomer });
+    } else {
+      // Aquí puedes manejar la lógica en caso de que selectValueCustomer esté vacío
+      // Por ejemplo, mostrar un mensaje de error o realizar alguna otra acción
+      onCreateUser({ ...values, password: "initialPassword", roles: [selectValue] });
+    }
   };
 
   const handleCancel = () => {
@@ -178,7 +202,6 @@ const AdminsPage = () => {
   }
 
   const onCreateUser = (values: SignUpFormData) => {
-    console.log("🚀 ~ file: AdminsPage.tsx:163 ~ onCreateUser ~ values:", values)
     dispatch(doSignUp(values))
       .unwrap()
       .then((res) => {
@@ -199,13 +222,14 @@ const AdminsPage = () => {
   }
 
   const handleDeleteUserClick = (_user: User) => {
+    setUserToDelete(_user)
     setIsDeleteConfirmationOpen(true);
   };
 
   const onDeleteUser = (_id: string) => {
     setUserToDelete(null); // Restablece el usuario que se va a eliminar
     setIsDeleteConfirmationOpen(false);
-    info("Pendiente la eliminacion")
+    dispatch(doDeleteUser(_id))
   }
 
 

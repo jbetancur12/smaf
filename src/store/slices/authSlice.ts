@@ -71,6 +71,7 @@ export const doLogout = createAsyncThunk(
   }
 )
 
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -82,6 +83,7 @@ const authSlice = createSlice({
     builder.addCase(doLogout.fulfilled, (state) => {
       state.accessToken = ''
     })
+
   }
 })
 

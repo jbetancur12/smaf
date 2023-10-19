@@ -77,7 +77,6 @@ const Sidebar:React.FC<SidebarProps> = ({
 }) => {
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
-  console.log("🚀 ~ file: SideBar.tsx:80 ~ active:", active)
   const navigate = useNavigate();
   const theme = useTheme()
 
@@ -138,7 +137,6 @@ const Sidebar:React.FC<SidebarProps> = ({
               //@ts-ignore
                .filter((item) => item.visibleToRoles.some((role) => userRoles.includes(role)))
               .map(({ text, icon, path }) => {
-                console.log("🚀 ~ file: SideBar.tsx:140 ~ path:", path)
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
