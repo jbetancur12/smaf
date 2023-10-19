@@ -26,6 +26,7 @@ const AdminsPage = () => {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [selectValue, setSelectValue]= useState("")
+  const [selectValueCustomer, setSelectValueCustomer]= useState("")
 
   const { success, error, info } = useNotification();
   const { users  } = useAppSelector((state) => state.users)
@@ -54,8 +55,8 @@ const AdminsPage = () => {
       value: '',
     },
     {
-      name: 'avatar',
-      label: 'Avatar',
+      name: 'role',
+      label: 'Role',
       type: 'component',
       required: true,
       component: (
@@ -70,6 +71,27 @@ const AdminsPage = () => {
             }))}
             getOptionLabel={(option: Record<string, string>) => option.name}
             onClientSelection={e => setSelectValue(e?.name || "")}
+          />
+      ),
+      value: null,
+    },
+    {
+      name: 'customer',
+      label: 'Customer',
+      type: 'component',
+      required: true,
+      component: (
+        <Select
+          endpoint={`${import.meta.env.VITE_REACT_APP_BASE_URL}api/customers`}
+          token={readToken()}
+          label="compañias"
+          mapOption={(data) =>
+            data.map((item: Record<string, string>) => ({
+              _id: item._id,
+              name: item.name,
+            }))}
+            getOptionLabel={(option: Record<string, string>) => option.name}
+            onClientSelection={e => setSelectValueCustomer(e?._id || "")}
           />
       ),
       value: null,
@@ -147,7 +169,7 @@ console.log(selectValue)
     console.log("🚀 ~ file: AdminsPage.tsx:147 ~ myHandleFormSubmit ~ values:", values)
     // Aquí puedes realizar la lógica con los datos del formulario
     setLoading(true)
-    onCreateUser({ ...values, password: "initialPassword", roles: [selectValue] });
+    onCreateUser({ ...values, password: "initialPassword", roles: [selectValue], customer: selectValueCustomer });
   };
 
   const handleCancel = () => {
