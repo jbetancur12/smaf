@@ -1,4 +1,5 @@
 import {
+  AdminPanelSettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
   DeviceThermostatOutlined,
@@ -36,6 +37,12 @@ const navItems = () => [
     text: "Clientes",
     icon: <FactoryOutlined />,
     path: "customers",
+    visibleToRoles: ["ADMIN_ROLE"]
+  },
+  {
+    text: "Admins",
+    icon: <AdminPanelSettingsOutlined />,
+    path: "admin-users",
     visibleToRoles: ["ADMIN_ROLE"]
   },
   // ...otros elementos del menú

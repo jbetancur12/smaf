@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 
 interface User {
@@ -37,6 +37,7 @@ interface NavbarProps {
 function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
@@ -85,7 +86,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
               <LightModeOutlined sx={{ fontSize: "25px" }} />
             )}
           </IconButton>
-          <IconButton>
+          <IconButton onClick={()=>navigate("/settings")}>
             <SettingsOutlined sx={{ fontSize: "25px" }} />
           </IconButton>
           {/* <LanguageSelect /> */}

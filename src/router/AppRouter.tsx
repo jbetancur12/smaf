@@ -18,12 +18,14 @@ const LogoutFallback = withLoading(Logout)
 const LayoutFallback = withLoading(Layout)
 
 const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
+const AdminsPage = React.lazy(() => import('@app/pages/AdminsPage/AdminsPage'))
 const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView2'))
 const CustomersPage = React.lazy(() => import('@app/pages/CustomersPage/CustomersPage'))
 const CustomerPage = React.lazy(() => import('@app/pages/CustomersPage/CustomerPage/CustomerPage'))
 const CustomerTemplatesPage = React.lazy(() => import('@app/pages/CustomersPage/CustomerPage/TemplatesPage/TemplatesPage'))
 
 const Templates = withLoading(TemplatesPage)
+const Admins = withLoading(AdminsPage)
 const TemplatesDataView = withLoading(TemplatesDataViewPage)
 const Customers = withLoading(CustomersPage)
 const Customer = withLoading(CustomerPage)
@@ -61,6 +63,11 @@ function AppRouter() {
               <Route path="template/:idTemplate" element={<CustomerTemplates />} />
             </Route>
           </Route>
+          </Route>
+          <Route  element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route path="admin-users">
+              <Route index element={<Admins/>}/>
+            </Route>
           </Route>
         </Route>
         <Route path="/auth/login" element={<LoginPage />} />

@@ -6,11 +6,20 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from 'react';
 
-interface Field {
+interface CommonField {
   name: string;
   label: string;
   type: string;
 }
+
+interface CustomField {
+  name: string;
+  label: string;
+  type: string;
+  component: React.ReactNode; // Aquí puedes usar React.ReactNode para representar cualquier componente React
+}
+
+type Field = CustomField | CommonField
 
 interface FormProps {
   open: boolean;
@@ -34,7 +43,7 @@ const Form: React.FC<FormProps> = ({
   editItem,
   handleEdit
 }) => {
-   const [values, setValues] = useState<Record<string, string>>({});
+  const [values, setValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -59,6 +68,7 @@ const Form: React.FC<FormProps> = ({
   const onEdit = () => {
     if (validateForm()) {
       handleEdit(values);
+      console.log("🚀 ~ file: Form.tsx:72 ~ onEdit ~ values:", values)
     }
     if (!loading) setValues({});
   };
@@ -68,9 +78,11 @@ const Form: React.FC<FormProps> = ({
     let isValid = true;
 
     fields.forEach((field: Field) => {
-      if (!values[field.name]) {
-        validationErrors[field.name] = `El ${field.label} es requerido`;
-        isValid = false;
+      if (field.type !== "component") {
+        if (!values[field.name]) {
+          validationErrors[field.name] = `El ${field.label} es requerido`;
+          isValid = false;
+        }
       }
     });
 
@@ -88,21 +100,31 @@ const Form: React.FC<FormProps> = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{editItem ? 'Editar' : 'Nuevo'}</DialogTitle>
       <DialogContent>
-        {fields.map((field) => (
-          <TextField
-            key={field.name}
-            required
-            margin="normal"
-            label={field.label}
-            name={field.name}
-            type={field.type}
-            fullWidth
-            value={values[field.name] || ''}
-            onChange={handleChange}
-            error={!!errors[field.name]}
-            helperText={errors[field.name]}
-          />
-        ))}
+        {fields.map((field) => {
+          if (field.type === "text" || field.type === "email") {
+            return <TextField
+              key={field.name}
+              required
+              margin="normal"
+              label={field.label}
+              name={field.name}
+              type={field.type}
+              fullWidth
+              value={values[field.name] || ''}
+              onChange={handleChange}
+              error={!!errors[field.name]}
+              helperText={errors[field.name]}
+            />
+          }
+
+          if (field.type === "component") {
+            return (<div key={field.name}>
+              {/* @ts-ignore */}
+              {field.component}
+            </div>)
+          }
+
+        })}
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onCancel}>
