@@ -230,6 +230,7 @@ const AdminsPage = () => {
     setUserToDelete(null); // Restablece el usuario que se va a eliminar
     setIsDeleteConfirmationOpen(false);
     dispatch(doDeleteUser(_id))
+    success("Usuario eliminado exitosamente")
   }
 
 
