@@ -19,7 +19,7 @@ import { SignUpFormData, User } from '../CustomersPage/CustomerPage/CustomerPage
 const AdminsPage = () => {
   const dispatch = useAppDispatch()
 
-  const [openBackDrop, setOpenBackDrop] = useState(false)
+  const [_openBackDrop, setOpenBackDrop] = useState(false)
   const [openDialog, setOpenDialog] = useState(false);
   const [editItem, setEditItem] = useState<Record<string, string> | null>(null)
   const [loading, setLoading] = useState<boolean>(false);
@@ -104,11 +104,6 @@ const AdminsPage = () => {
     setOpenDialog(true);
   };
 
-  const handleUpdateCustomer = () => {
-
-
-  }
-console.log(selectValue)
 
   const initFetch = useCallback(() => {
     dispatch(retrieveUsers()).unwrap().then((_res) => {
