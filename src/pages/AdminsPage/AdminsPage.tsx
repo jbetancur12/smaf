@@ -77,27 +77,27 @@ const AdminsPage = () => {
       ),
       value: null,
     },
-    // {
-    //   name: 'customer',
-    //   label: 'Customer',
-    //   type: 'component',
-    //   required: true,
-    //   component: (
-    //     <Select
-    //       endpoint={`${import.meta.env.VITE_REACT_APP_BASE_URL}api/customers`}
-    //       token={readToken()}
-    //       label="compañias"
-    //       mapOption={(data) =>
-    //         data.map((item: Record<string, string>) => ({
-    //           _id: item._id,
-    //           name: item.name,
-    //         }))}
-    //         getOptionLabel={(option: Record<string, string>) => option.name}
-    //         onClientSelection={e => setSelectValueCustomer(e?._id || "")}
-    //       />
-    //   ),
-    //   value: null,
-    // },
+    {
+      name: 'customer',
+      label: 'Customer',
+      type: 'component',
+      required: true,
+      component: (
+        <Select
+          endpoint={`${import.meta.env.VITE_REACT_APP_BASE_URL}api/customers`}
+          token={readToken()}
+          label="compañias"
+          mapOption={(data) =>
+            data.map((item: Record<string, string>) => ({
+              _id: item._id,
+              name: item.name,
+            }))}
+            getOptionLabel={(option: Record<string, string>) => option.name}
+            onClientSelection={e => setSelectValueCustomer(e?._id || "")}
+          />
+      ),
+      value: null,
+    },
   ];
 
 
