@@ -27,6 +27,17 @@ function formatDateTime(date: Date) {
 export default function IconLabelTabs() {
 
   const { socket, isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_MQTT);
+ if(socket){
+  socket.onopen = () => {
+    const message = {
+      topic: 'input',
+      type: 'publish',
+      message: `${customerId}/${templateId}/0/0/update`,
+    };
+    socket.send(JSON.stringify(message));
+    setMessageSent(true);
+  };
+ }
 
   let [searchParams] = useSearchParams()
 
@@ -58,11 +69,8 @@ export default function IconLabelTabs() {
   }, [])
 
   useEffect(() => {
-    console.log("ENtrooooo")
     if (isConnected && !isMessageSent && socket) {
-      console.log("ENtrooooo2")
       socket.onopen = () => {
-        console.log("ENtrooooo3")
         const message = {
           topic: 'input',
           type: 'publish',
@@ -72,7 +80,7 @@ export default function IconLabelTabs() {
         setMessageSent(true);
       };
     }
-  }, [isConnected, customerId, templateId, socket, isMessageSent]);
+  }, [isConnected, customerId, templateId, socket, isMessageSent, socket?.onopen]);
 
 
   useEffect(() => {
