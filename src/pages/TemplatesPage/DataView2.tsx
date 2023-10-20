@@ -26,7 +26,7 @@ function formatDateTime(date: Date) {
 
 export default function IconLabelTabs() {
 
-  const { socket, isConnected, sendMessage } = useWebSocket('wss://api.smaf.com.co');
+  const { socket, isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_MQTT);
 
   let [searchParams] = useSearchParams()
 
