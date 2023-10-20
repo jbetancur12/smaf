@@ -315,32 +315,6 @@ const CustomerPage = () => {
 
         <TabPanel value="3">
           <TemplatesTable templates={templates} />
-          {/* {templates.length > 0 ? (
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Id</TableCell>
-                    <TableCell>Nombre</TableCell>
-                    <TableCell>Descripcion</TableCell>
-                    <TableCell>Tipo</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {templates.map((template, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{template._id}</TableCell>
-                      <TableCell>{template.name}</TableCell>
-                      <TableCell>{template.description}</TableCell>
-                      <TableCell>{template.type}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          ) : (
-            <Typography variant="body1">No hay plantillas registradas para esta empresa.</Typography>
-          )} */}
         </TabPanel>
       </TabContext>
 
