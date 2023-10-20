@@ -41,17 +41,19 @@ const CustomerPage = () => {
   const [activeTab, setActiveTab] = useState('1'); // '1' representa la primera pestaña por defecto
 
   //Edit dates
+ const [hasSubscription, setHasSubscription] = useState(false)
+
   const [clickEditStartSuscription, setClickEditStartSuscription] = useState(false)
-  const [startEditionSuscription, setStartEditSuscription] = useState<Dayjs | null>()
+  const [startEditSuscription, setStartEditSuscription] = useState<Dayjs | null>(null)
 
   const [clickEditEndSuscription, setClickEditEndSuscription] = useState(false)
-  const [endEditionSuscription, setEndEditSuscription] = useState<Dayjs | null>()
+  const [endEditSuscription, setEndEditSuscription] = useState<Dayjs | null>(null)
 
   const [clickEditStartTrial, setClickEditStartTrial] = useState(false)
-  const [startEditionTrial, setStartEditTrial] = useState<Dayjs | null>()
+  const [startEditionTrial, setStartEditTrial] = useState<Dayjs | null>(null)
 
   const [clickEditEndTrial, setClickEditEndTrial] = useState(false)
-  const [endEditionTrial, setEndEditTrial] = useState<Dayjs | null>()
+  const [endEditionTrial, setEndEditTrial] = useState<Dayjs | null>(null)
 
 
   const fetchCustomer = () => {
@@ -61,13 +63,14 @@ const CustomerPage = () => {
         httpApi
           .post<any>('api/check-suscriptions/' + res._id)
           .then(({ data }) => {
+            setHasSubscription(data.activeSubscription.isActive)
             if (data.activeSubscription?.endDate) {
               setStartEditSuscription(dayjs(data.activeSubscription?.startDate))
-              setStartEditSuscription(dayjs(data.activeSubscription?.endDate))
+              setEndEditSuscription(dayjs(data.activeSubscription?.endDate))
             }
             if (data.trialPeriod?.trialEndDate) {
-              setStartEditSuscription(dayjs(data.trialPeriod?.trialStartDate))
-              setStartEditSuscription(dayjs(data.trialPeriod?.trialEndDate))
+              setStartEditTrial(dayjs(data.trialPeriod?.trialStartDate))
+              setEndEditTrial(dayjs(data.trialPeriod?.trialEndDate))
             }
           })
         setCustomer(res)
@@ -79,11 +82,19 @@ const CustomerPage = () => {
     httpApi
       .put<any>('api/activate-subscription/' + customer._id, { [frame]: date.toDate() })
       .then(({ data }) => {
-        if (frame === "startDate") setClickEditStartSuscription(false)
-        if (frame === "endDate") setClickEditEndSuscription(false)
-        if (data.activeSubscription?.startDate) {
-          setStartEditSuscription(dayjs(data.activeSubscription?.startDate))
+        if (frame === "startDate"){
+          setClickEditStartSuscription(false)
         }
+        if (frame === "endDate") {
+          setClickEditEndSuscription(false)
+        }
+        if (data.activeSubscription?.startDate) {
+          console.log("🚀 ~ file: CustomerPage.tsx:85 ~ .then ~ data.activeSubscription?.startDate:", data)
+          setStartEditSuscription(dayjs(data.activeSubscription?.startDate))
+          setEndEditSuscription(dayjs(data.activeSubscription?.endDate))
+        }
+
+        setHasSubscription(data.activeSubscription.isActive)
 
       })
   }
@@ -114,6 +125,7 @@ const CustomerPage = () => {
 
 
   }, [])
+
   return (
     <Box m="1.5rem 2.5rem">
       <Header title={customer.name} />
@@ -182,10 +194,10 @@ const CustomerPage = () => {
                     <>
                       <TableCell><strong>Fecha de Inicio:</strong></TableCell>
                       <TableCell align="center">
-                        {customer.activeSubscription?.startDate ?
-                          <span>{!clickEditStartSuscription ? new Date(customer.activeSubscription?.startDate).toLocaleDateString() :
+                        {startEditSuscription ?
+                          <span>{!clickEditStartSuscription ? startEditSuscription.toDate().toLocaleDateString() :
                             <DatePicker
-                              value={startEditionSuscription}
+                              value={startEditSuscription}
                               onChange={(newValue) => setStartEditSuscription(newValue)}
                               onAccept={(s) => {
                                 if (s !== null) {
@@ -209,10 +221,10 @@ const CustomerPage = () => {
                       </TableCell>
                       <TableCell><strong>Fecha de Fin:</strong></TableCell>
                       <TableCell align="center">
-                        {customer.activeSubscription?.endDate ?
-                          <span>{!clickEditEndSuscription ? new Date(customer.activeSubscription?.endDate).toLocaleDateString() :
+                        {endEditSuscription ?
+                          <span>{!clickEditEndSuscription ? endEditSuscription.toDate().toLocaleDateString() :
                             <DatePicker
-                              value={endEditionSuscription}
+                              value={endEditSuscription}
                               onChange={(newValue) => setEndEditSuscription(newValue)}
                               onAccept={(s) => {
                                 if (s !== null) {
@@ -318,7 +330,7 @@ const CustomerPage = () => {
         </TabPanel>
       </TabContext>
 
-      {customer && Object.keys(customer).length > 0 && <Subscription customerId={customer._id} hasSubscription={customer.activeSubscription?.isActive} hasTrial={customer.trialPeriod?.isOnTrial} />}
+      {customer && Object.keys(customer).length > 0 && <Subscription customerId={customer._id} hasSubscription={hasSubscription} hasTrial={customer.trialPeriod?.isOnTrial} />}
 
 
 
