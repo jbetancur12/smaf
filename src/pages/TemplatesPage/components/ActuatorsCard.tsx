@@ -115,6 +115,7 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
               variant="outlined"
               color='secondary'
               sx={{ backgroundColor: stateColor, color: "white" }}
+              disabled={!selectedOption}
             >
               {selectedOption ? selectedOption : <CircularProgress size={20} />}
             </Button>
