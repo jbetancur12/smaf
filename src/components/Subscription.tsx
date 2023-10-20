@@ -16,7 +16,7 @@ interface SubscriptionProps {
 
 const Subscription: React.FC<SubscriptionProps> = ({
   customerId,
-  hasSubscription ,
+  hasSubscription,
   hasTrial
 }) => {
   const [isSubscriptionActive, setSubscriptionActive] = useState<boolean | undefined>(false);
@@ -33,7 +33,7 @@ const Subscription: React.FC<SubscriptionProps> = ({
   useEffect(() => {
     setSubscriptionActive(hasSubscription)
     setTrialActive(hasTrial)
-  },[])
+  }, [])
 
   const initialEndDate = new Date(startDate);
   initialEndDate.setDate(startDate.getDate() + 1);
@@ -42,14 +42,19 @@ const Subscription: React.FC<SubscriptionProps> = ({
 
   const onActivateSubscription = () => {
     httpApi
-    .post<any>('api/activate-subscription/' + customerId, { startDate, endDate })
-    .then(({ data }) => console.log(data))
+      .post<any>('api/activate-subscription/' + customerId, { startDate, endDate })
+      .then((res) => {
+        if (res.statusText === "OK") setSubscriptionActive(res.data.activeSubscription.isActive)
+      })
   };
 
   const onActivateTrial = () => {
     httpApi
-    .post<any>('api/activate-trial/' + customerId, { startDate, endDate })
-    .then(({ data }) => console.log(data))
+      .post<any>('api/activate-trial/' + customerId, { startDate, endDate })
+      .then((res) => {
+        console.log(res)
+        if (res.statusText === "OK") { setTrialActive(res.data.trialPeriod.isOnTrial) }
+      })
   };
 
   const handleActivateSubscription = () => {
@@ -91,10 +96,10 @@ const Subscription: React.FC<SubscriptionProps> = ({
   const handleConfirm = () => {
     // Aquí puedes realizar la solicitud al servidor para activar la suscripción o el período de prueba
     // Utiliza startDate, endDate y otros datos para determinar la duración
-    if(subscription){
+    if (subscription) {
       onActivateSubscription()
     }
-    if(trial){
+    if (trial) {
       onActivateTrial()
     }
     setStartDate(new Date())
@@ -131,7 +136,7 @@ const Subscription: React.FC<SubscriptionProps> = ({
         variant={isSubscriptionActive ? 'outlined' : 'contained'}
         color="primary"
         onClick={handleActivateSubscription}
-        disabled= {isSubscriptionActive}
+        disabled={isSubscriptionActive}
         className='tw-mr-4'
       >
         {isSubscriptionActive ? 'Suscripción Activa' : 'Activar Suscripción'}

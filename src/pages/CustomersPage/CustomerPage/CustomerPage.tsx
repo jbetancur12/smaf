@@ -88,12 +88,12 @@ const CustomerPage = () => {
       })
   }
 
-  const editTrial = (date: Dayjs, frame: "startDate" | "endDate") => {
+  const editTrial = (date: Dayjs, frame: "trialStartDate" | "trialEndDate") => {
     httpApi
       .put<any>('api/activate-trial/' + customer._id, { [frame]: date.toDate() })
       .then(({ data }) => {
-        if (frame === "startDate") setClickEditStartTrial(false)
-        if (frame === "endDate") setClickEditEndTrial(false)
+        if (frame === "trialStartDate") setClickEditStartTrial(false)
+        if (frame === "trialEndDate") setClickEditEndTrial(false)
         if (data.activeSubscription?.trialStartDate) {
           setStartEditTrial(dayjs(data.trialPeriod?.trialStartDate))
         }
@@ -247,13 +247,13 @@ const CustomerPage = () => {
                       <TableCell><strong>Fecha de Inicio:</strong></TableCell>
                       <TableCell align="center">
                         {customer.trialPeriod?.trialStartDate ?
-                          <span>{!clickEditStartSuscription ? new Date(customer.trialPeriod?.trialStartDate).toLocaleDateString() :
+                          <span>{!clickEditStartTrial ? new Date(customer.trialPeriod?.trialStartDate).toLocaleDateString() :
                             <DatePicker
                               value={startEditionTrial}
                               onChange={(newValue) => setStartEditTrial(newValue)}
                               onAccept={(s) => {
                                 if (s !== null) {
-                                  editTrial(s, "startDate");
+                                  editTrial(s, "trialStartDate");
                                 }
                               }}
 
@@ -280,7 +280,7 @@ const CustomerPage = () => {
                               onChange={(newValue) => setEndEditTrial(newValue)}
                               onAccept={(s) => {
                                 if (s !== null) {
-                                  editTrial(s, "endDate");
+                                  editTrial(s, "trialEndDate");
                                 }
                               }}
 
@@ -327,3 +327,5 @@ const CustomerPage = () => {
 }
 
 export default CustomerPage
+
+
