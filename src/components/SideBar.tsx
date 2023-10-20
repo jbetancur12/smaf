@@ -40,7 +40,7 @@ const navItems = () => [
     visibleToRoles: ["ADMIN_ROLE"]
   },
   {
-    text: "Admins",
+    text: "Usuarios",
     icon: <AdminPanelSettingsOutlined />,
     path: "admin-users",
     visibleToRoles: ["ADMIN_ROLE"]
