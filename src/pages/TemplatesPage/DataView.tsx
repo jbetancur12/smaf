@@ -2,7 +2,7 @@ import { getTemplateMeasurements } from '@app/api/template.api'
 import { Sensor, VariableData } from '@app/api/variable.api'
 import { useNotification } from '@app/services/notificationService'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
-import { Backdrop, Box, CircularProgress, IconButton } from "@mui/material"
+import { Backdrop, Box, Checkbox, CircularProgress, FormControlLabel, IconButton } from "@mui/material"
 import { useState } from "react"
 import ApexCharts from './components/ApexCharts'
 import DatePickerRange from './components/DatePickerRange'
@@ -27,7 +27,7 @@ dt.setHours(dt.getHours() - 6)
 
 const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) => {
 
-  const {error} = useNotification()
+  const { error } = useNotification()
 
   const [startDate, setStartDate] = useState<Date>(dt)
   const [endDate, setEndDate] = useState<Date>(new Date())
@@ -36,6 +36,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
   const [variablesQuery, setVariablesQuery] = useState<string[]>([])
   const [backdrop, setBackdrop] = useState(false)
   const [range, setRange] = useState<string | null>("")
+  const [multiAxis, setMultiAxis] = useState(true);
 
 
   const datesQuery = (start: Date, end: Date) => {
@@ -79,7 +80,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
         break
       case '1Day':
         hoursToSubtract = 24;
-      break
+        break
       case '1Week':
         hoursToSubtract = 168;
         break
@@ -119,7 +120,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
         break
       case '1Day':
         hoursToSubtract = 24;
-      break
+        break
       case '1Week':
         hoursToSubtract = 168;
         break
@@ -141,7 +142,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
 
     setStartDate(newStartDate);
     setEndDate(newEndDate);
-    if(newEndDate > (new Date())){
+    if (newEndDate > (new Date())) {
       error("La fecha y hora final no puede ser mayor que la hora y fecha actual")
       return
     }
@@ -149,26 +150,42 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
   }
 
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMultiAxis(event.target.checked);
+  };
+
+
   return (
     <Box m="1.5rem 2.5rem">
       <Box className="tw-flex tw-items-center tw-gap-3 tw-mb-4" >
-        <RangeButtons custom={setCustom} datesQuery={datesQuery} disable={variablesQuery.length <= 0} setRange={setRange}/>
+        <RangeButtons custom={setCustom} datesQuery={datesQuery} disable={variablesQuery.length <= 0} setRange={setRange} />
         {custom && <DatePickerRange datesQuery={datesQuery} custom={custom} />}
+
+
+          <FormControlLabel
+            value="MutiEje"
+            control={<Checkbox checked={multiAxis} onChange={handleChange}/>}
+            label="MultiEje"
+            labelPlacement="start"
+          />
+
       </Box>
       <Box className="tw-w-full">
         <SelectComponent options={ai} onSubmit={handleFormSubmit} setVariablesQuery={setVariablesQuery} />
       </Box>
-      {data.length > 0 &&<Box>
-        <ApexCharts data={data} />
-        <Box className="tw-flex tw-justify-center tw-gap-5">
-          <IconButton onClick={backwardDate}>
-            <ArrowBack />
-          </IconButton>
-          <IconButton onClick={forwardDate}>
-            <ArrowForward />
-          </IconButton>
+      {
+        data.length > 0 && <Box>
+          <ApexCharts data={data} multiAxis={multiAxis} />
+          <Box className="tw-flex tw-justify-center tw-gap-5">
+            <IconButton onClick={backwardDate}>
+              <ArrowBack />
+            </IconButton>
+            <IconButton onClick={forwardDate}>
+              <ArrowForward />
+            </IconButton>
+          </Box>
         </Box>
-      </Box>}
+      }
       <Sensors variables={variables} data={mqtt} />
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -176,7 +193,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Box>
+    </Box >
   )
 }
 

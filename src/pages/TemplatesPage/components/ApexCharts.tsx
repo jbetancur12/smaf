@@ -4,9 +4,10 @@ import ReactApexChart from "react-apexcharts";
 interface SeriesData {
   name: string;
   data: number[];
+
 }
 
-const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
+const LineChart: React.FC<{ data: any[], multiAxis: boolean }> = ({ data, multiAxis }) => {
   // Extrae las categorías de tiempo y los valores de cada métrica
 
 
@@ -32,8 +33,7 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
     })),
   }));
 
-
-  const yAxesConfig = series.map((series, index) => ({
+  const yAxesConfig1 = series.map((series, index) => ({
     // opposite: true,
     seriesName: series.name,
     axisTicks: {
@@ -64,6 +64,37 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
     },
   }));
 
+  const yAxesConfig2 ={
+    // opposite: true,
+    // seriesName: series.name,
+    axisTicks: {
+      show: true,
+    },
+    axisBorder: {
+      show: true,
+      // color: "green", // Genera un color aleatorio para el eje
+    },
+    labels: {
+      style: {
+        colors: "green", // Genera un color aleatorio para las etiquetas
+      },
+      formatter: function (value: number) {
+
+        if (value % 1 === 0) {
+          return value.toString(); // Muestra números enteros sin decimales
+        }
+        return value.toFixed(2); // Muestra dos decimales para otros valores
+      },
+    },
+    title: {
+      // text: series.name,
+      style: {
+        // color: getRandomColor(index), // Genera un color aleatorio para el título
+      },
+
+    },
+  };
+
   const options: ApexOptions = {
     // annotations: {
     //   points: maxMinAnnotations
@@ -75,7 +106,7 @@ const LineChart: React.FC<{ data: any[] }> = ({ data }) => {
       categories: categories,
       tickAmount: 10,
     },
-    yaxis: yAxesConfig,
+    yaxis: multiAxis ? yAxesConfig1 : yAxesConfig2,
     stroke: {
       show: true,
       curve: 'smooth',
