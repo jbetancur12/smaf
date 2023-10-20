@@ -58,8 +58,11 @@ export default function IconLabelTabs() {
   }, [])
 
   useEffect(() => {
+    console.log("ENtrooooo")
     if (isConnected && !isMessageSent && socket) {
+      console.log("ENtrooooo2")
       socket.onopen = () => {
+        console.log("ENtrooooo3")
         const message = {
           topic: 'input',
           type: 'publish',
