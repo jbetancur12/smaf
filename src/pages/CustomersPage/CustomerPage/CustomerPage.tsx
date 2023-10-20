@@ -79,30 +79,44 @@ const CustomerPage = () => {
                 <TableRow>
                   <TableCell><strong>ID de Cliente:</strong></TableCell>
                   <TableCell>{customer.IdCustomer}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Email:</strong></TableCell>
                   <TableCell>{customer.email}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Teléfono:</strong></TableCell>
                   <TableCell>{customer.phone}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>País:</strong></TableCell>
                   <TableCell>{customer.country}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Ciudad:</strong></TableCell>
                   <TableCell>{customer.city}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Dirección:</strong></TableCell>
                   <TableCell>{customer.address1}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Fecha de Creación:</strong></TableCell>
                   <TableCell> {customer.createdAt ? new Date(customer.createdAt).toLocaleString() : 'Fecha no disponible'}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Suscripción:</strong></TableCell>
@@ -111,14 +125,26 @@ const CustomerPage = () => {
                     <TableCell>{customer.activeSubscription?.startDate ? new Date(customer.activeSubscription?.startDate).toLocaleDateString() : ""}</TableCell>
                     <TableCell><strong>Fecha de Fin:</strong></TableCell>
                     <TableCell>{customer.activeSubscription?.endDate ? new Date(customer.activeSubscription?.endDate).toLocaleDateString() : ""}</TableCell></>)}
+                  {!customer.activeSubscription?.endDate && (<>
+                    <TableCell colSpan={2} />
+                    <TableCell colSpan={2} />
+                  </>)}
                 </TableRow>
                 <TableRow>
                   <TableCell><strong>Periodo de Prueba:</strong></TableCell>
                   <TableCell> {customer.trialPeriod?.isOnTrial ? "Si" : 'No'}</TableCell>
-                  {customer.trialPeriod?.trialEndDate && (<>                <TableCell><strong>Fecha de Inicio:</strong></TableCell>
-                    <TableCell>{customer.trialPeriod?.trialStartDate ? new Date(customer.trialPeriod?.trialStartDate).toLocaleDateString() : ""}</TableCell>
-                    <TableCell><strong>Fecha de Fin:</strong></TableCell>
-                    <TableCell>{customer.trialPeriod?.trialEndDate ? new Date(customer.trialPeriod?.trialEndDate).toLocaleDateString() : ""}</TableCell></>)}
+                  {customer.trialPeriod?.trialEndDate && (
+                    <>
+                      <TableCell><strong>Fecha de Inicio:</strong></TableCell>
+                      <TableCell>{customer.trialPeriod?.trialStartDate ? new Date(customer.trialPeriod?.trialStartDate).toLocaleDateString() : ""}</TableCell>
+                      <TableCell><strong>Fecha de Fin:</strong></TableCell>
+                      <TableCell>{customer.trialPeriod?.trialEndDate ? new Date(customer.trialPeriod?.trialEndDate).toLocaleDateString() : ""}</TableCell>
+                    </>)}
+                  {!customer.activeSubscription?.endDate && (
+                    <>
+                      <TableCell colSpan={2} />
+                      <TableCell colSpan={2} />
+                    </>)}
                 </TableRow>
               </TableBody>
             </Table>
