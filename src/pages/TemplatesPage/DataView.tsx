@@ -35,7 +35,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
   const [custom, setCustom] = useState<Boolean>(false)
   const [variablesQuery, setVariablesQuery] = useState<string[]>([])
   const [backdrop, setBackdrop] = useState(false)
-  const [range, setRange] = useState<string | null>("")
+  const [range, setRange] = useState<string | null>("6Hours")
   const [multiAxis, setMultiAxis] = useState(true);
 
 
