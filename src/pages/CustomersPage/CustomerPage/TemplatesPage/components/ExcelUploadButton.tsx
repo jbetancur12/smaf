@@ -34,6 +34,7 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({setVariables}) => 
        success("Archivo cargado con éxito");
       })
       .catch((e) => {
+        console.log(e)
         error("Error al cargar el archivo");
       });
   };
