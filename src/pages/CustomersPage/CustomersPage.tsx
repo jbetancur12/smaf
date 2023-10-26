@@ -138,13 +138,13 @@ const Customers: React.FC = () => {
     initFetch()
   }, [initFetch])
 
-
+  console.log(customers)
   const columns: GridColDef[] = [
-    { field: '_id', headerName: 'ID', flex: 1 },
+    // { field: '_id', headerName: 'ID', flex: 1 },
     { field: 'name', headerName: 'Nombre', flex: 1 },
     { field: 'email', headerName: 'Email', flex: 1 },
     {
-      field: 'createdAt', headerName: 'Fecha', flex: 1, valueFormatter: (params) => {
+      field: 'createdAt', headerName: 'Fecha de creación', flex: 1, valueFormatter: (params) => {
         const date = new Date(params.value as string);
         const formattedDate = new Intl.DateTimeFormat('es-ES', {
           year: 'numeric',
@@ -153,6 +153,34 @@ const Customers: React.FC = () => {
         }).format(date);
         return formattedDate;
       },
+    },
+    {
+      field: 'activeSubscription', headerName: 'Subscrito', flex: 1, valueGetter: (params) => {
+        return params.row.activeSubscription.isActive ? "Si" : "No"
+      }
+    },
+    {
+      field: 'trialPeriod', headerName: 'Prueba', flex: 1, renderCell: (params) => {
+
+        if (params.row.trialPeriod.isOnTrial) {
+          const date = new Date(params.row.trialPeriod.trialEndDate as string);
+          const bencido = new Date(params.row.trialPeriod.trialEndDate) < new Date() ? "red": "green"
+          console.log("🚀 ~ file: CustomersPage.tsx:168 ~ bencido:", bencido)
+          const formattedDate = new Intl.DateTimeFormat('es-ES', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          }).format(date);
+          return <div className='tw-flex tw-flex-col'><div>Si</div><div className='tw-mb-1' style={{color: bencido}}>
+           <strong> {formattedDate}</strong>
+          </div></div>
+        }else{
+          return <div className='tw-flex  tw-flex-col'>No</div>
+        }
+
+
+
+      }
     },
     {
       field: 'actions',
