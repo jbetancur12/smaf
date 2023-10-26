@@ -155,7 +155,7 @@ const Customers: React.FC = () => {
       },
     },
     {
-      field: 'activeSubscription', headerName: 'Subscrito', flex: 1, renderCell: (params) => {
+      field: 'activeSubscription', headerName: 'Suscripto', flex: 1, renderCell: (params) => {
         const subscriptionEndDate = new Date(params.row.activeSubscription.endDate);
         const currentDate = new Date();
         const thirtyDaysFromNow = new Date();
