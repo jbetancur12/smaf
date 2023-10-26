@@ -8,7 +8,7 @@ import { doSignUp } from '@app/store/slices/authSlice';
 import { doDeleteUser, retrieveUsers } from '@app/store/slices/usersSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, PaletteColor, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useCallback, useEffect, useState } from 'react';
 import { SignUpFormData, User } from '../CustomersPage/CustomerPage/CustomerPage';
@@ -18,6 +18,7 @@ import { SignUpFormData, User } from '../CustomersPage/CustomerPage/CustomerPage
 
 const AdminsPage = () => {
   const dispatch = useAppDispatch()
+  const theme = useTheme();
 
   const [_openBackDrop, setOpenBackDrop] = useState(false)
   const [openDialog, setOpenDialog] = useState(false);
@@ -25,11 +26,11 @@ const AdminsPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
-  const [selectValue, setSelectValue]= useState("")
-  const [selectValueCustomer, setSelectValueCustomer]= useState("")
+  const [selectValue, setSelectValue] = useState("")
+  const [selectValueCustomer, setSelectValueCustomer] = useState("")
 
   const { success, error, info } = useNotification();
-  const { users  } = useAppSelector((state) => state.users)
+  const { users } = useAppSelector((state) => state.users)
   const user = useAppSelector((state) => state.user.user)
   console.log("🚀 ~ file: AdminsPage.tsx:34 ~ AdminsPage ~ user:", user)
 
@@ -71,9 +72,9 @@ const AdminsPage = () => {
               _id: item._id,
               name: item.name,
             }))}
-            getOptionLabel={(option: Record<string, string>) => option.name}
-            onClientSelection={e => setSelectValue(e?.name || "")}
-          />
+          getOptionLabel={(option: Record<string, string>) => option.name}
+          onClientSelection={e => setSelectValue(e?.name || "")}
+        />
       ),
       value: null,
     },
@@ -92,9 +93,9 @@ const AdminsPage = () => {
               _id: item._id,
               name: item.name,
             }))}
-            getOptionLabel={(option: Record<string, string>) => option.name}
-            onClientSelection={e => setSelectValueCustomer(e?._id || "")}
-          />
+          getOptionLabel={(option: Record<string, string>) => option.name}
+          onClientSelection={e => setSelectValueCustomer(e?._id || "")}
+        />
       ),
       value: null,
     },
@@ -121,28 +122,31 @@ const AdminsPage = () => {
   }, [initFetch])
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', flex: 1 },
-    { field: 'firstName', headerName: 'Nombre', flex: 1 },
-    { field: 'lastName', headerName: 'Nombre', flex: 1 },
-    { field: 'email', headerName: 'Email', flex: 1 },
-    { field: 'verified', headerName: 'Verificado', flex: 1, renderCell:(params) => (
-      <Box sx={
-        {
-          width: 10,
-          height:10,
-          backgroundColor: params.row.verified ? "green" : "orange",
-          borderRadius: "50%"
-        }
-      }></Box>
-    ) },
-    { field: 'customer',  headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
-      if(params.value){
-        return params.value
-      }
-      return "Admin"
-    } },
+    { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: 'Nombre', flex: 1, renderHeader: () => (<strong>Nombre</strong>), },
+    { field: 'lastName', headerClassName: 'super-app-theme--header', headerName: 'Apellido', flex: 1 },
+    { field: 'email', headerClassName: 'super-app-theme--header', headerName: 'Email', flex: 1 },
     {
-      field: 'created', headerName: 'Fecha de Creación', flex: 1, valueFormatter: (params) => {
+      field: 'verified', headerClassName: 'super-app-theme--header', headerName: 'Verificado', flex: 1, renderCell: (params) => (
+        <Box sx={
+          {
+            width: 10,
+            height: 10,
+            backgroundColor: params.row.verified ? "green" : "orange",
+            borderRadius: "50%"
+          }
+        }></Box>
+      )
+    },
+    {
+      field: 'customer', headerClassName: 'super-app-theme--header', headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
+        if (params.value) {
+          return params.value.name
+        }
+        return "Admin"
+      }
+    },
+    {
+      field: 'created', headerClassName: 'super-app-theme--header', headerName: 'Fecha de Creación', flex: 1, valueFormatter: (params) => {
         const date = new Date(params.value as string);
         const formattedDate = new Intl.DateTimeFormat('es-ES', {
           year: 'numeric',
@@ -154,28 +158,30 @@ const AdminsPage = () => {
     },
     {
       field: 'actions',
+      headerClassName: 'super-app-theme--header',
       headerName: 'Acciones',
       flex: 1,
       headerAlign: "center",
       renderCell: (params) => {
-        return(
-        <>
-          <IconButton
-            onClick={() => handleEditCustomer(params.row)}
-            className='tw-mr-2 '
-            color='warning'
+        return (
+          <>
+            <IconButton
+              onClick={() => handleEditCustomer(params.row)}
+              className='tw-mr-2 '
+              color='warning'
             >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            onClick={() => handleDeleteUserClick(params.row)}
-            color='error'
-            disabled={params.row.id === user?.id}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </>
-      )},
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => handleDeleteUserClick(params.row)}
+              color='error'
+              disabled={params.row.id === user?.id}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+        )
+      },
     },
   ];
 
@@ -183,7 +189,7 @@ const AdminsPage = () => {
 
     // Aquí puedes realizar la lógica con los datos del formulario
     setLoading(true)
-    if (selectValueCustomer.length >0) {
+    if (selectValueCustomer.length > 0) {
       onCreateUser({ ...values, password: "initialPassword", roles: [selectValue], customer: selectValueCustomer });
     } else {
       // Aquí puedes manejar la lógica en caso de que selectValueCustomer esté vacío
@@ -238,10 +244,26 @@ const AdminsPage = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title='Usuarios Administradores' />
-      <Button variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
+      <Button variant="contained" color='secondary' className="tw-mb-4" onClick={() => setOpenDialog(true)}>
         Nuevo Usuario
       </Button>
-      <DataGrid rows={users} columns={columns}  />
+      <Box
+        sx={{
+          width: '100%',
+          '& .MuiDataGrid-columnHeaderTitle': { fontWeight: "bold" },
+          '& .super-app-theme--header': {
+            backgroundColor: theme.palette.primary["200" as keyof PaletteColor],
+            fontWeight: "bold"
+          },
+          '& .odd': {
+            //@ts-ignore
+            background: theme.palette.neutral["10" as keyof PaletteColor],
+          }
+        }}>
+        <DataGrid rows={users} columns={columns} getRowClassName={(params) =>
+          params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+        } />
+      </Box>
       <Form fields={formFields} handleSubmit={myHandleFormSubmit} open={openDialog} onClose={() => setOpenDialog(false)} handleCancel={handleCancel} loading={loading} editItem={editItem} handleEdit={onEditUser} />
       <Dialog open={isDeleteConfirmationOpen} onClose={() => setIsDeleteConfirmationOpen(false)}>
         <DialogTitle>Confirmar Eliminación</DialogTitle>
