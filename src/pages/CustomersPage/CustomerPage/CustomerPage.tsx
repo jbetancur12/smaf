@@ -188,6 +188,13 @@ const CustomerPage = () => {
                 </TableRow>
 
                 <TableRow>
+                  <TableCell><strong>Variables:</strong></TableCell>
+                  <TableCell> {customer.variables?.length || 0}</TableCell>
+                  <TableCell colSpan={2} />
+                  <TableCell colSpan={2} />
+                </TableRow>
+
+                <TableRow>
                   <TableCell><strong>Suscripción:</strong></TableCell>
                   <TableCell> {customer.activeSubscription?.isActive ? "Si" : 'No'}</TableCell>
                   {customer.activeSubscription?.isActive ? (

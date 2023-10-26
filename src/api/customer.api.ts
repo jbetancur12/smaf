@@ -11,6 +11,7 @@ export interface CustomerData {
   address1: string
   createdAt: Date
   users: []
+
 }
 
 export interface CustomerDataResponse extends CustomerData {
@@ -25,6 +26,7 @@ export interface CustomerDataResponse extends CustomerData {
     trialStartDate: Date | null
     trialEndDate: Date | null
   }
+  variables: []
 }
 
 export const getCustomers = (): Promise<any> =>
