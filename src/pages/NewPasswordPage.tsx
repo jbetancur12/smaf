@@ -1,56 +1,66 @@
 import { useAppDispatch } from "@app/hooks/reduxHooks";
 import { useNotification } from "@app/services/notificationService";
-import { doLogin } from "@app/store/slices/authSlice";
-import { Box, Button, Container, Grid, Link, PaletteColor, TextField, Typography, useTheme } from "@mui/material";
+import { doSetNewPassword } from "@app/store/slices/authSlice";
+import { Box, Button, Container, PaletteColor, TextField, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 
-interface LoginFormData {
-  email: string
+interface NewPasswordFormData {
   password: string
+  confirmPassword: string
 }
 
-export const initValues: LoginFormData = {
-  email: '',
-  password: ''
+export const initValues: NewPasswordFormData = {
+  password: '',
+  confirmPassword: ''
 }
 
-function LoginForm() {
+function NewPasswordPage() {
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { error } = useNotification();
+  const [searchParams, _setSearchParams] = useSearchParams()
+
+  const { error, success } = useNotification();
 
   const [isLoading, setLoading] = useState(false)
-  const [values, setValues] = useState<LoginFormData>(initValues);
+  const [values, setValues] = useState<NewPasswordFormData>(initValues);
   const [errors, setErrors] = useState<{
     email?: string;
     password?: string;
   }>({});
 
+  const code = searchParams.get('code')
 
   const validateForm = (): boolean => {
     const validationErrors: { [key: string]: string } = {};
     let isValid = true;
-
-    if (!values.email) {
-      validationErrors.email = 'El email es requerido';
-      isValid = false;
-    }
 
     if (!values.password) {
       validationErrors.password = 'La contraseña es requerida';
       isValid = false;
     }
 
+    if (!values.confirmPassword) {
+      validationErrors.confirmPassword = 'La confirmacion de contraseña es requerida';
+      isValid = false;
+    }
+
+    if (values.password !== values.confirmPassword) {
+      validationErrors.email = 'Las contraseñas no coinciden';
+      isValid = false;
+      error("Las contraseñas no coinciden")
+    }
+
+
     setErrors(validationErrors);
     return isValid;
   };
 
 
-  const handleChange = (field: keyof LoginFormData, value: string) => {
+  const handleChange = (field: keyof NewPasswordFormData, value: string) => {
     setValues({ ...values, [field]: value });
   };
 
@@ -63,20 +73,15 @@ function LoginForm() {
 
     setLoading(true);
 
-
-
     try {
       // Dispatch the doLogin action
-      const response = await dispatch(doLogin(values));
+      await dispatch(doSetNewPassword({ newPassword: values.password, code: code }))
+        .unwrap()
+        .then(() => {
+          success("Contraseña cambiada")
+          navigate('/auth/login')
+        })
 
-      if (doLogin.fulfilled.match(response)) {
-        // Assuming the doLogin action handles successful login and stores user data in Redux
-        // You can now navigate to the desired route
-        navigate('/');
-      } else {
-        const errorMessage = response.error?.message || 'An unknown error occurred';
-        error(errorMessage);
-      }
     } catch (err) {
       console.error('Login error:', err);
       if (err instanceof Error) {
@@ -104,63 +109,57 @@ function LoginForm() {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ color: "#000"}}>
-          Iniciar Sesión
+        <Typography component="h1" variant="h2" sx={{ color: "#000", marginBottom: 3 }}>
+          Nueva Contraseña
         </Typography>
+
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={values.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            error={!!errors.email}
-            helperText={errors.email}
-            sx={{ color: theme.palette.primary["100" as keyof PaletteColor] }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
             id="password"
-            autoComplete="current-password"
+            label="Contraseña"
+            name="password"
+            autoComplete="password"
+            autoFocus
             value={values.password}
             onChange={(e) => handleChange('password', e.target.value)}
             error={!!errors.password}
             helperText={errors.password}
+            sx={{ color: theme.palette.primary["100" as keyof PaletteColor] }}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="secondary" />}
-            label="Recordarme"
-          /> */}
+
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="confirmPassword"
+            label="Confirmar contraseña"
+            name="confirmPassword"
+            autoComplete="confirmPassword"
+            autoFocus
+            value={values.confirmPassword}
+            onChange={(e) => handleChange('confirmPassword', e.target.value)}
+            error={!!errors.password}
+            helperText={errors.password}
+            sx={{ color: theme.palette.primary["100" as keyof PaletteColor] }}
+          />
+
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, background: theme.palette.primary["500" as keyof PaletteColor],  color: "white" }}
+            sx={{ mt: 3, mb: 2, background: theme.palette.primary["500" as keyof PaletteColor], color: "white" }}
             disabled={isLoading}
           >
-            {isLoading ? 'Ingresando...' : 'Ingresar'}
+            {isLoading ? 'Creando Contraseña...' : 'Crear Contraseña'}
           </Button>
-          <Grid container >
-            <Grid item xs>
-              <Link href="/auth/forgot-password" variant="body2" sx={{color: "black"}}>
-                Olvido su contraseña?
-              </Link>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
   )
 }
 
-export default LoginForm
+export default NewPasswordPage

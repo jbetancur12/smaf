@@ -7,7 +7,6 @@ import AppRouter from "./router/AppRouter";
 
 function App() {
   const mode = useAppSelector((state) => state.mode.mode)
-  console.log("🚀 ~ file: App.tsx:10 ~ App ~ mode:", mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <ThemeProvider theme={theme}>

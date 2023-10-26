@@ -3,7 +3,9 @@ import Layout from '@app/components/Layout'
 import RequireAuth from '@app/components/auth/RequireAuth'
 import { withLoading } from '@app/hocs/withLoading'
 import { useAppSelector } from '@app/hooks/reduxHooks'
+import ForgotPasswordPage from '@app/pages/ForgotPasswordPage'
 import LoginPage from '@app/pages/LoginPage'
+import NewPasswordPage from '@app/pages/NewPasswordPage'
 
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
@@ -72,6 +74,8 @@ function AppRouter() {
         </Route>
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutFallback />} />
+        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/auth/new-password" element={<NewPasswordPage />} />
         <Route path="/unauthorized" element={<h1>No tiene Autorización</h1>} />
       </Routes>
     </BrowserRouter>

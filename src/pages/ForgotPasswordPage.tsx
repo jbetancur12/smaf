@@ -1,30 +1,28 @@
 import { useAppDispatch } from "@app/hooks/reduxHooks";
 import { useNotification } from "@app/services/notificationService";
-import { doLogin } from "@app/store/slices/authSlice";
-import { Box, Button, Container, Grid, Link, PaletteColor, TextField, Typography, useTheme } from "@mui/material";
+import { doResetPassword } from "@app/store/slices/authSlice";
+import { Box, Button, Container, PaletteColor, TextField, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-interface LoginFormData {
+interface ForgotPasswordFormData {
   email: string
-  password: string
 }
 
-export const initValues: LoginFormData = {
+export const initValues: ForgotPasswordFormData = {
   email: '',
-  password: ''
 }
 
-function LoginForm() {
+function ForgotPasswordPage() {
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { error } = useNotification();
+  const { error, success } = useNotification();
 
   const [isLoading, setLoading] = useState(false)
-  const [values, setValues] = useState<LoginFormData>(initValues);
+  const [values, setValues] = useState<ForgotPasswordFormData>(initValues);
   const [errors, setErrors] = useState<{
     email?: string;
     password?: string;
@@ -40,17 +38,13 @@ function LoginForm() {
       isValid = false;
     }
 
-    if (!values.password) {
-      validationErrors.password = 'La contraseña es requerida';
-      isValid = false;
-    }
 
     setErrors(validationErrors);
     return isValid;
   };
 
 
-  const handleChange = (field: keyof LoginFormData, value: string) => {
+  const handleChange = (field: keyof ForgotPasswordFormData, value: string) => {
     setValues({ ...values, [field]: value });
   };
 
@@ -67,16 +61,17 @@ function LoginForm() {
 
     try {
       // Dispatch the doLogin action
-      const response = await dispatch(doLogin(values));
+        await dispatch(doResetPassword(values));
 
-      if (doLogin.fulfilled.match(response)) {
+
         // Assuming the doLogin action handles successful login and stores user data in Redux
         // You can now navigate to the desired route
+        success("Al correo electronico fueron enviadas las Instrucciones")
         navigate('/');
-      } else {
-        const errorMessage = response.error?.message || 'An unknown error occurred';
+
+        const errorMessage = 'An unknown error occurred';
         error(errorMessage);
-      }
+
     } catch (err) {
       console.error('Login error:', err);
       if (err instanceof Error) {
@@ -104,8 +99,11 @@ function LoginForm() {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ color: "#000"}}>
-          Iniciar Sesión
+        <Typography component="h1" variant="h2" sx={{ color: "#000", marginBottom:3}}>
+          Restablecer Contraseña
+        </Typography>
+        <Typography component="p">
+        Introduce tu dirección de correo electrónico y te enviaremos un código de verificación para restablecer tu contraseña
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -123,24 +121,6 @@ function LoginForm() {
             helperText={errors.email}
             sx={{ color: theme.palette.primary["100" as keyof PaletteColor] }}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={values.password}
-            onChange={(e) => handleChange('password', e.target.value)}
-            error={!!errors.password}
-            helperText={errors.password}
-          />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="secondary" />}
-            label="Recordarme"
-          /> */}
           <Button
             type="submit"
             fullWidth
@@ -148,19 +128,12 @@ function LoginForm() {
             sx={{ mt: 3, mb: 2, background: theme.palette.primary["500" as keyof PaletteColor],  color: "white" }}
             disabled={isLoading}
           >
-            {isLoading ? 'Ingresando...' : 'Ingresar'}
+            {isLoading ? 'Enviando Instrucciones...' : 'Enviar Instrucciones'}
           </Button>
-          <Grid container >
-            <Grid item xs>
-              <Link href="/auth/forgot-password" variant="body2" sx={{color: "black"}}>
-                Olvido su contraseña?
-              </Link>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
   )
 }
 
-export default LoginForm
+export default ForgotPasswordPage

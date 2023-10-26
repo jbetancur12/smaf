@@ -98,8 +98,7 @@ export const tokensDark: Tokens = reverseTokens(tokensLight);
 
 // Define la función de configuración del tema
 export const themeSettings = (mode: "dark" | "light") => {
-  console.log("🚀 ~ file: theme.ts:102 ~ themeSettings ~ mode:", mode)
-  return {
+   return {
     components: {
       MuiPopover: {
         defaultProps: {

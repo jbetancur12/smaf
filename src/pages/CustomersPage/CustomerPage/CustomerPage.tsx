@@ -89,7 +89,6 @@ const CustomerPage = () => {
           setClickEditEndSuscription(false)
         }
         if (data.activeSubscription?.startDate) {
-          console.log("🚀 ~ file: CustomerPage.tsx:85 ~ .then ~ data.activeSubscription?.startDate:", data)
           setStartEditSuscription(dayjs(data.activeSubscription?.startDate))
           setEndEditSuscription(dayjs(data.activeSubscription?.endDate))
         }

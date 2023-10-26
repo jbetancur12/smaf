@@ -30,9 +30,8 @@ interface NavbarProps {
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
-  console.log("🚀 ~ file: Navbar.tsx:40 ~ Navbar ~ user:", user)
-  const theme = useTheme();
+function Navbar({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
+    const theme = useTheme();
   // const dispatch = useDispatch();
   // const navigate = useNavigate()
 
