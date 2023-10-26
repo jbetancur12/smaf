@@ -11,13 +11,13 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
     <Box>
       <Typography
         variant="h2"
-        color={theme.palette.secondary["100" as keyof PaletteColor]}
+        color={theme.palette.primary["200" as keyof PaletteColor]}
         fontWeight="bold"
         sx={{ mb: "5px" }}
       >
         {title}
       </Typography>
-      <Typography variant="h5" color={theme.palette.secondary["300" as keyof PaletteColor]}>
+      <Typography variant="h5" color={theme.palette.primary["300" as keyof PaletteColor]}>
         {subtitle}
       </Typography>
     </Box>

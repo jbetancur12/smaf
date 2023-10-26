@@ -220,7 +220,7 @@ const Customers: React.FC = () => {
       gap: '1.5rem 2.5rem',
     }}>
       <Header title='Compañias' />
-      <Button variant="contained" onClick={() => setIsModalOpen(true)} sx={{ width: 'fit-content' }}>
+      <Button variant="contained" onClick={() => setIsModalOpen(true)} sx={{ width: 'fit-content' }} color='secondary'>
         Crear Nueva Compañia
       </Button>
       <Box>
@@ -234,7 +234,7 @@ const Customers: React.FC = () => {
       </Box>
       <Modal open={isModalOpen} onClose={handleCancel}>
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: '#FFF', padding: '1rem', borderRadius: 12 }}>
-          <h2>Crear Nuevo Customer</h2>
+          <h2>Crear Nueva Compañia</h2>
           <CustomerForm onCancel={handleCancel} onSubmit={handleFormSubmit} formData={formData} setFormData={setFormData} isEditing={isEditing} editingCustomer={editingCustomer} setEditingCustomer={setEditingCustomer} />
         </div>
       </Modal>

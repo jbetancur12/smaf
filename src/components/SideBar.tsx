@@ -3,12 +3,10 @@ import {
   ChevronLeft,
   ChevronRightOutlined,
   DeviceThermostatOutlined,
-  FactoryOutlined,
-  SettingsOutlined
+  FactoryOutlined
 } from "@mui/icons-material";
 import {
   Box,
-  Divider,
   Drawer,
   IconButton,
   List,
@@ -20,7 +18,6 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import profileImage from "assets/avatar.png";
 import logo from "assets/smaf_logo-nobg.png";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -85,8 +82,7 @@ const Sidebar:React.FC<SidebarProps> = ({
   }, [pathname]);
 
   const userRoles = user.roles && Array.isArray(user.roles) ? user.roles.map(role => role.name) : [];
-
-  return (
+     return (
     <Box component="nav">
       {isSidebarOpen && (
         <Drawer
@@ -99,7 +95,7 @@ const Sidebar:React.FC<SidebarProps> = ({
             "& .MuiDrawer-paper": {
               color: theme.palette.secondary["200" as keyof PaletteColor],
               // @ts-ignore
-              backgroundColor: theme.palette.background.alt,
+              backgroundColor: theme.palette.secondary["100" as keyof PaletteColor],
               boxSizing: "border-box",
               borderWidth: isNonMobile ? 0 : "2px",
               width: drawerWidth,
@@ -108,7 +104,7 @@ const Sidebar:React.FC<SidebarProps> = ({
         >
           <Box width="100%">
             <Box m="1.5rem 2rem 2rem 3rem">
-              <FlexBetween color={theme.palette.secondary.main}>
+              <FlexBetween color={theme.palette.primary.main}>
                 <Box display="flex" alignContent="center" justifyContent="center" gap="0.5rem" >
                   {/* <Typography variant="h4" fontWeight="bold">
                     ECOMVISION
@@ -155,12 +151,12 @@ const Sidebar:React.FC<SidebarProps> = ({
                       sx={{
                         backgroundColor:
                           active === path
-                            ? theme.palette.secondary["300" as keyof PaletteColor]
+                            ? theme.palette.secondary["50" as keyof PaletteColor]
                             : "transparent",
                         color:
                           active === path
-                            ? theme.palette.primary["600" as keyof PaletteColor]
-                            : theme.palette.secondary["100" as keyof PaletteColor],
+                            ? theme.palette.primary["900" as keyof PaletteColor]
+                            : theme.palette.secondary["900" as keyof PaletteColor],
                       }}
                     >
                       <ListItemIcon
@@ -168,8 +164,8 @@ const Sidebar:React.FC<SidebarProps> = ({
                           ml: "2rem",
                           color:
                             active === path
-                              ? theme.palette.primary["600" as keyof PaletteColor]
-                              : theme.palette.secondary["100" as keyof PaletteColor],
+                              ? theme.palette.primary["900" as keyof PaletteColor]
+                              : theme.palette.secondary["900" as keyof PaletteColor],
                         }}
                       >
                         {icon}
@@ -185,7 +181,7 @@ const Sidebar:React.FC<SidebarProps> = ({
             </List>
           </Box>
 
-          <Box position="absolute" bottom="2rem">
+          {/* <Box position="absolute" bottom="2rem">
             <Divider />
             <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
               <Box
@@ -219,7 +215,7 @@ const Sidebar:React.FC<SidebarProps> = ({
                 }}
               />
             </FlexBetween>
-          </Box>
+          </Box> */}
         </Drawer>
       )}
     </Box>

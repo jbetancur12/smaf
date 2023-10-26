@@ -65,7 +65,7 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({ custom, datesQuery, disable
   return (
     <Box>
       <ToggleButtonGroup value={alignment}
-        color="primary"
+        color="secondary"
         exclusive
         disabled={disable}
         onChange={handleAlignment}

@@ -50,7 +50,7 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({setVariables}) => 
         />
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           component="span"
           startIcon={<CloudUploadIcon />}
         >

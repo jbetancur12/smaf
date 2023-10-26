@@ -58,7 +58,7 @@ const Sensors: React.FC<SensorProps> = ({ variables, data }) => {
                         <IconButton
                           sx={{ position: 'absolute', top: '8px', right: '8px' }}
                           size="small"
-                          color="primary"
+                          color="secondary"
                           onClick={() => {
                             // Puedes agregar aquí la lógica para mostrar más información al hacer clic en el botón.
                           }}

@@ -127,7 +127,7 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
 
   return (
     <div>
-      <Button variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
+      <Button color="secondary" variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
         Nueva Plantilla
       </Button>
       {customerTemplates.length > 0 ? (
@@ -152,7 +152,7 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
                     <IconButton onClick={() =>  navigate(`template/${template._id}`)}>
                       <Visibility/>
                     </IconButton>
-                  <IconButton onClick={() => handleEditClick(template)} color="primary">
+                  <IconButton onClick={() => handleEditClick(template)} color="secondary">
                       <EditIcon />
                     </IconButton>
                     <IconButton onClick={() => handleDeleteUserClick(template)} color="error">
@@ -188,7 +188,7 @@ const TemplatesTable: React.FC<TemplatesTableProps> = ({ templates }) => {
           </Button>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => onDeleteUser(templateToDelete?._id || '')}
           >
             Confirmar

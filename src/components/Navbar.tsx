@@ -1,10 +1,6 @@
-import { setmode } from "@app/store/slices/modeSlice";
 import {
   ArrowDropDownOutlined,
-  DarkModeOutlined,
-  LightModeOutlined,
-  Menu as MenuIcon,
-  SettingsOutlined
+  Menu as MenuIcon
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -26,7 +22,9 @@ import FlexBetween from "./FlexBetween";
 interface User {
   name: string;
   occupation: string;
+  lastName: string
 }
+
 
 interface NavbarProps {
   user: User;
@@ -35,6 +33,7 @@ interface NavbarProps {
 }
 
 function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
+  console.log("🚀 ~ file: Navbar.tsx:40 ~ Navbar ~ user:", user)
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -77,7 +76,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
 
         {/* RIGHT SIDE */}
         <FlexBetween gap="1.5rem">
-          <IconButton
+          {/* <IconButton
             onClick={() => dispatch(setmode())}
           >
             {theme.palette.mode === "dark" ? (
@@ -85,10 +84,10 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
             ) : (
               <LightModeOutlined sx={{ fontSize: "25px" }} />
             )}
-          </IconButton>
-          <IconButton onClick={()=>navigate("/settings")}>
+          </IconButton> */}
+          {/* <IconButton onClick={() => navigate("/settings")}>
             <SettingsOutlined sx={{ fontSize: "25px" }} />
-          </IconButton>
+          </IconButton> */}
           {/* <LanguageSelect /> */}
 
           <FlexBetween>
@@ -102,7 +101,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
                 gap: "1rem",
               }}
             >
-              <Box
+              {/* <Box
                 component="img"
                 alt="profile"
                 src="/images/avatar.png"
@@ -110,20 +109,18 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
                 width="32px"
                 borderRadius="50%"
                 sx={{ objectFit: "cover", filter: theme.palette.mode === 'dark' ? 'invert(100%)' : 'none' }}
-              />
-              <Box textAlign="left">
+              /> */}
+              <Box textAlign="center"
+  display="flex"
+  justifyContent="center"
+  alignItems="center" sx={{ width: 32, height: 32, borderRadius: "50%", backgroundColor: theme.palette.secondary["100" as keyof PaletteColor] }}>
                 <Typography
                   fontWeight="bold"
-                  fontSize="0.85rem"
-                  sx={{ color: theme.palette.secondary["100" as keyof PaletteColor] }}
+                  fontSize="1rem"
+                  //@ts-ignore
+                  sx={{ color: theme.palette.neutral["1000" as keyof PaletteColor] }}
                 >
-                  {user.name}
-                </Typography>
-                <Typography
-                  fontSize="0.75rem"
-                  sx={{ color: theme.palette.secondary["200" as keyof PaletteColor] }}
-                >
-                  {user.occupation}
+                  {user.name.charAt(0).toUpperCase()}{user.lastName.charAt(0).toUpperCase()}
                 </Typography>
               </Box>
               <ArrowDropDownOutlined

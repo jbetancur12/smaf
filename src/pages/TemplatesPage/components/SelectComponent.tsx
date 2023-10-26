@@ -71,14 +71,14 @@ const SelectComponent: React.FC<SensorListProps> = ({ options, onSubmit, setVari
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={10}>
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+            <InputLabel id="demo-multiple-checkbox-label">Variables</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
               value={personName}
               onChange={handleChange}
-              input={<OutlinedInput label="Tag" />}
+              input={<OutlinedInput label="Variables" />}
               renderValue={(selected) => (
                 <Stack gap={1} direction="row" flexWrap="wrap">
                   {selected.map((value) => (
@@ -115,8 +115,9 @@ const SelectComponent: React.FC<SensorListProps> = ({ options, onSubmit, setVari
             type="submit"
             variant="contained"
             onClick={handleFormSubmit}
+            color="secondary"
           >
-            Enviar
+            Graficar
           </Button>
         </Grid>
       </Grid>

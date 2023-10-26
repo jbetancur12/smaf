@@ -130,7 +130,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
 
   return (
     <div>
-      <Button variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
+      <Button color='secondary' variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
         Nuevo Usuario
       </Button>
       {customerUsers.length > 0 ? (
@@ -149,7 +149,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
                   <TableCell>{user.firstName + ' ' + user.lastName}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEditClick(user)} color="primary">
+                    <IconButton onClick={() => handleEditClick(user)} color="secondary">
                       <EditIcon />
                     </IconButton>
                     <IconButton onClick={() => handleDeleteUserClick(user)} color="error">
@@ -178,7 +178,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
           </Button>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => onDeleteUser(userToDelete?.id || '')}
           >
             Confirmar

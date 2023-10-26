@@ -27,48 +27,47 @@ interface Tokens {
 
 
 // Define los tokens oscuros
-export const tokensDark: Tokens = {
+export const tokensLight: Tokens = {
   grey: {
-    0: "#ffffff", // manually adjusted
-    10: "#f6f6f6", // manually adjusted
-    50: "#f0f0f0", // manually adjusted
-    100: "#e0e0e0",
-    200: "#c2c2c2",
-    300: "#a3a3a3",
+    0: "#ffffff",
+    10: "#f6f6f6",
+    50: "#a4bdc8", // Gris representativo de tu marca
+    100: "#788c96", // Otro tono de gris de tu marca
+    200: "#5f7078", // Otro tono de gris de tu marca
+    300: "#c2c2c2",
     400: "#858585",
     500: "#666666",
     600: "#525252",
     700: "#3d3d3d",
     800: "#292929",
     900: "#141414",
-    1000: "#000000", // manually adjusted
+    1000: "#000000",
   },
   primary: {
-    // blue
-    100: "#d3d4de",
-    200: "#a6a9be",
-    300: "#7a7f9d",
-    400: "#4d547d",
-    500: "#21295c",
-    600: "#191F45", // manually adjusted
-    700: "#141937",
-    800: "#0d1025",
-    900: "#070812",
+    100: "#c8e8bf", // Color primario más claro basado en tu color representativo
+    200: "#34A13D", // Color principal de tu marca
+    300: "#1c7f2d", // Color primario ligeramente más oscuro
+    400: "#1a7329", // Color primario aún más oscuro
+    500: "#165e23", // Color primario aún más oscuro
+    600: "#134f1c", // Color primario aún más oscuro
+    700: "#0e3c14", // Color primario aún más oscuro
+    800: "#0a2b0e", // Color primario aún más oscuro
+    900: "#061906", // Color primario aún más oscuro
   },
   secondary: {
-    // yellow
-    50: "#f0f0f0", // manually adjusted
-    100: "#fff6e0",
-    200: "#a4edc6",
-    300: "#ffe3a3",
-    400: "#ffda85",
-    500: "#ffd166",
-    600: "#cca752",
-    700: "#997d3d",
-    800: "#665429",
-    900: "#332a14",
+    50: "#a8dbe7", // Color secundario más claro basado en tu color complementario
+    100: "#70C0D4", // Color complementario de tu marca
+    200: "#66aecb", // Color secundario ligeramente más oscuro
+    300: "#5992b7", // Color secundario aún más oscuro
+    400: "#4e81a7", // Color secundario aún más oscuro
+    500: "#426d95", // Color secundario aún más oscuro
+    600: "#3a5e86", // Color secundario aún más oscuro
+    700: "#314c75", // Color secundario aún más oscuro
+    800: "#273b63", // Color secundario aún más oscuro
+    900: "#1f2b54", // Color secundario aún más oscuro
   },
 };
+
 
 
 
@@ -95,10 +94,11 @@ function reverseTokens(tokens: Tokens): Tokens {
 }
 
 // Define los tokens claros a partir de los oscuros
-export const tokensLight: Tokens = reverseTokens(tokensDark);
+export const tokensDark: Tokens = reverseTokens(tokensLight);
 
 // Define la función de configuración del tema
 export const themeSettings = (mode: "dark" | "light") => {
+  console.log("🚀 ~ file: theme.ts:102 ~ themeSettings ~ mode:", mode)
   return {
     components: {
       MuiPopover: {
@@ -149,21 +149,21 @@ export const themeSettings = (mode: "dark" | "light") => {
             // valores de la paleta para el modo claro
             primary: {
               ...tokensLight.primary  as { [key: string]: string },
-              main: tokensDark.grey[50],
-              light: tokensDark.grey[100],
+              main: tokensLight.grey[50],
+              light: tokensLight.grey[100],
             },
             secondary: {
               ...tokensLight.secondary  as { [key: string]: string },
-              main: tokensDark.secondary[600],
-              light: tokensDark.secondary[700],
+              main: tokensLight.secondary[600],
+              light: tokensLight.secondary[700],
             },
             neutral: {
               ...tokensLight.grey  as { [key: string]: string },
-              main: tokensDark.grey[500],
+              main: tokensLight.grey[500],
             },
             background: {
-              default: tokensDark.grey[0],
-              alt: tokensDark.grey[50],
+              default: tokensLight.grey[0],
+              alt: tokensLight.grey[50],
             },
           }),
     },

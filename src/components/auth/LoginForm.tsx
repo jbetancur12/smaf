@@ -138,7 +138,7 @@ function LoginForm() {
             helperText={errors.password}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox value="remember" color="secondary" />}
             label="Recordarme"
           />
           <Button

@@ -44,7 +44,8 @@ const Layout: React.FC = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const user = useAppSelector((state) => state.user.user)
-   const userNormalized = `${user?.firstName} ${user?.lastName[0]}`
+   const userNormalized = `${user?.firstName}`
+   const lastName = `${user?.lastName}`
 
   return (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
@@ -55,7 +56,7 @@ const Layout: React.FC = () => {
         setIsSidebarOpen={setIsSidebarOpen} />
 
       <Box flexGrow={1}>
-        <Navbar user={{ name: userNormalized, occupation: "Usuario" } || {}}
+        <Navbar user={{ name: userNormalized, occupation: "Usuario", lastName:lastName } || {}}
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen} />
         <Outlet />

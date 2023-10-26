@@ -130,7 +130,7 @@ const Form: React.FC<FormProps> = ({
         <Button variant="outlined" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button variant="contained" color="primary" onClick={editItem ? onEdit : onSubmit}>
+        <Button variant="contained" color="secondary" onClick={editItem ? onEdit : onSubmit}>
           {editItem ? 'Guardar Cambios' : 'Crear'}
         </Button>
       </DialogActions>

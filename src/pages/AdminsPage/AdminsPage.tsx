@@ -254,7 +254,7 @@ const AdminsPage = () => {
           </Button>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => onDeleteUser(userToDelete?.id || '')}
           >
             Confirmar

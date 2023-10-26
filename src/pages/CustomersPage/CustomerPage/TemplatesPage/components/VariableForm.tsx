@@ -255,7 +255,7 @@ const VariableForm: React.FC<VariableFormProps> = ({
           </Grid>
         </Grid>
         <Box className="tw-mt-5">
-          <Button type="submit" variant="contained" color="primary" className="tw-mr-2">
+          <Button type="submit" variant="contained" color="secondary" className="tw-mr-2">
             {isEditing ? 'Guardar Cambios' : 'Crear Nueva Variables'}
           </Button>
           <Button variant="contained" color="secondary" onClick={handleCancel}>

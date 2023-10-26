@@ -129,7 +129,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ formData, onSubmit, onCance
           </Grid>
         </Grid>
         <Box className="tw-mt-5">
-          <Button type="submit" variant="contained" color="primary" className='tw-mr-2'>
+          <Button type="submit" variant="contained" color="secondary" className='tw-mr-2'>
             {isEditing ? 'Guardar Cambios' : 'Crear Nueva Compañia'}
           </Button>
           <Button variant="contained" color="secondary" onClick={handleCancel}>

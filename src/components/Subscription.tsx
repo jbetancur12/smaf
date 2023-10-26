@@ -134,7 +134,7 @@ const Subscription: React.FC<SubscriptionProps> = ({
       <h2>Administrar Estado de Suscripción</h2>
       <Button
         variant={isSubscriptionActive ? 'outlined' : 'contained'}
-        color="primary"
+        color="secondary"
         onClick={handleActivateSubscription}
         disabled={isSubscriptionActive}
         className='tw-mr-4'
@@ -143,7 +143,7 @@ const Subscription: React.FC<SubscriptionProps> = ({
       </Button>
       <Button
         variant={isTrialActive ? 'outlined' : 'contained'}
-        color="primary"
+        color="secondary"
         onClick={handleActivateTrial}
         disabled={isTrialActive || isSubscriptionActive}
       >
@@ -196,7 +196,7 @@ const Subscription: React.FC<SubscriptionProps> = ({
               </Select>
             </Grid>
           </Grid>
-          <Button variant="contained" color="primary" onClick={handleConfirm}>Confirmar</Button>
+          <Button variant="contained" color="secondary" onClick={handleConfirm}>Confirmar</Button>
         </Box>
       </Modal>
     </div>
