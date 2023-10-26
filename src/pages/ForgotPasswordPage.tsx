@@ -69,8 +69,6 @@ function ForgotPasswordPage() {
         success("Al correo electronico fueron enviadas las Instrucciones")
         navigate('/');
 
-        const errorMessage = 'An unknown error occurred';
-        error(errorMessage);
 
     } catch (err) {
       console.error('Login error:', err);
