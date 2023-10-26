@@ -32,7 +32,6 @@ const AdminsPage = () => {
   const { success, error, info } = useNotification();
   const { users } = useAppSelector((state) => state.users)
   const user = useAppSelector((state) => state.user.user)
-  console.log("🚀 ~ file: AdminsPage.tsx:34 ~ AdminsPage ~ user:", user)
 
 
   const formFields = [

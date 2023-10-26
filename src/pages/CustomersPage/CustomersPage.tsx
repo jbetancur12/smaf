@@ -138,7 +138,6 @@ const Customers: React.FC = () => {
     initFetch()
   }, [initFetch])
 
-  console.log(customers)
   const columns: GridColDef[] = [
     // { field: '_id', headerName: 'ID', flex: 1 },
     { field: 'name', headerName: 'Nombre', flex: 1 },
