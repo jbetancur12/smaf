@@ -15,8 +15,7 @@ import {
   useTheme
 } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 
 interface User {
@@ -35,8 +34,8 @@ interface NavbarProps {
 function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
   console.log("🚀 ~ file: Navbar.tsx:40 ~ Navbar ~ user:", user)
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const navigate = useNavigate()
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
