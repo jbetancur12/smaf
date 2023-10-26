@@ -6,7 +6,7 @@ import { doCreateCustomer, doDeleteCustomer, doUpdateCustomer, retrieveCustomers
 import { Equalizer, Visibility } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Backdrop, Box, Button, CircularProgress, IconButton, Modal } from '@mui/material';
+import { Backdrop, Box, Button, CircularProgress, IconButton, Modal, PaletteColor, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import CustomerForm, { CustomerFormData } from './components/CustomerForm';
 const Customers: React.FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const theme = useTheme();
   const { success, error } = useNotification();
   const { customers } = useAppSelector((state) => state.customer)
 
@@ -247,7 +248,32 @@ const Customers: React.FC = () => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        {!loading ? (<DataGrid rows={customers} columns={columns} getRowId={(row) => row._id} />) : "..."}
+        <Box
+          sx={{
+            width: '100%',
+            '& .MuiDataGrid-columnHeaderTitle': { fontWeight: "bold" },
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: theme.palette.primary["200" as keyof PaletteColor],
+              fontWeight: "bold"
+            },
+            '& .odd': {
+              //@ts-ignore
+              background: theme.palette.neutral["10" as keyof PaletteColor],
+            }
+          }}
+        >
+          {!loading ?
+            (
+              <DataGrid
+                rows={customers}
+                columns={columns}
+                getRowId={(row) => row._id}
+                getRowClassName={(params) =>
+                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
+              />
+            ) : ""}
+        </Box>
       </Box>
       <Modal open={isModalOpen} onClose={handleCancel}>
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: '#FFF', padding: '1rem', borderRadius: 12 }}>
