@@ -11,7 +11,6 @@ import {
   MenuItem,
   PaletteColor,
   Toolbar,
-  Typography,
   useTheme
 } from "@mui/material";
 import { useState } from "react";
@@ -100,7 +99,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
                 gap: "1rem",
               }}
             >
-              {/* <Box
+              <Box
                 component="img"
                 alt="profile"
                 src="/images/avatar.png"
@@ -108,8 +107,8 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
                 width="32px"
                 borderRadius="50%"
                 sx={{ objectFit: "cover", filter: theme.palette.mode === 'dark' ? 'invert(100%)' : 'none' }}
-              /> */}
-              <Box textAlign="center"
+              />
+              {/* <Box textAlign="center"
   display="flex"
   justifyContent="center"
   alignItems="center" sx={{ width: 32, height: 32, borderRadius: "50%", backgroundColor: theme.palette.secondary["100" as keyof PaletteColor] }}>
@@ -121,7 +120,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
                 >
                   {user.name.charAt(0).toUpperCase()}{user.lastName.charAt(0).toUpperCase()}
                 </Typography>
-              </Box>
+              </Box> */}
               <ArrowDropDownOutlined
                 sx={{ color: theme.palette.secondary["300" as keyof PaletteColor], fontSize: "25px" }}
               />
