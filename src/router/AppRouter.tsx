@@ -72,6 +72,7 @@ function AppRouter() {
         </Route>
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutFallback />} />
+        <Route path="/unauthorized" element={<h1>No tiene Autorización</h1>} />
       </Routes>
     </BrowserRouter>
   )

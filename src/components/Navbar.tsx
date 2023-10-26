@@ -131,7 +131,7 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }: NavbarProps) {
               onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem><Link to="/logout">Log out</Link></MenuItem>
+              <MenuItem><Link to="/logout" style={{ textDecoration: "none", color: "#0074d9" }}>Cerrar Sesión</Link></MenuItem>
             </Menu>
           </FlexBetween>
         </FlexBetween>
