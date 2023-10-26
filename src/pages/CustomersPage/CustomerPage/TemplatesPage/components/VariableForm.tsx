@@ -229,7 +229,7 @@ const VariableForm: React.FC<VariableFormProps> = ({
                 <em>Seleccione un tipo</em>
               </MenuItem>
               <MenuItem value="analogInput">Entrada Analoga</MenuItem>
-              <MenuItem value="digitalOuput">Salida Digital</MenuItem>
+              <MenuItem value="digitalOutput">Salida Digital</MenuItem>
             </Select>
             <FormHelperText sx={{color:"red", marginLeft: 2}}>{errors.type}</FormHelperText>
             {/* <TextField
