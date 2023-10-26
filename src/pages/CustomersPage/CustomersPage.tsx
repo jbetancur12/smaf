@@ -155,31 +155,49 @@ const Customers: React.FC = () => {
       },
     },
     {
-      field: 'activeSubscription', headerName: 'Subscrito', flex: 1, valueGetter: (params) => {
-        return params.row.activeSubscription.isActive ? "Si" : "No"
-      }
-    },
-    {
-      field: 'trialPeriod', headerName: 'Prueba', flex: 1, renderCell: (params) => {
+      field: 'activeSubscription', headerName: 'Subscrito', flex: 1, renderCell: (params) => {
+        const subscriptionEndDate = new Date(params.row.activeSubscription.endDate);
+        const currentDate = new Date();
+        const thirtyDaysFromNow = new Date();
+        thirtyDaysFromNow.setDate(currentDate.getDate() + 30);
+        if (params.row.activeSubscription.isActive) {
+          const date = new Date(params.row.activeSubscription.endDate as string);
+          const bencido = subscriptionEndDate <= thirtyDaysFromNow ? "red" : "green";
 
-        if (params.row.trialPeriod.isOnTrial) {
-          const date = new Date(params.row.trialPeriod.trialEndDate as string);
-          const bencido = new Date(params.row.trialPeriod.trialEndDate) < new Date() ? "red": "green"
-          console.log("🚀 ~ file: CustomersPage.tsx:168 ~ bencido:", bencido)
           const formattedDate = new Intl.DateTimeFormat('es-ES', {
             year: 'numeric',
             month: 'short',
             day: '2-digit',
           }).format(date);
-          return <div className='tw-flex tw-flex-col'><div>Si</div><div className='tw-mb-1' style={{color: bencido}}>
-           <strong> {formattedDate}</strong>
+          return <div className='tw-flex tw-flex-col'><div>Si</div><div className='tw-mb-1' style={{ color: bencido }}>
+            <strong> {formattedDate}</strong>
           </div></div>
-        }else{
+        } else {
           return <div className='tw-flex  tw-flex-col'>No</div>
         }
+      }
+    },
+    {
+      field: 'trialPeriod', headerName: 'Prueba', flex: 1, renderCell: (params) => {
+        const trialEndDate = new Date(params.row.trialPeriod.trialEndDate);
+        const currentDate = new Date();
+        const thirtyDaysFromNow = new Date();
+        thirtyDaysFromNow.setDate(currentDate.getDate() + 30);
+        if (params.row.trialPeriod.isOnTrial) {
+          const date = new Date(params.row.trialPeriod.trialEndDate as string);
+          const bencido = trialEndDate <= thirtyDaysFromNow ? "red" : "green";
 
-
-
+          const formattedDate = new Intl.DateTimeFormat('es-ES', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          }).format(date);
+          return <div className='tw-flex tw-flex-col'><div>Si</div><div className='tw-mb-1' style={{ color: bencido }}>
+            <strong> {formattedDate}</strong>
+          </div></div>
+        } else {
+          return <div className='tw-flex  tw-flex-col'>No</div>
+        }
       }
     },
     {
