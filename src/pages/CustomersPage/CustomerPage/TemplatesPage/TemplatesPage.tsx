@@ -13,6 +13,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useCopyToClipboard } from "usehooks-ts"
+import ExcelUploadButton from "./components/ExcelUploadButton"
 import VariableForm, { VariableFormData } from "./components/VariableForm"
 
 const TemplatesPage = () => {
@@ -186,6 +187,9 @@ const TemplatesPage = () => {
       <Button variant="contained" onClick={() => setIsModalOpen(true)} sx={{ width: 'fit-content' }} className="tw-mb-3">
         Crear Nueva Variable
       </Button>
+      <Box className="tw-float-right">
+      <ExcelUploadButton setVariables={setVariables}/>
+      </Box>
       {template.variables && template.variables.length > 0 ? (
         <DataGrid rows={variables} columns={columns} getRowId={(row) => row._id} />
       ) : (
