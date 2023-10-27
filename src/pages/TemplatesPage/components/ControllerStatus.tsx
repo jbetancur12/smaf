@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from "@app/hooks/reduxHooks";
-import { useNotification } from "@app/services/notificationService";
 import { retrieveControllers } from "@app/store/slices/controllerSlice";
 import { Box, Typography } from "@mui/material";
 import { useCallback, useEffect } from "react";
@@ -7,7 +6,6 @@ import { useSearchParams } from "react-router-dom";
 
 const ControllerStatus = () => {
   const dispatch = useAppDispatch();
-  const { error } = useNotification();
   const { controllers } = useAppSelector((state) => state.controller);
   let [searchParams] = useSearchParams();
   const customerId = searchParams.get("customer");
