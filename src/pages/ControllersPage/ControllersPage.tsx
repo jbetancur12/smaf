@@ -43,6 +43,10 @@ const ControllersPage = () => {
         }></Box>
       )
     },
+    { field: 'variables', headerClassName: 'super-app-theme--header', headerName: 'Numero de variables', flex: 1, valueGetter: (params) => {
+      // Verifica si el campo "controller" existe en la fila
+      return params.row.variables.length
+    }, },
     {
       field: 'customer.name', headerClassName: 'super-app-theme--header', headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
         if (params.value) {

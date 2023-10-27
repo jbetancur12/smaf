@@ -1,3 +1,5 @@
+import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
+import { retrieveControllers } from '@app/store/slices/controllerSlice';
 import {
   Box,
   Button,
@@ -8,7 +10,8 @@ import {
   SelectChangeEvent,
   TextField
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface VariableFormProps {
   onSubmit: (data: VariableFormData) => void;
@@ -28,6 +31,7 @@ export interface VariableFormData {
   virtualPin: string; // Add virtualPin field
   typePin: string; // Add typePin field
   type: string;
+  controller: string
 }
 
 const VariableForm: React.FC<VariableFormProps> = ({
@@ -41,7 +45,16 @@ const VariableForm: React.FC<VariableFormProps> = ({
   onEdit
 }) => {
 
+  const dispatch = useAppDispatch()
+  const { id  } = useParams()
+
+  const { controllers } = useAppSelector((state) => state.controller)
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+
+  useEffect(() => {
+    dispatch(retrieveControllers())
+  }, [])
 
 
   const validateForm = (): boolean => {
@@ -49,30 +62,34 @@ const VariableForm: React.FC<VariableFormProps> = ({
     let isValid = true;
     console.log(isEditing)
 
-      if ((!isEditing && !formData.name) || (isEditing && !editingVariable?.name)) {
-        validationErrors.name = `El nombre es requerido`;
-        isValid = false;
-      }
+    if ((!isEditing && !formData.name) || (isEditing && !editingVariable?.name)) {
+      validationErrors.name = `El nombre es requerido`;
+      isValid = false;
+    }
 
-      if ((!isEditing && !formData.sensorType)  || (isEditing &&  !editingVariable?.sensorType)) {
-        validationErrors.sensorType = `El Tipo de Sensor es requerido`;
-        isValid = false;
-      }
+    if ((!isEditing && !formData.sensorType) || (isEditing && !editingVariable?.sensorType)) {
+      validationErrors.sensorType = `El Tipo de Sensor es requerido`;
+      isValid = false;
+    }
 
-      if ((!isEditing && !formData.unit)  || (isEditing &&  !editingVariable?.unit)) {
-        validationErrors.unit = `La Unidad  es requerida`;
-        isValid = false;
-      }
+    if ((!isEditing && !formData.unit) || (isEditing && !editingVariable?.unit)) {
+      validationErrors.unit = `La Unidad  es requerida`;
+      isValid = false;
+    }
 
-      if ((!isEditing && !formData.virtualPin)  || (isEditing &&  !editingVariable?.virtualPin)) {
-        validationErrors.virtualPin = `El Pin Virtual  es requerido`;
-        isValid = false;
-      }
+    if ((!isEditing && !formData.virtualPin) || (isEditing && !editingVariable?.virtualPin)) {
+      validationErrors.virtualPin = `El Pin Virtual  es requerido`;
+      isValid = false;
+    }
 
-      if ((!isEditing && !formData.typePin)  || (isEditing &&  !editingVariable?.typePin)) {
-        validationErrors.typePin = `El tipo de pin es requerido`;
-        isValid = false;
-      }
+    if ((!isEditing && !formData.typePin) || (isEditing && !editingVariable?.typePin)) {
+      validationErrors.typePin = `El tipo de pin es requerido`;
+      isValid = false;
+    }
+    if ((!isEditing && !formData.controller) || (isEditing && !editingVariable?.controller)) {
+      validationErrors.controller = `El controlador de pin es requerido`;
+      isValid = false;
+    }
 
 
 
@@ -91,7 +108,7 @@ const VariableForm: React.FC<VariableFormProps> = ({
   const handleFormEdit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      if(editingVariable) onEdit(editingVariable);
+      if (editingVariable) onEdit(editingVariable);
     }
   };
 
@@ -129,6 +146,7 @@ const VariableForm: React.FC<VariableFormProps> = ({
       unit: '',
       virtualPin: '',
       typePin: '',
+      controller: ''
     })
     setEditingVariable({
       name: "",
@@ -136,10 +154,16 @@ const VariableForm: React.FC<VariableFormProps> = ({
       unit: '',
       virtualPin: '',
       typePin: '',
+      controller: ''
     })
     onCancel();
   };
 
+
+
+
+
+  const options = controllers.filter(controller => controller.customer._id === id)
 
 
   return (
@@ -147,6 +171,29 @@ const VariableForm: React.FC<VariableFormProps> = ({
       <form onSubmit={!isEditing ? handleFormSubmit : handleFormEdit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
+            <Select
+              name="controller"
+              label="Controlador"
+              onChange={handleSelectChange}
+              value={isEditing ? editingVariable?.controller : formData.controller}
+              renderValue={(selected) => {
+                if (selected.length === 0) {
+                  return <em>Seleccione un controlador</em>;
+                }
+
+                return selected;
+              }}
+              displayEmpty
+              fullWidth
+              error={!!errors.controller}
+            >
+
+              {options.map(option =>  <MenuItem key={option._id} value={option._id}>{option.name}</MenuItem> )}
+
+            </Select>
+            <FormHelperText sx={{ color: "red", marginLeft: 2 }}>{errors.controller}</FormHelperText>
+            </Grid>
+            <Grid item xs={12}>
             <TextField
               type="text"
               name="name"
@@ -231,7 +278,7 @@ const VariableForm: React.FC<VariableFormProps> = ({
               <MenuItem value="analogInput">Entrada Analoga</MenuItem>
               <MenuItem value="digitalOutput">Salida Digital</MenuItem>
             </Select>
-            <FormHelperText sx={{color:"red", marginLeft: 2}}>{errors.type}</FormHelperText>
+            <FormHelperText sx={{ color: "red", marginLeft: 2 }}>{errors.type}</FormHelperText>
             {/* <TextField
               id="outlined-select-currency"
               name='type'

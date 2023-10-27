@@ -13,7 +13,8 @@ interface Controller {
   controllerId: string
   _id: string;
   lastPingTime: string;
-  connected: boolean
+  connected: boolean;
+  variables: []
 }
 
 interface ControllersTableProps {
@@ -100,20 +101,20 @@ const ControllersTable: React.FC<ControllersTableProps> = ({ controllers }) => {
   const onDeleteController = (_id: string) => {
 
     dispatch(doDeleteController(_id))
-    .unwrap()
-    .then(res => {
-      if (res !== undefined) {
-        setCustomerControllers((current) => {
-          // Filtra la matriz para excluir el controlador a eliminar
-          const newArray = current || [];
-          const updatedControllers = newArray.filter((controller) => controller._id !== res.data._id);
-          return updatedControllers;
-        });
-        setControllerToDelete(null); // Restablece el usuario que se va a eliminar
-        setIsDeleteConfirmationOpen(false);
-        setLoading(true)
-      }
-    })
+      .unwrap()
+      .then(res => {
+        if (res !== undefined) {
+          setCustomerControllers((current) => {
+            // Filtra la matriz para excluir el controlador a eliminar
+            const newArray = current || [];
+            const updatedControllers = newArray.filter((controller) => controller._id !== res.data._id);
+            return updatedControllers;
+          });
+          setControllerToDelete(null); // Restablece el usuario que se va a eliminar
+          setIsDeleteConfirmationOpen(false);
+          setLoading(true)
+        }
+      })
   }
 
 
@@ -130,6 +131,7 @@ const ControllersTable: React.FC<ControllersTableProps> = ({ controllers }) => {
                 <TableCell>Nombre</TableCell>
                 <TableCell>Id del Controlador</TableCell>
                 <TableCell>Estado</TableCell>
+                <TableCell>Numero de Variables</TableCell>
                 {/* <TableCell>Last Ping</TableCell> */}
               </TableRow>
             </TableHead>
@@ -148,6 +150,7 @@ const ControllersTable: React.FC<ControllersTableProps> = ({ controllers }) => {
                       }}>
                     </Box>
                   </TableCell>
+                  <TableCell>{controller.variables.length}</TableCell>
                   {/* <TableCell><span>{new Date(controller.lastPingTime).toLocaleString()}</span></TableCell> */}
                   <TableCell>
                     <IconButton onClick={() => handleEditClick(controller)} color="secondary">

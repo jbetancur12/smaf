@@ -31,6 +31,7 @@ const TemplatesPage = () => {
     unit: '',
     virtualPin: '',
     typePin: '',
+    controller: ''
   });
 
 
@@ -56,12 +57,23 @@ const TemplatesPage = () => {
     fetchTemplate()
   }, [])
 
+
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Nombre', flex: 1 },
     { field: 'sensorType', headerName: 'Tipo de Sensor', flex: 1 },
     { field: 'unit', headerName: 'Unidad', flex: 1 },
     { field: 'virtualPin', headerName: 'Pin Virtual', flex: 1 },
     { field: 'typePin', headerName: 'Tipo de Pin', flex: 1 },
+    {
+      field: 'controller', headerName: 'Controlador', flex: 1, valueGetter: (params) => {
+        // Verifica si el campo "controller" existe en la fila
+        if (params.row.controller) {
+          return params.row.controller.name; // Accede al campo "name" si existe
+        } else {
+          return ''; // O proporciona un valor predeterminado si no existe
+        }
+      },
+    },
     {
       field: 'actions',
       headerName: 'Acciones',
@@ -74,13 +86,13 @@ const TemplatesPage = () => {
             className='tw-mr-2 '
             color='warning'
           >
-            <EditIcon/>
+            <EditIcon />
           </Button>
           <Button
             onClick={() => handleDeleteVariable(params.row)}
             color='error'
           >
-            <DeleteIcon/>
+            <DeleteIcon />
           </Button>
         </>
       ),
@@ -138,31 +150,31 @@ const TemplatesPage = () => {
   }
 
   const handleFormEdit = (values: any) => {
-    dispatch(doUpdateVariable({id:values._id, data:values}))
-    .unwrap()
-    .then((data:VariableDataResponse) => {
+    dispatch(doUpdateVariable({ id: values._id, data: values }))
+      .unwrap()
+      .then((data: VariableDataResponse) => {
 
-      // setVariables(data)
-      const updatedVariables:VariableDataResponse[] = variables.map((item) =>{
-        if(item._id === data._id){
-          return data
-        }else{
-          return item
-        }
+        // setVariables(data)
+        const updatedVariables: VariableDataResponse[] = variables.map((item) => {
+          if (item._id === data._id) {
+            return data
+          } else {
+            return item
+          }
 
 
+        })
+
+        setVariables(updatedVariables)
+        success(`Variable actualizada con exito`)
+        setIsModalOpen(false);
       })
-
-      setVariables(updatedVariables)
-      success(`Variable actualizada con exito`)
-      setIsModalOpen(false);
-    })
-    .catch((err) => {
-      error(err.message)
-    })
+      .catch((err) => {
+        error(err.message)
+      })
   }
 
-  const handleCellClick = (value:string|undefined) => {
+  const handleCellClick = (value: string | undefined) => {
     //@ts-ignore
     copy(value);
     info("Id copiado al portapapeles")
@@ -177,9 +189,9 @@ const TemplatesPage = () => {
           <TableBody>
             <TableRow>
               <TableCell><strong>Id Customer: </strong></TableCell>
-              <TableCell onClick={()=> handleCellClick(template.customer)}>{template.customer} <ContentCopy className="tw-cursor-pointer"/></TableCell>
+              <TableCell onClick={() => handleCellClick(template.customer)}>{template.customer} <ContentCopy className="tw-cursor-pointer" /></TableCell>
               <TableCell ><strong>Id Template: </strong></TableCell>
-              <TableCell onClick={()=> handleCellClick(template._id)}>{template._id} <ContentCopy className="tw-cursor-pointer"/></TableCell>
+              <TableCell onClick={() => handleCellClick(template._id)}>{template._id} <ContentCopy className="tw-cursor-pointer" /></TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -188,7 +200,7 @@ const TemplatesPage = () => {
         Crear Nueva Variable
       </Button>
       <Box className="tw-float-right">
-      <ExcelUploadButton setVariables={setVariables}/>
+        <ExcelUploadButton setVariables={setVariables} />
       </Box>
       {template.variables && template.variables.length > 0 ? (
         <DataGrid rows={variables} columns={columns} getRowId={(row) => row._id} />
@@ -198,7 +210,7 @@ const TemplatesPage = () => {
       <Modal open={isModalOpen} onClose={handleCancel}>
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: '#FFF', padding: '1rem', borderRadius: 12 }}>
           <h2>Crear Nueva Variable</h2>
-          <VariableForm onCancel={handleCancel} onSubmit={handleFormSubmit} formData={formData} setFormData={setFormData} isEditing={isEditing} editingVariable={editingVariable} setEditingVariable={setEditingVariable} onEdit={handleFormEdit}/>
+          <VariableForm onCancel={handleCancel} onSubmit={handleFormSubmit} formData={formData} setFormData={setFormData} isEditing={isEditing} editingVariable={editingVariable} setEditingVariable={setEditingVariable} onEdit={handleFormEdit} />
         </div>
       </Modal>
       <Modal open={isConfirmationOpen} onClose={() => setIsConfirmationOpen(false)}>
