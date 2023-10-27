@@ -27,6 +27,7 @@ export interface CustomerDataResponse extends CustomerData {
     trialEndDate: Date | null
   }
   variables: []
+  controllers: []
 }
 
 export const getCustomers = (): Promise<any> =>

@@ -14,6 +14,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import ControllersTable from "./components/ControllersTable"
 import TemplatesTable from "./components/TemplatesTable"
 import UsersTable from "./components/UsersTable"
 
@@ -135,6 +136,7 @@ const CustomerPage = () => {
             <Tab label="Información del Cliente" value="1" />
             <Tab label="Usuarios" value="2" />
             <Tab label="Plantillas" value="3" />
+            <Tab label="Controladores" value="4" />
           </TabList>
         </Box>
 
@@ -325,6 +327,7 @@ const CustomerPage = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {customer && Object.keys(customer).length > 0 && <Subscription customerId={customer._id} hasSubscription={hasSubscription} hasTrial={customer.trialPeriod?.isOnTrial} />}
         </TabPanel>
 
         <TabPanel value="2">
@@ -334,9 +337,12 @@ const CustomerPage = () => {
         <TabPanel value="3">
           <TemplatesTable templates={templates} />
         </TabPanel>
+        <TabPanel value="4">
+         <ControllersTable controllers={customer.controllers}/>
+        </TabPanel>
       </TabContext>
 
-      {customer && Object.keys(customer).length > 0 && <Subscription customerId={customer._id} hasSubscription={hasSubscription} hasTrial={customer.trialPeriod?.isOnTrial} />}
+
 
 
 
