@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 const ControllersPage = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme();
-  const { success, error, info } = useNotification();
+  const {  error } = useNotification();
   const { controllers } = useAppSelector((state) => state.controller)
 
   const [_openBackDrop, setOpenBackDrop] = useState(false)
