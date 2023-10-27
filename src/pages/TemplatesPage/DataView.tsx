@@ -5,6 +5,7 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import { Backdrop, Box, Checkbox, CircularProgress, FormControlLabel, IconButton } from "@mui/material"
 import { useState } from "react"
 import ApexCharts from './components/ApexCharts'
+import ControllerStatus from './components/ControllerStatus'
 import DatePickerRange from './components/DatePickerRange'
 import RangeButtons from './components/RangeButtons'
 import SelectComponent from './components/SelectComponent'
@@ -27,7 +28,9 @@ dt.setHours(dt.getHours() - 6)
 
 const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) => {
 
+
   const { error } = useNotification()
+
 
   const [startDate, setStartDate] = useState<Date>(dt)
   const [endDate, setEndDate] = useState<Date>(new Date())
@@ -186,6 +189,7 @@ const DataView: React.FC<DataViewProps> = ({ ai, templateId, variables, mqtt }) 
           </Box>
         </Box>
       }
+      <ControllerStatus/>
       <Sensors variables={variables} data={mqtt} />
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
