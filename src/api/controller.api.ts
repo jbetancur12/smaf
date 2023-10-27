@@ -5,6 +5,9 @@ export interface CreateRequest {
   customer: string
 }
 
+export const getControllers = (): Promise<any> =>
+  httpApi.get<any[]>('api/controller').then((res) => res.data)
+
 export const create = (signUpData: CreateRequest): Promise<undefined> =>
   httpApi
     .post<undefined>('api/controller', { ...signUpData })

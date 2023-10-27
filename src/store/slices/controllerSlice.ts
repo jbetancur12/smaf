@@ -1,4 +1,4 @@
-import { CreateRequest, create, deleteController } from "@app/api/controller.api"
+import { CreateRequest, create, deleteController, getControllers } from "@app/api/controller.api"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 interface ControllerState {
@@ -21,12 +21,20 @@ export const doDeleteController = createAsyncThunk(
   async (controllerId: string) => deleteController(controllerId)
 )
 
+export const retrieveControllers = createAsyncThunk(
+  'controllers/retrieve',
+  async () => getControllers()
+)
+
 
 const controllerSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(retrieveControllers.fulfilled, (state, action) => {
+      return { ...state, controllers: action.payload }
+    })
     builder.addCase(doCreateController.fulfilled, (state, action) => {
       state.controllers.push(action.payload)
     })

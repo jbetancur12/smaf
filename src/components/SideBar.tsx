@@ -2,6 +2,7 @@ import {
   AdminPanelSettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
+  DeveloperBoard,
   DeviceThermostatOutlined,
   FactoryOutlined
 } from "@mui/icons-material";
@@ -40,6 +41,12 @@ const navItems = () => [
     text: "Usuarios",
     icon: <AdminPanelSettingsOutlined />,
     path: "admin-users",
+    visibleToRoles: ["ADMIN_ROLE"]
+  },
+  {
+    text: "Controladores",
+    icon: <DeveloperBoard />,
+    path: "controllers",
     visibleToRoles: ["ADMIN_ROLE"]
   },
   // ...otros elementos del menú

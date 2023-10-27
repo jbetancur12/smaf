@@ -242,7 +242,7 @@ const AdminsPage = () => {
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title='Usuarios Administradores' />
+      <Header title='Usuarios' />
       <Button variant="contained" color='secondary' className="tw-mb-4" onClick={() => setOpenDialog(true)}>
         Nuevo Usuario
       </Button>
