@@ -12,6 +12,7 @@ const ControllersPage = () => {
   const {  error } = useNotification();
   const { controllers } = useAppSelector((state) => state.controller)
 
+
   const [_openBackDrop, setOpenBackDrop] = useState(false)
 
 
@@ -48,7 +49,7 @@ const ControllersPage = () => {
       return params.row.variables.length
     }, },
     {
-      field: 'customer.name', headerClassName: 'super-app-theme--header', headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
+      field: 'customer', headerClassName: 'super-app-theme--header', headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
         if (params.value) {
           return params.value.name
         }
