@@ -2,14 +2,15 @@ import Header from "@app/components/Header";
 import { useAppDispatch, useAppSelector } from "@app/hooks/reduxHooks";
 import { useNotification } from "@app/services/notificationService";
 import { retrieveControllers } from "@app/store/slices/controllerSlice";
-import { Box, PaletteColor, useTheme } from "@mui/material";
+import { Box, PaletteColor, Typography, useTheme } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ControllersPage = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme();
-  const {  error } = useNotification();
+  const { error } = useNotification();
   const { controllers } = useAppSelector((state) => state.controller)
 
 
@@ -44,14 +45,21 @@ const ControllersPage = () => {
         }></Box>
       )
     },
-    { field: 'variables', headerClassName: 'super-app-theme--header', headerName: 'Numero de variables', flex: 1, valueGetter: (params) => {
-      // Verifica si el campo "controller" existe en la fila
-      return params.row.variables.length
-    }, },
     {
-      field: 'customer', headerClassName: 'super-app-theme--header', headerAlign: "center", headerName: 'Compañia', flex: 1, valueFormatter: (params) => {
+      field: 'variables', headerClassName: 'super-app-theme--header', headerName: 'Numero de variables', flex: 1, valueGetter: (params) => {
+        // Verifica si el campo "controller" existe en la fila
+        return params.row.variables.length
+      },
+    },
+    {
+      field: 'customer', headerClassName: 'super-app-theme--header', headerAlign: "center", headerName: 'Compañia', flex: 1, renderCell: (params) => {
         if (params.value) {
-          return params.value.name
+          const companyUrl = `/customers/${params.value._id}`; // Asegúrate de tener una propiedad "id" en el objeto "customer"
+          return (
+            <Link to={companyUrl} className="tw-no-underline tw-text-inherit tw-transition-transform tw-transform tw-hover:scale-110">
+              {params.value.name}
+            </Link>
+          );
         }
         return "Admin"
       }
@@ -71,7 +79,7 @@ const ControllersPage = () => {
   ];
   return (
     <Box m="1.5rem 2.5rem">
-      <Header  title='Controladores'/>
+      <Header title='Controladores' />
       <Box
         sx={{
           width: '100%',
@@ -85,9 +93,10 @@ const ControllersPage = () => {
             background: theme.palette.neutral["10" as keyof PaletteColor],
           }
         }}>
-        <DataGrid rows={controllers} columns={columns} getRowId={(row) => row._id} getRowClassName={(params) =>
+        {controllers && controllers.length > 0 ? <DataGrid rows={controllers} columns={columns} getRowId={(row) => row._id} getRowClassName={(params) =>
           params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-        } />
+        } /> : <Typography variant="body1">Aun no hay controladores registrados </Typography>}
+
       </Box>
     </Box>
   )
