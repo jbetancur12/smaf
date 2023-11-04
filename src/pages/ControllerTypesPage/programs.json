@@ -1,0 +1,72 @@
+{
+  "programA": {
+    "enabled": false,
+    "days": {
+      "monday": true,
+      "tuesday": false,
+      "wednesday": false,
+      "thursday": false,
+      "friday": false,
+      "saturday": false,
+      "sunday": false
+    },
+    "starters": {
+      "1": {
+        "time": "02:00",
+        "timers": {
+          "output1": 0,
+          "output2": 5,
+          "output3": 0,
+          "output4": 0,
+          "output5": 0,
+          "output6": 0,
+          "output7": 0,
+          "output8": 0,
+          "output9": 0,
+          "output10": 0,
+          "output11": 0,
+          "output12": 0,
+          "output13": 0,
+          "output14": 0,
+          "output15": 0,
+          "output16": 0,
+          "output17": 0,
+          "output18": 0,
+          "output19": 0,
+          "output20": 0,
+          "output21": 0,
+          "output22": 0,
+          "output23": 0,
+          "output24": 0
+        },
+        "fertilization": {
+          "enabled": false,
+          "booster": false,
+          "shaker": false,
+          "fillingAndPressurizingTime": 0,
+          "avanceTime": 0,
+          "shakerTime": 0,
+          "tanks": {
+            "tank1": false,
+            "tank2": false,
+            "tank3": false,
+            "tank4": false,
+            "tank5": false,
+            "tank6": false,
+            "tank7": false,
+            "tank8": false
+          },
+          "days": {
+            "monday": false,
+            "tuesday": false,
+            "wednesday": false,
+            "thursday": false,
+            "friday": false,
+            "saturday": false,
+            "sunday": false
+          }
+        }
+      }
+    }
+  }
+}

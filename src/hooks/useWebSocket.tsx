@@ -13,6 +13,7 @@ function useWebSocket(url: string): WebSocketHook {
   const [receivedMessage, setReceivedMessage] = useState<string>('');
 
   useEffect(() => {
+
     const ws = new WebSocket(url);
 
     ws.onopen = () => {
@@ -24,7 +25,6 @@ function useWebSocket(url: string): WebSocketHook {
     };
 
     ws.onmessage = (event) => {
-
       setReceivedMessage(event.data);
     };
 

@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 const ControllerStatus = () => {
   const dispatch = useAppDispatch();
   const { controllers } = useAppSelector((state) => state.controller);
+
   let [searchParams] = useSearchParams();
   const customerId = searchParams.get("customer");
 
@@ -21,6 +22,7 @@ const ControllerStatus = () => {
   const customerControllers = controllers.filter(
     (controller) => controller.customer._id === customerId
   );
+
 
   return (
     <Box

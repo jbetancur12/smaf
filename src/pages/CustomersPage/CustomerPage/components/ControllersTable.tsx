@@ -1,12 +1,13 @@
 import Form from "@app/components/Form";
-import { useAppDispatch } from "@app/hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "@app/hooks/reduxHooks";
 import { useNotification } from "@app/services/notificationService";
 import { doCreateController, doDeleteController } from "@app/store/slices/controllerSlice";
+import { retrieveControllerTypes } from "@app/store/slices/controllerTypeSlice";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface Controller {
   name: string;
@@ -14,7 +15,8 @@ interface Controller {
   _id: string;
   lastPingTime: string;
   connected: boolean;
-  variables: []
+  variables: [];
+  controllerType: string;
 }
 
 interface ControllersTableProps {
@@ -22,37 +24,32 @@ interface ControllersTableProps {
 
 }
 
-const formFields = [
-  {
-    name: 'name',
-    label: 'Nombre',
-    type: 'text',
-    required: true,
-    value: '',
-  },
-
-];
 
 const ControllersTable: React.FC<ControllersTableProps> = ({ controllers }) => {
 
   const { id: customer } = useParams()
   const { success, error, info } = useNotification()
   const dispatch = useAppDispatch()
+  const {controllerTypes} = useAppSelector((state) => state.controllerType)
+
 
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [editItem, setEditItem] = useState<Controller | null>(null)
   const [customerControllers, setCustomerControllers] = useState<Controller[] | undefined>([]);
+  console.log("🚀 ~ file: ControllersTable.tsx:40 ~ customerControllers:", customerControllers)
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [controllerToDelete, setControllerToDelete] = useState<Controller | null>(null);
+  const [controllerType, setControllerType] = useState("")
 
   useEffect(() => {
     setCustomerControllers(controllers)
+    dispatch(retrieveControllerTypes())
   }, [])
 
   const handleFormSubmit = (values: any) => {
     setLoading(true);
-    dispatch(doCreateController({ ...values, customer }))
+    dispatch(doCreateController({ ...values, customer, controllerType }))
       .unwrap()
       .then((res) => {
         if (res !== undefined) {
@@ -117,19 +114,56 @@ const ControllersTable: React.FC<ControllersTableProps> = ({ controllers }) => {
       })
   }
 
+  const handleChange = (event: SelectChangeEvent) => {
+    setControllerType(event.target.value as string);
+  };
+
+  const formFields = [
+    {
+      name: 'name',
+      label: 'Nombre',
+      type: 'text',
+      required: true,
+      value: '',
+    },
+    {
+      name: 'controllerType',
+      label: 'Tipo de Controlador',
+      type: 'component',
+      required: true,
+      value: '',
+      component: (
+        <Select
+            labelId="controllerTypes"
+            id="controllerTypes"
+            value={controllerType}
+            label="Tipo de Controlador"
+            onChange={handleChange}
+            fullWidth
+          >
+            {controllerTypes.map(controllerType => <MenuItem key={controllerType._id} value={controllerType._id}>{controllerType.name}</MenuItem>)}
+          </Select>
+      )
+    },
+
+  ];
+
 
   return (
     <div>
       <Button color='secondary' variant="contained" className="tw-mb-4" onClick={() => setOpenDialog(true)}>
-        NuevoControlador
+        Nuevo Controlador
       </Button>
       {customerControllers && customerControllers.length > 0 ? (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Nombre</TableCell>
+                <TableCell>
+                Nombre
+                </TableCell>
                 <TableCell>Id del Controlador</TableCell>
+                <TableCell>Tipo de Controlador</TableCell>
                 <TableCell>Estado</TableCell>
                 <TableCell>Numero de Variables</TableCell>
                 {/* <TableCell>Last Ping</TableCell> */}
@@ -138,8 +172,9 @@ const ControllersTable: React.FC<ControllersTableProps> = ({ controllers }) => {
             <TableBody>
               {customerControllers.map((controller) => (
                 <TableRow key={controller._id}>
-                  <TableCell>{controller.name}</TableCell>
+                  <TableCell><Link to={`controller/${controller.controllerType}`}>{controller.name}</Link></TableCell>
                   <TableCell>{controller.controllerId}</TableCell>
+                  <TableCell>{controllerTypes.find(controllerType => controllerType._id === controller.controllerType)?.name}</TableCell>
                   <TableCell>
                     <Box
                       sx={{

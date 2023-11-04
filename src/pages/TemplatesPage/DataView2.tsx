@@ -2,12 +2,14 @@ import { getTemplate } from '@app/api/template.api';
 import { Sensor, VariableData } from '@app/api/variable.api';
 
 import useWebSocket from '@app/hooks/useWebSocket';
+import { setController } from '@app/store/slices/controllerSlice';
 import { Sensors } from '@mui/icons-material';
 import SsidChartIcon from '@mui/icons-material/SsidChart';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import DataView from './DataView';
 import Actuators from './components/Actuators';
@@ -27,6 +29,7 @@ function formatDateTime(date: Date) {
 export default function IconLabelTabs() {
 
   const { socket, isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_MQTT);
+  const dispatch = useDispatch()
  if(socket){
   socket.onopen = () => {
     const message = {
@@ -46,6 +49,7 @@ export default function IconLabelTabs() {
   const [ai, setAi] = useState<Sensor[]>([])
   const [mqttDataObj, setMqttDataObj] = useState<any>({})
   const [mqttInputObj, setMqttInputObj] = useState<any>({ 0: '0,0' })
+  const [status, setStatus] = useState({ })
   const [isMessageSent, setMessageSent] = useState(false);
 
 
@@ -96,6 +100,11 @@ export default function IconLabelTabs() {
               [data[3]]: { value: data[4], date: formatDateTime(new Date()) },
             }));
           }
+        }
+
+        if(wssPayload.topic === "controllerStatusChange"){
+          dispatch(setController(wssPayload.message))
+
         }
 
         if (wssPayload.topic === 'output') {

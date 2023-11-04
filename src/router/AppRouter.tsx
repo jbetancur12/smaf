@@ -22,6 +22,8 @@ const LayoutFallback = withLoading(Layout)
 const TemplatesPage = React.lazy(() => import('@app/pages/TemplatesPage'))
 const AdminsPage = React.lazy(() => import('@app/pages/AdminsPage/AdminsPage'))
 const ControllersPage = React.lazy(() => import('@app/pages/ControllersPage/ControllersPage'))
+const ControllerTypesPage = React.lazy(() => import('@app/pages/ControllerTypesPage/ControllerTypesPage'))
+const ControllerProgramsPage = React.lazy(() => import('@app/pages/ControllerTypesPage/components/Program'))
 const TemplatesDataViewPage = React.lazy(() => import('@app/pages/TemplatesPage/DataView2'))
 const CustomersPage = React.lazy(() => import('@app/pages/CustomersPage/CustomersPage'))
 const CustomerPage = React.lazy(() => import('@app/pages/CustomersPage/CustomerPage/CustomerPage'))
@@ -30,6 +32,8 @@ const CustomerTemplatesPage = React.lazy(() => import('@app/pages/CustomersPage/
 const Templates = withLoading(TemplatesPage)
 const Admins = withLoading(AdminsPage)
 const Controllers = withLoading(ControllersPage)
+const ControllerTypes = withLoading(ControllerTypesPage)
+const ControllerPrograms = withLoading(ControllerProgramsPage)
 const TemplatesDataView = withLoading(TemplatesDataViewPage)
 const Customers = withLoading(CustomersPage)
 const Customer = withLoading(CustomerPage)
@@ -60,22 +64,29 @@ function AppRouter() {
             </Route>
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-          <Route path="customers">
-            <Route index element={<Customers />} />
-            <Route path=":id">
-              <Route index element={<Customer />} />
-              <Route path="template/:idTemplate" element={<CustomerTemplates />} />
+            <Route path="customers">
+              <Route index element={<Customers />} />
+              <Route path=":id">
+                <Route index element={<Customer />} />
+                <Route path="template/:idTemplate" element={<CustomerTemplates />} />
+                <Route path="controller/:controllerTypeId" element={<ControllerTypes />} />
+                <Route path="controller-programs/:controllerTypeId" element={<ControllerPrograms />} />
+              </Route>
             </Route>
           </Route>
-          </Route>
-          <Route  element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="admin-users">
-              <Route index element={<Admins/>}/>
+              <Route index element={<Admins />} />
             </Route>
           </Route>
-          <Route  element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="controllers">
-              <Route index element={<Controllers/>}/>
+              <Route index element={<Controllers />} />
+            </Route>
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route path="controller-types/:controllerTypeId">
+              <Route index element={<ControllerTypes />} />
             </Route>
           </Route>
         </Route>

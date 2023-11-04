@@ -2,10 +2,12 @@ import Header from "@app/components/Header";
 import { useAppDispatch, useAppSelector } from "@app/hooks/reduxHooks";
 import { useNotification } from "@app/services/notificationService";
 import { retrieveControllers } from "@app/store/slices/controllerSlice";
-import { Box, PaletteColor, Typography, useTheme } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Box, PaletteColor, Tab, Typography, useTheme } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ControllerTypes from "./components/ControllerTypes";
 
 const ControllersPage = () => {
   const dispatch = useAppDispatch()
@@ -14,7 +16,9 @@ const ControllersPage = () => {
   const { controllers } = useAppSelector((state) => state.controller)
 
 
+
   const [_openBackDrop, setOpenBackDrop] = useState(false)
+  const [activeTab, setActiveTab] = useState('1');
 
 
   const initFetch = useCallback(() => {
@@ -80,24 +84,40 @@ const ControllersPage = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title='Controladores' />
-      <Box
-        sx={{
-          width: '100%',
-          '& .MuiDataGrid-columnHeaderTitle': { fontWeight: "bold" },
-          '& .super-app-theme--header': {
-            backgroundColor: theme.palette.primary["200" as keyof PaletteColor],
-            fontWeight: "bold"
-          },
-          '& .odd': {
-            //@ts-ignore
-            background: theme.palette.neutral["10" as keyof PaletteColor],
-          }
-        }}>
-        {controllers && controllers.length > 0 ? <DataGrid rows={controllers} columns={columns} getRowId={(row) => row._id} getRowClassName={(params) =>
-          params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-        } /> : <Typography variant="body1">Aun no hay controladores registrados </Typography>}
 
-      </Box>
+      <TabContext value={activeTab}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={(_e, newValue) => setActiveTab(newValue)}>
+            <Tab label="Controladores" value="1" />
+            <Tab label="Tipo de controladores" value="2" />
+          </TabList>
+        </Box>
+
+
+        <TabPanel value="1">
+          <Box
+            sx={{
+              width: '100%',
+              '& .MuiDataGrid-columnHeaderTitle': { fontWeight: "bold" },
+              '& .super-app-theme--header': {
+                backgroundColor: theme.palette.primary["200" as keyof PaletteColor],
+                fontWeight: "bold"
+              },
+              '& .odd': {
+                //@ts-ignore
+                background: theme.palette.neutral["10" as keyof PaletteColor],
+              }
+            }}>
+            {controllers && controllers.length > 0 ? <DataGrid rows={controllers} columns={columns} getRowId={(row) => row._id} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            } /> : <Typography variant="body1">Aun no hay controladores registrados </Typography>}
+
+          </Box>
+        </TabPanel>
+        <TabPanel value="2">
+          <ControllerTypes/>
+        </TabPanel>
+      </TabContext>
     </Box>
   )
 }
