@@ -1,4 +1,3 @@
-import { useAppSelector } from "@app/hooks/reduxHooks";
 import {
   Box,
   FormControl,
@@ -8,23 +7,51 @@ import {
   SelectChangeEvent,
   Switch,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Days = () => {
-  const programParameters = useAppSelector((state) => state.parameters)
+interface DaysProps {
+  data: number[]
+}
+
+function objectToBinary(obj: Record<string, boolean>): number {
+  const days = ["domingo", "sábado", "viernes", "jueves", "miércoles", "martes", "lunes"];
+  let binaryString = "";
+  for (const day of days) {
+    binaryString += obj[day] ? "1" : "0";
+  }
+  return parseInt(binaryString, 2);
+}
+
+const Days:React.FC<DaysProps> = ({data}) => {
 
   const [selectedDays, setSelectedDays] = useState<Record<string, boolean>>({
-    lunes: !!programParameters?.diasSemana[1], // Convierte el número a booleano
-    martes: !!programParameters?.diasSemana[2], // Convierte el número a booleano
-    miércoles: !!programParameters?.diasSemana[3], // Convierte el número a booleano
-    jueves: !!programParameters?.diasSemana[4], // Convierte el número a booleano
-    viernes: !!programParameters?.diasSemana[5], // Convierte el número a booleano
-    sábado: !!programParameters?.diasSemana[6], // Convierte el número a booleano
-    domingo: !!programParameters?.diasSemana[0], // Convierte el número a booleano
+    lunes: false,
+    martes: false,
+    miércoles: false,
+    jueves: false,
+    viernes: false,
+    sábado: false,
+    domingo: false,
   });
 
+  const binaryValue = objectToBinary(selectedDays);
+
+
   const [selectedProgram, setSelectedProgram] = useState<string>("A");
-  const [isSwitchOn, setIsSwitchOn] = useState( programParameters?.operation);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+
+  useEffect(() => {
+    setIsSwitchOn(data[0] === 1)
+
+   if(data.length > 0){ const binaryString = data[1].toString(2).padStart(7, "0");
+    const days = Object.keys(selectedDays);
+    days.forEach((day, index) => {
+      setSelectedDays((prevSelectedDays) => ({
+        ...prevSelectedDays,
+        [day]: binaryString[index] === "1",
+      }));
+    });}
+  },[data])
 
 
   const handleDayToggle = (day: string) => {
@@ -41,6 +68,9 @@ const Days = () => {
   const handleSwitchToggle = () => {
     setIsSwitchOn(!isSwitchOn);
   };
+
+  const valuesToSend = `${isSwitchOn?1:0},${binaryValue}`
+
 
   return (
     <div>

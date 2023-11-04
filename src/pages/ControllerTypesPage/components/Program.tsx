@@ -1,7 +1,12 @@
 
+import { useAppSelector } from '@app/hooks/reduxHooks';
+import useWebSocket from '@app/hooks/useWebSocket';
+import { setParametersController } from '@app/store/slices/parametersControllerSlice';
 import { ExitToApp, Save } from '@mui/icons-material';
 import { Box, Grid, IconButton, Switch, useTheme } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import Days from './Days';
 import RowComponent from './RowComponentProgram';
 
@@ -11,6 +16,13 @@ interface Props {
 
 const Program: React.FC<Props> = ({ handleProgramDialogClose }) => {
 
+  const { socket } = useWebSocket(import.meta.env.VITE_MQTT);
+  const { controllerTypeId, id } = useParams();
+  const dispatch = useDispatch();
+
+  const { controllerTypes } = useAppSelector((state) => state.controllerType)
+  const { frame1 } = useAppSelector((state) => state.parametersController)
+
 
   const [values, setValues] = useState<Record<string, string>>({});
   const [colorValues, setColorValues] = useState<Record<string, string>>({});
@@ -18,6 +30,65 @@ const Program: React.FC<Props> = ({ handleProgramDialogClose }) => {
   const theme = useTheme()
   const numberOfRows = 8;
   const valveNames = ["V_master_1", "V_master_2", "V_master_3", "V_master_4", "Bomba 1", "Bomba 2", "Lluvia"]
+
+  const controllerTypeSelected = controllerTypes.filter((controllerType => controllerType._id === controllerTypeId))[0]
+
+
+
+  useEffect(() => {
+    if (socket) {
+      socket.onopen = () => {
+        // Configura el WebSocket
+        const message = {
+          topic: 'getParameters',
+          type: 'publish',
+          message: `${id}/${controllerTypeSelected.name}/programA/frame1`,
+        };
+        socket.send(JSON.stringify(message));
+      };
+    }
+  }, [id, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      // Realiza las operaciones que deseas cuando isTimesDialogOpen es true
+
+      socket.onmessage = (event: MessageEvent<any>) => {
+        const wssPayload = JSON.parse(event.data);
+
+
+        if (wssPayload.topic === 'sendParameters') {
+          const {message} = wssPayload
+          const numeros: number[] = message.split(",").map((elemento:string) => parseInt(elemento.replace(/[" ]/g, ''), 10));
+
+          const msg = {
+            [`frame1`]: numeros
+          }
+
+
+          dispatch(setParametersController(msg))
+        }
+
+      };
+
+      if (socket.readyState === WebSocket.OPEN) {
+        const message = {
+          topic: 'getParameters',
+          type: 'publish',
+          message: `${id}/${controllerTypeId}/programA/frame1/`,
+        };
+        socket.send(JSON.stringify(message));
+      }
+
+
+    }
+
+    return () => {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.close();
+      }
+    };
+  }, [socket]);
 
 
 
@@ -52,7 +123,7 @@ const Program: React.FC<Props> = ({ handleProgramDialogClose }) => {
       }
     }
     >
-      <Days />
+      <Days data={frame1.slice(0, 2)}/>
       <Grid container spacing={2}>
         <Grid item md={6}>
           <Box>
