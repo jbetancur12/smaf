@@ -1,41 +1,74 @@
 import { retrieveControllerTypes } from "@app/store/slices/controllerTypeSlice";
 // import { Settings } from "@mui/icons-material";
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import Program from "./components/Program";
+// import { useParams } from "react-router-dom";
+// import Program from "./components/Program";
 import SettingsComponent from "./components/SettingsComponent";
-
-
 
 const ControllerTypesPage = () => {
   const dispatch = useDispatch();
-  const theme = useTheme()
+  // const theme = useTheme()
 
-  const { controllerTypeId } = useParams();
-  const [isProgramDialogOpen, setProgramDialogOpen] = useState(false);
+  // const { controllerTypeId } = useParams();
+  // const [isProgramDialogOpen, setProgramDialogOpen] = useState(false);
 
-  const [programClicked, setProgramClicked] = useState("")
+  // const [programClicked, setProgramClicked] = useState("")
+  // const [, setProgramClicked] = useState("");
 
-  const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false)
+  const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
 
   useEffect(() => {
     //@ts-ignore
-    dispatch(retrieveControllerTypes())
-  }, [])
-
+    dispatch(retrieveControllerTypes());
+  }, []);
 
   // Textos de los botones
   const buttonLabels = [
-    "SAL1", "SAL2", "SAL3", "SAL4", "SAL5", "SAL6", "SAL7", "SAL8",
-    "SAL9", "SAL10", "SAL11", "SAL12", "SAL13", "SAL14", "SAL15", "SAL16",
-    "SAL17", "SAL18", "SAL19", "SAL20", "SAL21", "SAL22", "SAL23", "SAL24",
-    "Tq 1", "Tq 2", "Tq 3", "Tq 4", "Tq 5", "Tq 6", "Tq 7", "Tq 8",
-    "VM1", "VM2", "VM3", "VM4", "B1", "B2", "JET", "AGI T"
+    "SAL1",
+    "SAL2",
+    "SAL3",
+    "SAL4",
+    "SAL5",
+    "SAL6",
+    "SAL7",
+    "SAL8",
+    "SAL9",
+    "SAL10",
+    "SAL11",
+    "SAL12",
+    "SAL13",
+    "SAL14",
+    "SAL15",
+    "SAL16",
+    "SAL17",
+    "SAL18",
+    "SAL19",
+    "SAL20",
+    "SAL21",
+    "SAL22",
+    "SAL23",
+    "SAL24",
+    "Tq 1",
+    "Tq 2",
+    "Tq 3",
+    "Tq 4",
+    "Tq 5",
+    "Tq 6",
+    "Tq 7",
+    "Tq 8",
+    "VM1",
+    "VM2",
+    "VM3",
+    "VM4",
+    "B1",
+    "B2",
+    "JET",
+    "AGI T",
   ];
 
-  const letras = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  // const letras = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
   // Divide los botones en grupos de 8
   const buttonGroups = [];
@@ -44,24 +77,22 @@ const ControllerTypesPage = () => {
     buttonGroups.push(buttonGroup);
   }
 
+  // const handleProgramDialogOpen = (program: string) => {
+  //   setProgramDialogOpen(true);
+  //   setProgramClicked(program)
+  // };
 
+  // const handleProgramDialogClose = () => {
+  //   setProgramDialogOpen(false);
+  // };
 
-  const handleProgramDialogOpen = (program: string) => {
-    setProgramDialogOpen(true);
-    setProgramClicked(program)
-  };
-
-  const handleProgramDialogClose = () => {
-    setProgramDialogOpen(false);
-  };
-
-  const handleSettingsDialogOpen = () => {
-    setSettingsDialogOpen(true);
-  }
+  // const handleSettingsDialogOpen = () => {
+  //   setSettingsDialogOpen(true);
+  // }
 
   const handleSettingsDialogClose = () => {
     setSettingsDialogOpen(false);
-  }
+  };
 
   return (
     <>
@@ -130,17 +161,17 @@ const ControllerTypesPage = () => {
         </Box>
       </Box>} */}
       <Box maxWidth={800} margin="0 auto">
-        <Program handleProgramDialogClose={handleProgramDialogClose} />
-
+        {/* <Program handleProgramDialogClose={handleProgramDialogClose} /> */}
       </Box>
 
-
-      {isSettingsDialogOpen && <SettingsComponent isSettingsDialogOpen={isSettingsDialogOpen} handleSettingsDialogClose={handleSettingsDialogClose} />}
-
-
-
+      {isSettingsDialogOpen && (
+        <SettingsComponent
+          isSettingsDialogOpen={isSettingsDialogOpen}
+          handleSettingsDialogClose={handleSettingsDialogClose}
+        />
+      )}
     </>
   );
-}
+};
 
 export default ControllerTypesPage;

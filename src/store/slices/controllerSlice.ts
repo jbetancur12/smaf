@@ -1,5 +1,5 @@
 import { CreateRequest, create, deleteController, getControllers } from "@app/api/controller.api"
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 interface ControllerState {
   controllers: any[]
@@ -32,7 +32,13 @@ const controllerSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setController: (state, action: PayloadAction<any>) => {
+    // setController: (state, action: PayloadAction<any>) => {
+
+
+
+
+    // },
+        setController: () => {
 
 
 

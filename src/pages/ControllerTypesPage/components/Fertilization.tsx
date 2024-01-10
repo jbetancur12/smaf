@@ -2,8 +2,15 @@ import { useAppSelector } from "@app/hooks/reduxHooks";
 import useWebSocket from "@app/hooks/useWebSocket";
 import { setParametersController } from "@app/store/slices/parametersControllerSlice";
 import { ExitToApp, Save } from "@mui/icons-material";
-import { Box, Grid, IconButton, Switch, TextField, useTheme } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Switch,
+  TextField,
+  useTheme,
+} from "@mui/material";
+// import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -14,25 +21,35 @@ interface FertilizationProgramProps {
   handleFertilizationDialogClose: () => void;
 }
 
-const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFertilizationDialogOpen, handleFertilizationDialogClose }) => {
-  const { socket, isConnected, sendMessage, receivedMessage } = useWebSocket(import.meta.env.VITE_MQTT);
-  const theme = useTheme()
+const Fertilization: React.FC<FertilizationProgramProps> = ({
+  rowNumber,
+  isFertilizationDialogOpen,
+  handleFertilizationDialogClose,
+}) => {
+  const { socket, isConnected, sendMessage, receivedMessage } = useWebSocket(
+    import.meta.env.VITE_MQTT
+  );
+  const theme = useTheme();
   const dispatch = useDispatch();
-  const { frame3, program } = useAppSelector((state) => state.parametersController)
-  const { controllerTypes } = useAppSelector((state) => state.controllerType)
+  const { frame3, program } = useAppSelector(
+    (state) => state.parametersController
+  );
+  const { controllerTypes } = useAppSelector((state) => state.controllerType);
   const { controllerTypeId, id } = useParams();
 
   const styles = {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     // backgroundColor: 'rgba(0, 0, 0, 0.5)', // Ajusta la opacidad aquí (0.5 es 50% de opacidad)
     zIndex: 9998, // Coloca el fondo detrás del modal
   };
 
-  const controllerTypeSelected = controllerTypes.filter((controllerType => controllerType._id === controllerTypeId))[0]
+  const controllerTypeSelected = controllerTypes.filter(
+    (controllerType) => controllerType._id === controllerTypeId
+  )[0];
 
   const [selectedDays, setSelectedDays] = useState<Record<string, boolean>>({
     lunes: false,
@@ -45,24 +62,21 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
   });
 
   const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const [fillingAndPressureTime, setFillingAndPressureTime] = useState<null | Dayjs>(
-    dayjs('00:00', 'HH:mm')
-  );
-  const [advanceTime, setAdvanceTime] = useState<null | Dayjs>(
-    dayjs('00:00', 'HH:mm')
-  );
+  // const [, setFillingAndPressureTime] = useState<null | Dayjs>(
+  //   dayjs("00:00", "HH:mm")
+  // );
+  // const [, setAdvanceTime] = useState<null | Dayjs>(dayjs("00:00", "HH:mm"));
 
-  const [shakerTime, setShakerTime] = useState<null | Dayjs>(
-    dayjs('00:00', 'HH:mm')
-  );
+  // const [, setShakerTime] = useState<null | Dayjs>(dayjs("00:00", "HH:mm"));
 
   const [values, setValues] = useState<Record<string, string>>({});
 
-  const [tanqueCheckboxes, setTanqueCheckboxes] = useState<Record<string, boolean>>({});
+  const [tanqueCheckboxes, setTanqueCheckboxes] = useState<
+    Record<string, boolean>
+  >({});
 
   const [isBoosterOn, setIsBoosterOn] = useState(false);
   const [isAgitatorOn, setIsAgitatorOn] = useState(false);
-
 
   const handleBoosterSwitchToggle = () => {
     setIsBoosterOn(!isBoosterOn);
@@ -73,10 +87,10 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
     setIsAgitatorOn(!isAgitatorOn);
   };
 
-  const handleFertilizationDialogSave = () => { }
+  const handleFertilizationDialogSave = () => {};
 
   const handleDayToggle = (day: string) => {
-    const clone = {...selectedDays, [day]: !selectedDays[day]}
+    const clone = { ...selectedDays, [day]: !selectedDays[day] };
     setSelectedDays(clone);
   };
 
@@ -84,24 +98,22 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
     setIsSwitchOn(!isSwitchOn);
   };
 
-  const handleFillingAndPressureTimeChange = (newTime: Dayjs | null) => {
-    setFillingAndPressureTime(newTime);
-  };
+  // const handleFillingAndPressureTimeChange = (newTime: Dayjs | null) => {
+  //   setFillingAndPressureTime(newTime);
+  // };
 
-  const handleAdvanceTimeChange = (newTime: Dayjs | null) => {
-    setAdvanceTime(newTime);
-  };
+  // const handleAdvanceTimeChange = (newTime: Dayjs | null) => {
+  //   setAdvanceTime(newTime);
+  // };
 
-
-  const handleShakerTimeChange = (newTime: Dayjs | null) => {
-    setShakerTime(newTime);
-  };
+  // const handleShakerTimeChange = (newTime: Dayjs | null) => {
+  //   setShakerTime(newTime);
+  // };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
-  }
-
+  };
 
   const handleTanqueCheckboxToggle = (tanque: string) => {
     setTanqueCheckboxes((prevCheckboxes) => ({
@@ -130,15 +142,13 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
 
   useEffect(() => {
     if (isConnected && socket && socket.readyState === WebSocket.OPEN) {
-
-        // Configura el WebSocket
-        const message = {
-          topic: 'getParameters',
-          type: 'publish',
-          message: `${id}/${controllerTypeSelected.name}/program${program}/frame3/${rowNumber}`,
-        };
-        sendMessage(JSON.stringify(message));
-
+      // Configura el WebSocket
+      const message = {
+        topic: "getParameters",
+        type: "publish",
+        message: `${id}/${controllerTypeSelected.name}/program${program}/frame3/${rowNumber}`,
+      };
+      sendMessage(JSON.stringify(message));
     }
   }, [id, rowNumber, isConnected]);
 
@@ -146,29 +156,29 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
     if (receivedMessage && socket && socket.readyState === WebSocket.OPEN) {
       // Realiza las operaciones que deseas cuando isTimesDialogOpen es true
 
-      const wssPayload = JSON.parse(receivedMessage)
+      const wssPayload = JSON.parse(receivedMessage);
 
+      if (wssPayload.topic === "sendParameters") {
+        const { message } = wssPayload;
+        const numeros: number[] = message
+          .split(",")
+          .map((elemento: string) =>
+            parseInt(elemento.replace(/[" ]/g, ""), 10)
+          );
 
-        if (wssPayload.topic === 'sendParameters') {
-          const {message} = wssPayload
-          const numeros: number[] = message.split(",").map((elemento:string) => parseInt(elemento.replace(/[" ]/g, ''), 10));
+        const msg = {
+          [`frame3`]: numeros,
+        };
 
-          const msg = {
-            [`frame3`]: numeros
-          }
-
-
-          dispatch(setParametersController(msg))
-        }
-
+        dispatch(setParametersController(msg));
+      }
     }
-
   }, [receivedMessage]);
 
   useEffect(() => {
-    if(frame3.length > 0){
-      const valveStates = frame3[0].toString(2).padStart(8, '0');
-      setIsSwitchOn(valveStates[valveStates.length - rowNumber] == "1")
+    if (frame3.length > 0) {
+      const valveStates = frame3[0].toString(2).padStart(8, "0");
+      setIsSwitchOn(valveStates[valveStates.length - rowNumber] == "1");
       const binaryString = frame3[1].toString(2).padStart(7, "0");
       const days = Object.keys(selectedDays);
       days.forEach((day, index) => {
@@ -176,41 +186,47 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
           ...prevSelectedDays,
           [day]: binaryString[index] === "1",
         }));
-      })
-      const pumpStates = frame3[9].toString(2).padStart(8, '0');
-      setIsBoosterOn(pumpStates[pumpStates.length - rowNumber] == "1")
-      const shakerStates = frame3[10].toString(2).padStart(8, '0');
-      setIsBoosterOn(shakerStates[shakerStates.length - rowNumber] == "1")
+      });
+      const pumpStates = frame3[9].toString(2).padStart(8, "0");
+      setIsBoosterOn(pumpStates[pumpStates.length - rowNumber] == "1");
+      const shakerStates = frame3[10].toString(2).padStart(8, "0");
+      setIsBoosterOn(shakerStates[shakerStates.length - rowNumber] == "1");
       setValues({
-        "fillingAndPressureTime": frame3[12 + rowNumber ],
-        "shakerTime": frame3[20 + rowNumber ],
-        "advanceTime": frame3[28 + rowNumber ]
-      })
+        fillingAndPressureTime: frame3[12 + rowNumber],
+        shakerTime: frame3[20 + rowNumber],
+        advanceTime: frame3[28 + rowNumber],
+      });
     }
-  },[frame3])
-
+  }, [frame3]);
 
   return (
     <Box sx={styles} id="times">
-      <Box sx={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 9999,
-        padding: theme.spacing(2),
-        background: 'white',
-        // borderRadius: 8,
-        boxShadow: theme.shadows[5],
-        display: isFertilizationDialogOpen ? 'flex' : 'none',
-        flexDirection: "column",
-        alignItems: "center",
-        // width:"100%"
-      }} >
+      <Box
+        sx={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 9999,
+          padding: theme.spacing(2),
+          background: "white",
+          // borderRadius: 8,
+          boxShadow: theme.shadows[5],
+          display: isFertilizationDialogOpen ? "flex" : "none",
+          flexDirection: "column",
+          alignItems: "center",
+          // width:"100%"
+        }}
+      >
         <Grid container>
-
           <Box id="2">
-            <Box display="flex" alignItems="center" justifyContent="space-between" id="1" className="tw-mb-4">
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              id="1"
+              className="tw-mb-4"
+            >
               <Box>
                 <label>
                   <input
@@ -268,7 +284,6 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
                   />
                   D
                 </label>
-
               </Box>
               <Box>
                 <label>On/Off</label>
@@ -277,23 +292,26 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
                   onChange={handleSwitchToggle}
                   name="switch"
                   sx={{
-                    '& .MuiSwitch-switchBase': {
-                      '&.Mui-checked': {
-                        color: '#fff',
-                        '& + .MuiSwitch-track': {
+                    "& .MuiSwitch-switchBase": {
+                      "&.Mui-checked": {
+                        color: "#fff",
+                        "& + .MuiSwitch-track": {
                           opacity: 1,
-                          backgroundColor: isSwitchOn ? 'green' : 'gray',
+                          backgroundColor: isSwitchOn ? "green" : "gray",
                         },
                       },
                     },
                   }}
                 />
-
-
               </Box>
             </Box>
             <Box>
-              <Box display="flex" alignItems="center" justifyContent="space-between" className="tw-mb-2 tw-gap-3">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                className="tw-mb-2 tw-gap-3"
+              >
                 <label>Llenado y la presurizacion (Sec)</label>
                 <TextField
                   name="fillingAndPressureTime"
@@ -303,7 +321,12 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
                   value={values[`fillingAndPressureTime`] || 0}
                 />
               </Box>
-              <Box display="flex" alignItems="center" justifyContent="space-between" className="tw-mb-2 tw-gap-3">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                className="tw-mb-2 tw-gap-3"
+              >
                 <label>Tiempo de Avance (Sec)</label>
                 <TextField
                   name="advanceTime"
@@ -313,7 +336,12 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
                   value={values[`advanceTime`] || 0}
                 />
               </Box>
-              <Box display="flex" alignItems="center" justifyContent="space-between" className="tw-mb-2 tw-gap-3">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                className="tw-mb-2 tw-gap-3"
+              >
                 <label>Agitador (Sec)</label>
                 <TextField
                   name="shakerTime"
@@ -331,10 +359,7 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
               justifyContent="center"
               className="tw-gap-14 tw-mb-4"
             >
-              <Box>
-                {generateTanqueCheckboxes()}
-              </Box>
-
+              <Box>{generateTanqueCheckboxes()}</Box>
 
               <Box display="flex" alignItems="center" flexDirection="column">
                 <Box>
@@ -344,12 +369,12 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
                     onChange={handleBoosterSwitchToggle}
                     name="switch-booster"
                     sx={{
-                      '& .MuiSwitch-switchBase': {
-                        '&.Mui-checked': {
-                          color: '#fff',
-                          '& + .MuiSwitch-track': {
+                      "& .MuiSwitch-switchBase": {
+                        "&.Mui-checked": {
+                          color: "#fff",
+                          "& + .MuiSwitch-track": {
                             opacity: 1,
-                            backgroundColor: isBoosterOn ? 'green' : 'gray',
+                            backgroundColor: isBoosterOn ? "green" : "gray",
                           },
                         },
                       },
@@ -363,12 +388,12 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
                     onChange={handleAgitatorSwitchToggle}
                     name="switch-agitator"
                     sx={{
-                      '& .MuiSwitch-switchBase': {
-                        '&.Mui-checked': {
-                          color: '#fff',
-                          '& + .MuiSwitch-track': {
+                      "& .MuiSwitch-switchBase": {
+                        "&.Mui-checked": {
+                          color: "#fff",
+                          "& + .MuiSwitch-track": {
                             opacity: 1,
-                            backgroundColor: isAgitatorOn ? 'green' : 'gray',
+                            backgroundColor: isAgitatorOn ? "green" : "gray",
                           },
                         },
                       },
@@ -378,7 +403,6 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
               </Box>
             </Box>
           </Box>
-
         </Grid>
         <Box display="flex" width="100%" justifyContent="end">
           <IconButton onClick={handleFertilizationDialogSave}>
@@ -390,7 +414,7 @@ const Fertilization: React.FC<FertilizationProgramProps> = ({ rowNumber, isFerti
         </Box>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default Fertilization
+export default Fertilization;

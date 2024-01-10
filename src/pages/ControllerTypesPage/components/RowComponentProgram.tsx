@@ -1,80 +1,66 @@
-import {
-  Box,
-  Button,
-  Checkbox
-} from "@mui/material";
+import { Box, Button, Checkbox } from "@mui/material";
 import { TimeField } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Fertilization from "./Fertilization";
-const TimesComponentProgram = React.lazy(() => import('./TimesComponentProgram'))
-
-
+const TimesComponentProgram = React.lazy(
+  () => import("./TimesComponentProgram")
+);
 
 interface RowComponentProgramProps {
   rowNumber: number;
   valveName: string;
   minutes: number;
   seconds: number;
-  state: number
-
+  state: number;
 }
 
-
-
-const RowComponentProgram: React.FC<RowComponentProgramProps> = ({ rowNumber, valveName, minutes, seconds, state }) => {
-
-
-    const [isRowOn, setIsRowOn] = useState(false);
+//@ts-ignore
+const RowComponentProgram: React.FC<RowComponentProgramProps> = ({
+  rowNumber,
+  valveName,
+  minutes,
+  seconds,
+  state,
+}) => {
+  console.log("🚀 ~ valveName:", valveName);
+  const [isRowOn, setIsRowOn] = useState(false);
   const [selectedTime, setSelectedTime] = useState<null | Dayjs>(
-    dayjs('00:00', 'HH:mm')
+    dayjs("00:00", "HH:mm")
   );
 
-
-
-  const [isTimesDialogOpen, setTimesDialogOpen] = useState(false)
-  const [isFertilizationDialogOpen, setFertilizationDialogOpen] = useState(false)
-
-
-
-
+  const [isTimesDialogOpen, setTimesDialogOpen] = useState(false);
+  const [isFertilizationDialogOpen, setFertilizationDialogOpen] =
+    useState(false);
 
   const handleRowToggle = () => {
     setIsRowOn(!isRowOn);
   };
 
   const handleTimeChange = (newTime: Dayjs | null) => {
-
     setSelectedTime(newTime);
   };
 
-
-
-
   const handleTimesDialogOpen = () => {
     setTimesDialogOpen(true);
-  }
+  };
 
   const handleFertilizationDialogOpen = () => {
     setFertilizationDialogOpen(true);
-  }
-
+  };
 
   const handleTimesDialogClose = () => {
     setTimesDialogOpen(false);
-  }
+  };
 
   const handleFertilizationDialogClose = () => {
     setFertilizationDialogOpen(false);
-  }
-
-
+  };
 
   useEffect(() => {
-    setSelectedTime(dayjs(`${minutes}:${seconds}`, 'HH:mm'));
-    setIsRowOn("" + state == "1")
+    setSelectedTime(dayjs(`${minutes}:${seconds}`, "HH:mm"));
+    setIsRowOn("" + state == "1");
   }, [minutes, seconds, state]);
-
 
   return (
     <>
@@ -86,10 +72,18 @@ const RowComponentProgram: React.FC<RowComponentProgramProps> = ({ rowNumber, va
           value={selectedTime}
           onChange={handleTimeChange}
         />
-        <Button variant="contained" color="primary" onClick={handleTimesDialogOpen}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleTimesDialogOpen}
+        >
           Tiempos
         </Button>
-        <Button variant="contained" color="primary" onClick={handleFertilizationDialogOpen}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleFertilizationDialogOpen}
+        >
           Fertilizar
         </Button>
         {/* <Box display="flex" alignItems="center" className="">
@@ -100,13 +94,24 @@ const RowComponentProgram: React.FC<RowComponentProgramProps> = ({ rowNumber, va
             name="switch"
           />
         </Box> */}
-
       </Box>
-      {isTimesDialogOpen && <TimesComponentProgram isTimesDialogOpen={isTimesDialogOpen} handleTimesDialogClose={handleTimesDialogClose} rowNumber={rowNumber}/>}
-      {isFertilizationDialogOpen && <Fertilization isFertilizationDialogOpen={isFertilizationDialogOpen} handleFertilizationDialogClose={handleFertilizationDialogClose} rowNumber={rowNumber}/>}
+      {isTimesDialogOpen && (
+        <TimesComponentProgram
+          isTimesDialogOpen={isTimesDialogOpen}
+          handleTimesDialogClose={handleTimesDialogClose}
+          rowNumber={rowNumber}
+        />
+      )}
+      {isFertilizationDialogOpen && (
+        <Fertilization
+          isFertilizationDialogOpen={isFertilizationDialogOpen}
+          handleFertilizationDialogClose={handleFertilizationDialogClose}
+          rowNumber={rowNumber}
+        />
+      )}
       {/* <TimesComponentProgram rowNumber={rowNumber} isTimesDialogOpen={isTimesDialogOpen} handleTimesDialogClose={handleTimesDialogClose} /> */}
     </>
   );
-}
+};
 
 export default RowComponentProgram;

@@ -50,7 +50,7 @@ export default function IconLabelTabs() {
   const [ai, setAi] = useState<Sensor[]>([]);
   const [mqttDataObj, setMqttDataObj] = useState<any>({});
   const [mqttInputObj, setMqttInputObj] = useState<any>({ 40: "0,0" });
-  const [status, setStatus] = useState({});
+  // const [status, setStatus] = useState({});
   const [isMessageSent, setMessageSent] = useState(false);
 
   const templateId = searchParams.get("template");
