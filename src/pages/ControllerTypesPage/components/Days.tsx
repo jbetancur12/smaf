@@ -1,3 +1,5 @@
+import { useAppSelector } from "@app/hooks/reduxHooks";
+import { setParametersController } from "@app/store/slices/parametersControllerSlice";
 import {
   Box,
   FormControl,
@@ -8,21 +10,26 @@ import {
   Switch,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 interface DaysProps {
-  data: number[]
+  data: number[];
+  handleChange: (program:string) => void
 }
 
 function objectToBinary(obj: Record<string, boolean>): number {
   const days = ["domingo", "sábado", "viernes", "jueves", "miércoles", "martes", "lunes"];
   let binaryString = "";
   for (const day of days) {
-    binaryString += obj[day] ? "1" : "0";
+    binaryString += obj[day] ? "0" : "1";
   }
   return parseInt(binaryString, 2);
 }
 
-const Days:React.FC<DaysProps> = ({data}) => {
+const Days:React.FC<DaysProps> = ({data, handleChange}) => {
+  const { frame1, program } = useAppSelector((state) => state.parametersController)
+  const cloneFrame = [...frame1]
+  const dispatch = useDispatch();
 
   const [selectedDays, setSelectedDays] = useState<Record<string, boolean>>({
     lunes: false,
@@ -37,13 +44,15 @@ const Days:React.FC<DaysProps> = ({data}) => {
   const binaryValue = objectToBinary(selectedDays);
 
 
-  const [selectedProgram, setSelectedProgram] = useState<string>("A");
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   useEffect(() => {
     setIsSwitchOn(data[0] === 1)
+    setSelectedProgram(program)
 
-   if(data.length > 0){ const binaryString = data[1].toString(2).padStart(7, "0");
+   if(data.length > 0){
+    const binaryString = data[1].toString(2).padStart(7, "0");
     const days = Object.keys(selectedDays);
     days.forEach((day, index) => {
       setSelectedDays((prevSelectedDays) => ({
@@ -55,14 +64,15 @@ const Days:React.FC<DaysProps> = ({data}) => {
 
 
   const handleDayToggle = (day: string) => {
-    setSelectedDays((prevSelectedDays) => ({
-      ...prevSelectedDays,
-      [day]: !prevSelectedDays[day],
-    }));
+    const clone = {...selectedDays, [day]: !selectedDays[day]}
+    setSelectedDays(clone);
+
   };
 
   const handleProgramChange = (event: SelectChangeEvent) => {
     setSelectedProgram(event.target.value as string);
+    dispatch(setParametersController({program: event.target.value as string}))
+    handleChange(event.target.value as string)
   };
 
   const handleSwitchToggle = () => {
@@ -70,6 +80,7 @@ const Days:React.FC<DaysProps> = ({data}) => {
   };
 
   const valuesToSend = `${isSwitchOn?1:0},${binaryValue}`
+
 
 
   return (

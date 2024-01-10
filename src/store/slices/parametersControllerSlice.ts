@@ -4,13 +4,15 @@ export interface Parameters {
   frame1: any[];
   frame2: any[];
   frame3: any[];
+  program: string
 }
 
 
 const initialMqttData: Parameters | null = {
   frame1: [],
   frame2: [],
-  frame3: []
+  frame3: [],
+  program: "A"
 }
 
 const parametersControllerSlice = createSlice({
@@ -22,6 +24,7 @@ const parametersControllerSlice = createSlice({
 
       // console.log("🚀 ~ file: parametersControllerSlice.ts:26 ~ action.payload:", action.payload.frame1)
       // if(action.payload.frame1){
+
       return {...state, ...action.payload}
     // }
 

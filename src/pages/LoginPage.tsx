@@ -1,11 +1,7 @@
-import LoginForm from "@app/components/auth/LoginForm"
+import LoginForm from "@app/components/auth/LoginForm";
 
 function LoginPage() {
-  return (
-    <>
-     <LoginForm/>
-    </>
-  )
+  return <LoginForm />;
 }
 
-export default LoginPage
+export default LoginPage;

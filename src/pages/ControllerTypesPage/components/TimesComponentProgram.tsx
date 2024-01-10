@@ -19,9 +19,9 @@ interface TimesComponentProgramProps {
 
 const TimesComponentProgram: React.FC<TimesComponentProgramProps> = ({ rowNumber, isTimesDialogOpen, handleTimesDialogClose }) => {
   const dispatch = useDispatch();
-  const { socket, isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_MQTT);
+  const { socket, isConnected, sendMessage, receivedMessage } = useWebSocket(import.meta.env.VITE_MQTT);
   const { controllerTypeId, id } = useParams();
-  const { frame2 } = useAppSelector((state) => state.parametersController)
+  const { frame2, program } = useAppSelector((state) => state.parametersController)
 
   const { controllerTypes } = useAppSelector((state) => state.controllerType)
 
@@ -33,30 +33,30 @@ const TimesComponentProgram: React.FC<TimesComponentProgramProps> = ({ rowNumber
   const [values, setValues] = useState<Record<string, string>>({});
   const [valvesStates, setValvesStates] = useState("0")
 
+
   const controllerTypeSelected = controllerTypes.filter((controllerType => controllerType._id === controllerTypeId))[0]
 
 
   useEffect(() => {
-    if (socket) {
-      socket.onopen = () => {
+    if (isConnected && socket && socket.readyState === WebSocket.OPEN) {
+
         // Configura el WebSocket
         const message = {
           topic: 'getParameters',
           type: 'publish',
-          message: `${id}/${controllerTypeSelected.name}/programA/frame2/${rowNumber}`,
+          message: `${id}/${controllerTypeSelected.name}/program${program}/frame2/${rowNumber}`,
         };
-        socket.send(JSON.stringify(message));
-      };
+        sendMessage(JSON.stringify(message));
+
     }
-  }, [id, rowNumber, socket]);
+  }, [id, rowNumber, isConnected]);
 
 
   useEffect(() => {
-    if (socket) {
+    if (receivedMessage && socket && socket.readyState === WebSocket.OPEN) {
       // Realiza las operaciones que deseas cuando isTimesDialogOpen es true
 
-      socket.onmessage = (event: MessageEvent<any>) => {
-        const wssPayload = JSON.parse(event.data);
+      const wssPayload = JSON.parse(receivedMessage)
 
 
         if (wssPayload.topic === 'sendParameters') {
@@ -71,26 +71,11 @@ const TimesComponentProgram: React.FC<TimesComponentProgramProps> = ({ rowNumber
           dispatch(setParametersController(msg))
         }
 
-      };
-
-      if (socket.readyState === WebSocket.OPEN) {
-        const message = {
-          topic: 'getParameters',
-          type: 'publish',
-          message: `${id}/${controllerTypeId}/programA/frame2/${rowNumber}`,
-        };
-        socket.send(JSON.stringify(message));
-      }
-
-
     }
 
-    return () => {
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.close();
-      }
-    };
-  }, [socket]);
+  }, [receivedMessage]);
+
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -267,12 +252,12 @@ const TimesComponentProgram: React.FC<TimesComponentProgramProps> = ({ rowNumber
             </Grid>
           ))}
         </Grid>
-        <Box display="flex" width="100%" justifyContent="end">
-        <IconButton onClick={handleTimesDialogSave}>
-          <Save />
+        <Box display="flex" width="100%" justifyContent="end" marginTop={4}>
+        <IconButton onClick={handleTimesDialogSave} color="success">
+          <Save  sx={{width: 40, height:40}}/>
         </IconButton>
         <IconButton onClick={handleTimesDialogClose}>
-          <ExitToApp />
+          <ExitToApp  sx={{width: 40, height:40}}/>
         </IconButton>
         </Box>
       </Box>

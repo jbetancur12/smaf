@@ -1,7 +1,6 @@
 import { retrieveControllerTypes } from "@app/store/slices/controllerTypeSlice";
 // import { Settings } from "@mui/icons-material";
-import { Settings } from "@mui/icons-material";
-import { Box, Button, Container, Typography, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -66,8 +65,8 @@ const ControllerTypesPage = () => {
 
   return (
     <>
-      <Container maxWidth="sm"> {/* Para centrar horizontalmente */}
-        <Box display="flex" flexDirection="column" alignItems="center">
+      {/* <Container maxWidth="sm">  */}
+      {/* <Box display="flex" flexDirection="column" alignItems="center">
           <Box display="flex" justifyContent="center">
             {letras.map((letra, index) => (
               <Button key={index} variant="contained" color="primary"
@@ -94,10 +93,10 @@ const ControllerTypesPage = () => {
           </Box>
 
 
-        </Box>
+        </Box> */}
 
-      </Container>
-      {isProgramDialogOpen && <Box sx={{
+      {/* </Container> */}
+      {/* {isProgramDialogOpen && <Box sx={{
         position: 'fixed',
         top: 0,
         left: 0,
@@ -125,12 +124,16 @@ const ControllerTypesPage = () => {
         >
 
           <Typography variant="h5">Este es un modal personalizado</Typography>
-          <Program handleProgramDialogClose={handleProgramDialogClose} />
 
 
 
         </Box>
-      </Box>}
+      </Box>} */}
+      <Box maxWidth={800} margin="0 auto">
+        <Program handleProgramDialogClose={handleProgramDialogClose} />
+
+      </Box>
+
 
       {isSettingsDialogOpen && <SettingsComponent isSettingsDialogOpen={isSettingsDialogOpen} handleSettingsDialogClose={handleSettingsDialogClose} />}
 

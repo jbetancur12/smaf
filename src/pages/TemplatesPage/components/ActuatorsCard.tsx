@@ -1,19 +1,34 @@
-import { Box, Button, Card, CardContent, CircularProgress, Grid, Menu, MenuItem, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 
 interface ActuatorsCardProps {
   name: string;
   virtualPin: number;
   states: any;
-  handleOutput: (vp?: number, msg?: string, customer?: string) => void
+  handleOutput: (vp?: number, msg?: string, customer?: string) => void;
 }
 
-const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states, handleOutput }) => {
+const ActuatorsCard: React.FC<ActuatorsCardProps> = ({
+  name,
+  virtualPin,
+  states,
+  handleOutput,
+}) => {
   // const [selectedOption, setSelectedOption] = useState<string | undefined>('  ')
-  const [buttonColor, setButtonColor] = useState<string>('gray')
-  const [stateColor, setStateColor] = useState<string>('gray')
-  const [_actualState, setActualState] = useState({ state: 0, operation: 0 })
-  const [_loading, setLoading] = useState(true)
+  const [buttonColor, setButtonColor] = useState<string>("gray");
+  const [stateColor, setStateColor] = useState<string>("gray");
+  const [_actualState, setActualState] = useState({ state: 0, operation: 0 });
+  const [_loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
@@ -28,13 +43,13 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
   const handleOptionClick = (option: string) => {
     let optionCode = "0";
     switch (option) {
-      case 'Off':
+      case "Off":
         optionCode = "0";
         break;
-      case 'On':
+      case "On":
         optionCode = "1";
         break;
-      case 'Auto':
+      case "Auto":
         optionCode = "2";
         break;
 
@@ -42,78 +57,86 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
         break;
     }
 
-
-    handleOutput(virtualPin, optionCode)
+    handleOutput(virtualPin, optionCode);
 
     setSelectedOption(option);
     handleClose();
   };
 
-
   useEffect(() => {
-    if (states[virtualPin as number] === undefined) return
-    const aState = states[virtualPin as number].split(',')
-    setActualState({ state: aState[0], operation: aState[1] })
+    console.log("🚀 ~ useEffect ~ aState:", states);
+    if (states[virtualPin as number] === undefined) return;
+    const aState = states[virtualPin as number].split(",");
+    setActualState({ state: aState[0], operation: aState[1] });
 
     switch (aState[0]) {
-      case '0':
-        setButtonColor('#b31414')
-        break
-      case '1':
-        if (aState[1] === '1') {
-          setButtonColor('orange')
+      case "0":
+        setButtonColor("#b31414");
+        break;
+      case "1":
+        if (aState[1] === "1") {
+          setButtonColor("orange");
         } else {
-          setButtonColor('green')
+          setButtonColor("green");
         }
-        break
+        break;
       default:
-        setButtonColor('gray')
-        break
+        setButtonColor("gray");
+        break;
     }
 
     switch (aState[1]) {
-      case '0':
-        setStateColor('#b31414')
-        setSelectedOption('Off')
-        setLoading(false)
-        break
-      case '1':
-        setStateColor('orange')
-        setSelectedOption('On')
-        setLoading(false)
-        break
-      case '2':
-        setStateColor('green')
-        setSelectedOption('Auto')
-        setLoading(false)
-        break
+      case "0":
+        setStateColor("#b31414");
+        setSelectedOption("Off");
+        setLoading(false);
+        break;
+      case "1":
+        setStateColor("orange");
+        setSelectedOption("On");
+        setLoading(false);
+        break;
+      case "2":
+        setStateColor("green");
+        setSelectedOption("Auto");
+        setLoading(false);
+        break;
       default:
-        setStateColor('gray')
-        break
+        setStateColor("gray");
+        break;
     }
-  }, [states])
+  }, [states]);
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={2} >
-      <Card style={{ marginBottom: '1rem' }}>
-        <CardContent sx={{ textAlign: 'center', position: 'relative' }} >
+    <Grid item xs={12} sm={6} md={4} lg={2}>
+      <Card style={{ marginBottom: "1rem" }}>
+        <CardContent sx={{ textAlign: "center", position: "relative" }}>
           <Typography variant="h6" component="div">
             {name}
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "10px" }}>
-            <Box sx={{
-              width: '30px',
-              height: '30px',
-              borderRadius: '50%',
-              backgroundColor: buttonColor,
-              marginRight: '5px'
-            }} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            <Box
+              sx={{
+                width: "30px",
+                height: "30px",
+                borderRadius: "50%",
+                backgroundColor: buttonColor,
+                marginRight: "5px",
+              }}
+            />
             <Button
               aria-controls="menu"
               aria-haspopup="true"
               onClick={handleClick}
               variant="outlined"
-              color='secondary'
+              color="secondary"
               sx={{ backgroundColor: stateColor, color: "white" }}
               disabled={!selectedOption}
             >
@@ -126,20 +149,20 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
               onClose={handleClose}
             >
               <MenuItem
-                onClick={() => handleOptionClick('On')}
-                selected={selectedOption === 'On'}
+                onClick={() => handleOptionClick("On")}
+                selected={selectedOption === "On"}
               >
                 On
               </MenuItem>
               <MenuItem
-                onClick={() => handleOptionClick('Off')}
-                selected={selectedOption === 'Off'}
+                onClick={() => handleOptionClick("Off")}
+                selected={selectedOption === "Off"}
               >
                 Off
               </MenuItem>
               <MenuItem
-                onClick={() => handleOptionClick('Auto')}
-                selected={selectedOption === 'Auto'}
+                onClick={() => handleOptionClick("Auto")}
+                selected={selectedOption === "Auto"}
               >
                 Auto
               </MenuItem>
@@ -148,9 +171,7 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({ name, virtualPin, states,
         </CardContent>
       </Card>
     </Grid>
-  )
+  );
+};
 
-
-}
-
-export default ActuatorsCard
+export default ActuatorsCard;

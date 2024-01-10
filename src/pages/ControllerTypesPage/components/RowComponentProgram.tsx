@@ -14,12 +14,16 @@ const TimesComponentProgram = React.lazy(() => import('./TimesComponentProgram')
 interface RowComponentProgramProps {
   rowNumber: number;
   valveName: string;
+  minutes: number;
+  seconds: number;
+  state: number
 
 }
 
 
 
-const RowComponentProgram: React.FC<RowComponentProgramProps> = ({ rowNumber, valveName }) => {
+const RowComponentProgram: React.FC<RowComponentProgramProps> = ({ rowNumber, valveName, minutes, seconds, state }) => {
+
 
     const [isRowOn, setIsRowOn] = useState(false);
   const [selectedTime, setSelectedTime] = useState<null | Dayjs>(
@@ -67,8 +71,9 @@ const RowComponentProgram: React.FC<RowComponentProgramProps> = ({ rowNumber, va
 
 
   useEffect(() => {
-    setSelectedTime(dayjs('00:00', 'HH:mm'));
-  }, []);
+    setSelectedTime(dayjs(`${minutes}:${seconds}`, 'HH:mm'));
+    setIsRowOn("" + state == "1")
+  }, [minutes, seconds, state]);
 
 
   return (
