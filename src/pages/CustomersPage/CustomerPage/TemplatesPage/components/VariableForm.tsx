@@ -145,16 +145,30 @@ const VariableForm: React.FC<VariableFormProps> = ({
     const { name, value } = e.target;
     if (isEditing) {
       // Si está en modo de edición, actualiza los datos directamente en editingCustomer
-      setEditingVariable({
-        ...editingVariable,
-        [name]: value,
-      });
+      if (name === "controller") {
+        setEditingVariable({
+          ...editingVariable,
+          [name]: options.find((option) => option._id === value),
+        });
+      } else {
+        setEditingVariable({
+          ...editingVariable,
+          [name]: value,
+        });
+      }
     } else {
       // Si no está en modo de edición, actualiza los datos en formData
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      if (name == "controller") {
+        setFormData({
+          ...formData,
+          [name]: options.find((option) => option._id === value),
+        });
+      } else {
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      }
     }
   };
 
@@ -181,7 +195,7 @@ const VariableForm: React.FC<VariableFormProps> = ({
   const options = controllers.filter(
     (controller) => controller.customer._id === id
   );
-
+  console.log("🚀 ~ formData:", formData?.typePin);
   return (
     <Box className="tw-max-w-lg">
       <form onSubmit={!isEditing ? handleFormSubmit : handleFormEdit}>
@@ -191,17 +205,20 @@ const VariableForm: React.FC<VariableFormProps> = ({
               name="controller"
               label="Controlador"
               onChange={handleSelectChange}
-              value={
-                isEditing
-                  ? editingVariable?.controller?._id
-                  : formData?.controller?._id
-              }
+              // value={
+              //   isEditing
+              //     ? editingVariable?.controller.name
+              //     : formData?.controller.controllerId
+              // }
               renderValue={(selected) => {
+                console.log("🚀 ~ selected:", selected);
                 if (!selected) {
                   return <em>Seleccione un controlador</em>;
                 }
 
-                return selected;
+                return isEditing
+                  ? editingVariable?.controller.name
+                  : formData?.controller.name;
               }}
               displayEmpty
               fullWidth
@@ -293,17 +310,19 @@ const VariableForm: React.FC<VariableFormProps> = ({
               displayEmpty
               label="Tipo Pin"
               renderValue={(selected) => {
-                if (selected.length === 0) {
+                if (selected) {
                   return <em>Seleccione un tipo</em>;
                 }
 
-                return selected;
-              }}
-              value={
-                isEditing
+                return isEditing
                   ? editingVariable?.typePin || "analogInput"
-                  : formData.typePin
-              }
+                  : formData.typePin;
+              }}
+              // value={
+              //   isEditing
+              //     ? editingVariable?.typePin || "analogInput"
+              //     : formData.typePin
+              // }
               onChange={handleSelectChange}
               error={!!errors.typePin}
               fullWidth
