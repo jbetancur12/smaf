@@ -27,9 +27,7 @@ function formatDateTime(date: Date) {
 }
 
 export default function IconLabelTabs() {
-  const { socket, isConnected, sendMessage } = useWebSocket(
-    import.meta.env.VITE_MQTT
-  );
+  const { socket, isConnected } = useWebSocket(import.meta.env.VITE_MQTT);
   const dispatch = useDispatch();
   if (socket) {
     socket.onopen = () => {
