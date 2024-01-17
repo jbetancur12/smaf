@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface WebSocketHook {
   socket: WebSocket | null;
@@ -10,10 +10,9 @@ interface WebSocketHook {
 function useWebSocket(url: string): WebSocketHook {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [receivedMessage, setReceivedMessage] = useState<string>('');
+  const [receivedMessage, setReceivedMessage] = useState<string>("");
 
   useEffect(() => {
-
     const ws = new WebSocket(url);
 
     ws.onopen = () => {
@@ -31,13 +30,14 @@ function useWebSocket(url: string): WebSocketHook {
     setSocket(ws);
 
     return () => {
-      if(ws.readyState === WebSocket.OPEN){
+      if (ws.readyState === WebSocket.OPEN) {
         ws.close();
       }
     };
   }, [url]);
 
   const sendMessage = (message: string) => {
+    console.log("🚀 ~ sendMessage ~ message:", isConnected);
     if (socket && isConnected) {
       socket.send(message);
     }

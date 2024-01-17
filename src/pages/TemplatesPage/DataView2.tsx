@@ -148,7 +148,11 @@ export default function IconLabelTabs() {
       message: `${customerId}/${templateId}/${Date.now()}/${vp}/${msg}`,
     };
 
-    sendMessage(JSON.stringify(message));
+    if (socket) {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(message));
+      }
+    }
   };
 
   return (
