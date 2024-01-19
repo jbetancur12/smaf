@@ -1,5 +1,6 @@
 export interface UserModel {
   id: string
+  customerKey?: string
   firstName: string
   lastName: string
   imgUrl: string

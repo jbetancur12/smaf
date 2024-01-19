@@ -58,7 +58,6 @@ const TemplatesPage = () => {
     dispatch(retrieveTemplate(idTemplate))
       .unwrap()
       .then((res) => {
-        console.log("🚀 ~ .then ~ res:", res);
         setTemplate(res);
 
         // @ts-ignore

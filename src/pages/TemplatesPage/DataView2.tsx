@@ -34,7 +34,9 @@ export default function IconLabelTabs() {
       const message = {
         topic: "input",
         type: "publish",
-        message: `${customerId}/${templateId}/0/0/update`,
+        message: `${customerKey || customerId}/${
+          templateKey || templateId
+        }/0/0/update`,
       };
       socket.send(JSON.stringify(message));
       setMessageSent(true);
@@ -53,6 +55,15 @@ export default function IconLabelTabs() {
 
   const templateId = searchParams.get("template");
   const customerId = searchParams.get("customer");
+  const templateKey =
+    searchParams.get("templateKey") === "undefined"
+      ? null
+      : searchParams.get("templateKey");
+  const customerKey =
+    searchParams.get("customerKey") === "undefined"
+      ? null
+      : searchParams.get("customerKey");
+
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -70,12 +81,15 @@ export default function IconLabelTabs() {
   }, []);
 
   useEffect(() => {
+    console.log(customerKey || customerId);
     if (isConnected && !isMessageSent && socket) {
       socket.onopen = () => {
         const message = {
           topic: "input",
           type: "publish",
-          message: `${customerId}/${templateId}/0/0/update`,
+          message: `${customerKey || customerId}/${
+            templateKey || templateId
+          }/0/0/update`,
         };
         socket.send(JSON.stringify(message));
         setMessageSent(true);
@@ -124,7 +138,9 @@ export default function IconLabelTabs() {
         const message = {
           topic: "input",
           type: "publish",
-          payload: `${customerId}/${templateId}/0/0/update`,
+          payload: `${customerKey || customerId}/${
+            templateKey || templateId
+          }/0/0/update`,
         };
         socket.send(JSON.stringify(message));
       }
@@ -143,7 +159,9 @@ export default function IconLabelTabs() {
     const message = {
       topic: "input",
       type: "publish",
-      message: `${customerId}/${templateId}/${Date.now()}/${vp}/${msg}`,
+      message: `${customerKey || customerId}/${
+        templateKey || templateId
+      }/${Date.now()}/${vp}/${msg}`,
     };
 
     if (socket) {

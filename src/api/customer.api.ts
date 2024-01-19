@@ -28,6 +28,7 @@ export interface CustomerDataResponse extends CustomerData {
   }
   variables: []
   controllers: []
+  customerKey?: string
 }
 
 export const getCustomers = (): Promise<any> =>
