@@ -69,8 +69,8 @@ const DatePickerRange: React.FC<{
 
   const onChange = (dates: [Date, Date]) => {
     const [start, end] = dates;
-    start.setHours(0, 0, 0, 0);
-    end.setHours(23, 59, 59, 999);
+    // start.setHours(0, 0, 0, 0);
+    // end.setHours(23, 59, 59, 999);
     setStartDate(start);
     setEndDate(end);
     datesQuery(start, end);

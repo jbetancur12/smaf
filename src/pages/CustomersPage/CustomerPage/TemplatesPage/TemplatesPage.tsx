@@ -58,6 +58,7 @@ const TemplatesPage = () => {
     dispatch(retrieveTemplate(idTemplate))
       .unwrap()
       .then((res) => {
+        console.log("🚀 ~ .then ~ res:", res);
         setTemplate(res);
 
         // @ts-ignore
@@ -203,15 +204,21 @@ const TemplatesPage = () => {
               <TableCell>
                 <strong>Id Customer: </strong>
               </TableCell>
-              <TableCell onClick={() => handleCellClick(template.customer)}>
-                {template.customer}{" "}
+              <TableCell
+                onClick={() => handleCellClick(template.customer?._id)}
+                // className="tw-flex tw-justify-around"
+              >
+                <span>
+                  {template.customer?.customerKey || template.customer?._id}{" "}
+                </span>
                 <ContentCopy className="tw-cursor-pointer" />
               </TableCell>
               <TableCell>
                 <strong>Id Template: </strong>
               </TableCell>
               <TableCell onClick={() => handleCellClick(template._id)}>
-                {template._id} <ContentCopy className="tw-cursor-pointer" />
+                {template.templateKey || template._id}{" "}
+                <ContentCopy className="tw-cursor-pointer" />
               </TableCell>
             </TableRow>
           </TableBody>

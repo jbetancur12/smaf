@@ -7,7 +7,11 @@ export interface TemplateData {
   description: string
   type: string
   variables: VariableData[]
-  customer?: string
+  customer?: {
+    _id: string
+    customerKey: string
+  }
+  templateKey?: string
 }
 
 export interface TemplateDataResponse extends TemplateData {
