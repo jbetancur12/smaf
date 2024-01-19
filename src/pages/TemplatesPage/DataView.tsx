@@ -17,7 +17,6 @@ import DatePickerRange from "./components/DatePickerRange";
 import RangeButtons from "./components/RangeButtons";
 import SelectComponent from "./components/SelectComponent";
 import Sensors from "./components/Sensors";
-import dayjs from "dayjs";
 
 interface ISeries {
   timestamp: string;
