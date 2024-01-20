@@ -57,11 +57,11 @@ export default function IconLabelTabs() {
   const customerId = searchParams.get("customer");
   const templateKey =
     searchParams.get("templateKey") === "undefined"
-      ? null
+      ? templateId
       : searchParams.get("templateKey");
   const customerKey =
     searchParams.get("customerKey") === "undefined"
-      ? null
+      ? customerId
       : searchParams.get("customerKey");
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -81,7 +81,6 @@ export default function IconLabelTabs() {
   }, []);
 
   useEffect(() => {
-    console.log(customerKey || customerId);
     if (isConnected && !isMessageSent && socket) {
       socket.onopen = () => {
         const message = {
@@ -111,7 +110,8 @@ export default function IconLabelTabs() {
 
         if (wssPayload.topic === "sensor") {
           const data = wssPayload.message.split("/");
-          if (data[1] === templateId) {
+
+          if (data[1] === templateKey) {
             setMqttDataObj((prevData: any) => ({
               ...prevData,
               [data[3]]: { value: data[4], date: formatDateTime(new Date()) },
@@ -125,7 +125,7 @@ export default function IconLabelTabs() {
 
         if (wssPayload.topic === "output") {
           const data = wssPayload.message.split("/");
-          if (data[1] === templateId) {
+          if (data[1] === templateKey) {
             setMqttInputObj((prevData: any) => ({
               ...prevData,
               [data[3]]: data[4],
