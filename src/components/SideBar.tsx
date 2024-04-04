@@ -4,7 +4,7 @@ import {
   ChevronRightOutlined,
   DeveloperBoard,
   DeviceThermostatOutlined,
-  FactoryOutlined
+  FactoryOutlined,
 } from "@mui/icons-material";
 import {
   Box,
@@ -17,7 +17,7 @@ import {
   ListItemText,
   PaletteColor,
   Typography,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import logo from "assets/smaf_logo-nobg.png";
 import { useEffect, useState } from "react";
@@ -29,29 +29,28 @@ const navItems = () => [
     text: "Plantillas",
     icon: <DeviceThermostatOutlined />,
     path: "templates",
-    visibleToRoles: ["USER_ROLE"]
+    visibleToRoles: ["USER_ROLE", "MODERATOR_ROLE"],
   },
   {
     text: "Clientes",
     icon: <FactoryOutlined />,
     path: "customers",
-    visibleToRoles: ["ADMIN_ROLE"]
+    visibleToRoles: ["ADMIN_ROLE"],
   },
   {
     text: "Usuarios",
     icon: <AdminPanelSettingsOutlined />,
     path: "admin-users",
-    visibleToRoles: ["ADMIN_ROLE"]
+    visibleToRoles: ["ADMIN_ROLE"],
   },
   {
     text: "Controladores",
     icon: <DeveloperBoard />,
     path: "controllers",
-    visibleToRoles: ["ADMIN_ROLE"]
+    visibleToRoles: ["ADMIN_ROLE"],
   },
   // ...otros elementos del menú
 ];
-
 
 interface SidebarProps {
   user: {
@@ -59,11 +58,11 @@ interface SidebarProps {
     occupation: string;
     roles?: [
       {
-        name: string
-        _id?: string
-        createdAt?: Date
+        name: string;
+        _id?: string;
+        createdAt?: Date;
       }
-    ]
+    ];
   };
   drawerWidth: number;
   isSidebarOpen: boolean;
@@ -71,8 +70,7 @@ interface SidebarProps {
   isNonMobile: boolean;
 }
 
-
-const Sidebar:React.FC<SidebarProps> = ({
+const Sidebar: React.FC<SidebarProps> = ({
   user,
   drawerWidth,
   isSidebarOpen,
@@ -82,14 +80,17 @@ const Sidebar:React.FC<SidebarProps> = ({
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
   const navigate = useNavigate();
-  const theme = useTheme()
+  const theme = useTheme();
 
   useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);
 
-  const userRoles = user.roles && Array.isArray(user.roles) ? user.roles.map(role => role.name) : [];
-     return (
+  const userRoles =
+    user.roles && Array.isArray(user.roles)
+      ? user.roles.map((role) => role.name)
+      : [];
+  return (
     <Box component="nav">
       {isSidebarOpen && (
         <Drawer
@@ -102,7 +103,8 @@ const Sidebar:React.FC<SidebarProps> = ({
             "& .MuiDrawer-paper": {
               color: theme.palette.secondary["200" as keyof PaletteColor],
               // @ts-ignore
-              backgroundColor: theme.palette.secondary["100" as keyof PaletteColor],
+              backgroundColor:
+                theme.palette.secondary["100" as keyof PaletteColor],
               boxSizing: "border-box",
               borderWidth: isNonMobile ? 0 : "2px",
               width: drawerWidth,
@@ -112,7 +114,12 @@ const Sidebar:React.FC<SidebarProps> = ({
           <Box width="100%">
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.primary.main}>
-                <Box display="flex" alignContent="center" justifyContent="center" gap="0.5rem" >
+                <Box
+                  display="flex"
+                  alignContent="center"
+                  justifyContent="center"
+                  gap="0.5rem"
+                >
                   {/* <Typography variant="h4" fontWeight="bold">
                     ECOMVISION
                   </Typography> */}
@@ -137,54 +144,66 @@ const Sidebar:React.FC<SidebarProps> = ({
             </Box>
             <List>
               {navItems()
-              //@ts-ignore
-               .filter((item) => item.visibleToRoles.some((role) => userRoles.includes(role)))
-              .map(({ text, icon, path }) => {
-                if (!icon) {
-                  return (
-                    <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
-                      {text}
-                    </Typography>
-                  );
-                }
+                //@ts-ignore
+                .filter((item) =>
+                  item.visibleToRoles.some((role) => userRoles.includes(role))
+                )
+                .map(({ text, icon, path }) => {
+                  if (!icon) {
+                    return (
+                      <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
+                        {text}
+                      </Typography>
+                    );
+                  }
 
-                return (
-                  <ListItem key={text} disablePadding>
-                    <ListItemButton
-                      onClick={() => {
-                        navigate(`/${path}`);
-                        setActive(path);
-                      }}
-                      sx={{
-                        backgroundColor:
-                          active === path
-                            ? theme.palette.secondary["50" as keyof PaletteColor]
-                            : "transparent",
-                        color:
-                          active === path
-                            ? theme.palette.primary["900" as keyof PaletteColor]
-                            : theme.palette.secondary["900" as keyof PaletteColor],
-                      }}
-                    >
-                      <ListItemIcon
+                  return (
+                    <ListItem key={text} disablePadding>
+                      <ListItemButton
+                        onClick={() => {
+                          navigate(`/${path}`);
+                          setActive(path);
+                        }}
                         sx={{
-                          ml: "2rem",
+                          backgroundColor:
+                            active === path
+                              ? theme.palette.secondary[
+                                  "50" as keyof PaletteColor
+                                ]
+                              : "transparent",
                           color:
                             active === path
-                              ? theme.palette.primary["900" as keyof PaletteColor]
-                              : theme.palette.secondary["900" as keyof PaletteColor],
+                              ? theme.palette.primary[
+                                  "900" as keyof PaletteColor
+                                ]
+                              : theme.palette.secondary[
+                                  "900" as keyof PaletteColor
+                                ],
                         }}
                       >
-                        {icon}
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                      {active === path && (
-                        <ChevronRightOutlined sx={{ ml: "auto" }} />
-                      )}
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
+                        <ListItemIcon
+                          sx={{
+                            ml: "2rem",
+                            color:
+                              active === path
+                                ? theme.palette.primary[
+                                    "900" as keyof PaletteColor
+                                  ]
+                                : theme.palette.secondary[
+                                    "900" as keyof PaletteColor
+                                  ],
+                          }}
+                        >
+                          {icon}
+                        </ListItemIcon>
+                        <ListItemText primary={text} />
+                        {active === path && (
+                          <ChevronRightOutlined sx={{ ml: "auto" }} />
+                        )}
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
             </List>
           </Box>
 

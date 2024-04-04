@@ -112,7 +112,6 @@ const LineChart: React.FC<{ data: any[]; multiAxis: boolean }> = ({
         export: {
           csv: {
             dateFormatter(timestamp) {
-              console.log(timestamp);
               // Formatear la fecha utilizando toLocaleString()
               return timestamp;
             },
