@@ -104,6 +104,21 @@ const LineChart: React.FC<{ data: any[]; multiAxis: boolean }> = ({
     // },
     chart: {
       id: "multi-axis-line-chart",
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+        },
+        export: {
+          csv: {
+            dateFormatter(timestamp) {
+              console.log(timestamp);
+              // Formatear la fecha utilizando toLocaleString()
+              return timestamp;
+            },
+          },
+        },
+      },
     },
     xaxis: {
       categories: categories,
