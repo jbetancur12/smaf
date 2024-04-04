@@ -49,6 +49,12 @@ const navItems = () => [
     path: "controllers",
     visibleToRoles: ["ADMIN_ROLE"],
   },
+  {
+    text: "Logs",
+    icon: <DeveloperBoard />,
+    path: "logs-actuactors",
+    visibleToRoles: ["USER_ROLE", "MODERATOR_ROLE"],
+  },
   // ...otros elementos del menú
 ];
 
@@ -78,6 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isNonMobile, // Agrega la variable de tema aquí
 }) => {
   const { pathname } = useLocation();
+
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();

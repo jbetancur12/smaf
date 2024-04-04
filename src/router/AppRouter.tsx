@@ -44,6 +44,10 @@ const CustomerTemplatesPage = React.lazy(
     import("@app/pages/CustomersPage/CustomerPage/TemplatesPage/TemplatesPage")
 );
 
+const LogsActuactorsPage = React.lazy(
+  () => import("@app/pages/LogsActuactorPage")
+);
+
 const Templates = withLoading(TemplatesPage);
 const Admins = withLoading(AdminsPage);
 const Controllers = withLoading(ControllersPage);
@@ -53,10 +57,12 @@ const TemplatesDataView = withLoading(TemplatesDataViewPage);
 const Customers = withLoading(CustomersPage);
 const Customer = withLoading(CustomerPage);
 const CustomerTemplates = withLoading(CustomerTemplatesPage);
+const LogsActuactors = withLoading(LogsActuactorsPage);
 
 function AppRouter() {
   // const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
+
   const userRole = user ? user.user?.roles : [{ name: "USER_ROLE" }];
 
   const hasUserRole = userRole?.some(
@@ -84,6 +90,7 @@ function AppRouter() {
               <Route index element={<Templates />} />
               <Route path="charts" element={<TemplatesDataView />} />
             </Route>
+            <Route path={`/logs-actuactors`} element={<LogsActuactors />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="customers">

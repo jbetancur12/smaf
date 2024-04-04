@@ -12,5 +12,5 @@ export const createLogsActuactors = (data: CreateRequest): Promise<any> =>
 
 export const getLogsActuactors = (id: string): Promise<any> =>
   httpApi
-    .get<undefined>(`api/logs-actuactor/${id}`)
+    .get<undefined>(`api/logs-actuactor/customer/${id}`)
     .then(({ data }) => data)

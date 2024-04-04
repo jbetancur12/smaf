@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@app/hooks/reduxHooks";
-import { User } from "@app/pages/CustomersPage/CustomerPage/CustomerPage";
+
 import { doCreateLogsActuactors } from "@app/store/slices/logsActuactorSlice";
 import {
   Box,
@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 interface ActuatorsCardProps {
   name: string;
@@ -23,7 +23,7 @@ interface ActuatorsCardProps {
 }
 
 interface ClickEventLog {
-  actuator: string; // Nombre del actuador
+  actuactor: string; // Nombre del actuador
   user: string; // Nombre de usuario o identificador
   option: string; // Opción seleccionada
   customer: string | null; // Marca de tiempo del evento
@@ -65,7 +65,7 @@ const ActuatorsCard: React.FC<ActuatorsCardProps> = ({
 
   const handleOptionClick = (option: string) => {
     const clickEvent: ClickEventLog = {
-      actuator: name, // Nombre del actuador
+      actuactor: name, // Nombre del actuador
       option: option,
       user: user.user?.firstName || "Unknown", // Nombre de usuario (o "Unknown" si no está definido)
       customer: customer, // Marca de tiempo actual
