@@ -1,4 +1,9 @@
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Box,
+  ToggleButton,
+  ToggleButtonGroup,
+  useMediaQuery,
+} from "@mui/material";
 import React, { useState } from "react";
 import { ranges, ranges_ } from "../utils";
 
@@ -30,6 +35,8 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({
   const [alignment, setAlignment] = React.useState<string | null>("6Hours");
   const [_startDate, setStartDate] = useState<Date>(new Date(_dt));
   const [endDate, _setEndDate] = useState<Date>(new Date());
+
+  const matches = useMediaQuery("(min-width:600px)");
 
   const handleAlignment = (
     _event: React.MouseEvent<HTMLElement>,
@@ -81,6 +88,7 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({
         disabled={disable}
         onChange={handleAlignment}
         aria-label="text alignment"
+        orientation={`${matches ? `horizontal` : `vertical`}`}
       >
         {ranges.map((value, idx) => (
           <ToggleButton value={value} key={idx}>

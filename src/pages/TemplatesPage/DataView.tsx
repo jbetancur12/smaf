@@ -17,6 +17,7 @@ import DatePickerRange from "./components/DatePickerRange";
 import RangeButtons from "./components/RangeButtons";
 import SelectComponent from "./components/SelectComponent";
 import Sensors from "./components/Sensors";
+import ExcelExport from "@app/services/ExcelExport";
 
 interface ISeries {
   timestamp: string;
@@ -167,7 +168,7 @@ const DataView: React.FC<DataViewProps> = ({
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Box className="tw-flex tw-items-center tw-gap-3 tw-mb-4">
+      <Box className="tw-flex tw-items-center tw-gap-3 tw-mb-4 sm:tw-flex-column sm:tw-items-center">
         <RangeButtons
           custom={setCustom}
           datesQuery={datesQuery}
@@ -182,6 +183,8 @@ const DataView: React.FC<DataViewProps> = ({
           label="MultiEje"
           labelPlacement="start"
         />
+
+        <ExcelExport fileName={"Export - " + Date.now()} excelData={data} />
       </Box>
       <Box className="tw-w-full">
         <SelectComponent
@@ -190,6 +193,7 @@ const DataView: React.FC<DataViewProps> = ({
           setVariablesQuery={setVariablesQuery}
         />
       </Box>
+
       {data.length > 0 && (
         <Box>
           <ApexCharts data={data} multiAxis={multiAxis} />
