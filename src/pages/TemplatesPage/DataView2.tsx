@@ -110,6 +110,7 @@ export default function IconLabelTabs() {
 
         if (wssPayload.topic === "sensor") {
           const data = wssPayload.message.split("/");
+          console.log("🚀 ~ useEffect ~ data:", data);
 
           if (data[1] === templateKey) {
             setMqttDataObj((prevData: any) => ({

@@ -73,7 +73,13 @@ const DatePickerRange: React.FC<{
     // end.setHours(23, 59, 59, 999);
     setStartDate(start);
     setEndDate(end);
-    datesQuery(start, end);
+
+    const newEndDate = new Date(end?.setDate(end?.getDate() + 1));
+
+    datesQuery(
+      new Date(start.setHours(0, 0, 0, 0)),
+      new Date(newEndDate?.setHours(0, 0, 0, 0))
+    );
   };
 
   const ExampleCustomInput = forwardRef<

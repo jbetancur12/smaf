@@ -10,7 +10,7 @@ export interface CreateRequest {
 export const createLogsActuactors = (data: CreateRequest): Promise<any> =>
   httpApi.post<any[]>('api/logs-actuactor', { ...data }).then((res) => res.data)
 
-export const getLogsActuactors = (id: string): Promise<any> =>
+export const getLogsActuactors = (id: string, page:number, pageSize:number): Promise<any> =>
   httpApi
-    .get<undefined>(`api/logs-actuactor/customer/${id}`)
+    .get<undefined>(`api/logs-actuactor/customer/${id}?page=${page}&pageSize=${pageSize}`)
     .then(({ data }) => data)

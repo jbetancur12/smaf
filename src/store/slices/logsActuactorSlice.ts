@@ -18,7 +18,7 @@ export const doCreateLogsActuactors = createAsyncThunk(
 
 export const retrieveLogsActuactors = createAsyncThunk(
     'logsActuactors/retrieve',
-    async (id:any) => getLogsActuactors(id)    
+    async ({id, page, pageSize}: {id: any, page: number, pageSize: number}) => getLogsActuactors(id, page, pageSize)    
   )
 
 const logsActuactorSlice = createSlice({

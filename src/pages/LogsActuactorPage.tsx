@@ -1,6 +1,5 @@
 import LogsActuactors from "@app/components/LogsActuactors";
 import { useAppSelector } from "@app/hooks/reduxHooks";
-import React from "react";
 
 const LogsActuactorPage = () => {
   const user = useAppSelector((state) => state.user);

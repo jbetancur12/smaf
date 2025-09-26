@@ -46,6 +46,7 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({
     custom(false);
     setRange(range);
     const dt: Date = new Date();
+    // const finalEndDate = endDate;
 
     switch (range) {
       case "lastHour":
@@ -55,16 +56,21 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({
         dt.setHours(dt.getHours() - 6);
         break;
       case "1Day":
-        dt.setHours(dt.getHours() - 24);
+        dt.setHours(0, 0, 0, 0);
+        dt.setDate(dt.getDate() - 1);
         break;
       case "1Week":
-        dt.setHours(dt.getHours() - 168);
+        dt.setHours(0, 0, 0, 0);
+        dt.setDate(dt.getDate() - 7);
+        //finalEndDate?.setDate(finalEndDate?.getDate() - 1);
         break;
       case "1Month":
-        dt.setHours(dt.getHours() - 730);
+        dt.setHours(0, 0, 0, 0);
+        dt.setMonth(dt.getMonth() - 1);
         break;
       case "3Months":
-        dt.setHours(dt.getHours() - 2190);
+        dt.setHours(0, 0, 0, 0);
+        dt.setMonth(dt.getMonth() - 3);
         break;
       case "custom":
         custom(true);
@@ -76,6 +82,7 @@ const RangeButtons: React.FC<RangeButtonsProps> = ({
     }
 
     setStartDate(new Date(dt));
+    // datesQuery(new Date(dt), new Date(finalEndDate.setHours(0, 0, 0, 0)));
     datesQuery(new Date(dt), endDate);
   };
 
